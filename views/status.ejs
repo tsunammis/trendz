@@ -1,12 +1,4 @@
-<!doctype html>
-<html>
-<head>
-	<title>Trendz.io</title>
-	<link href='http://fonts.googleapis.com/css?family=Damion' rel='stylesheet' type='text/css'>
-	<link rel="stylesheet" href="/assets/css/style.css">
-</head>
-<body>
-
+<% include _header.ejs %>
 <div class="container">
 	<form action="/status" method="post">
 		<label>Status</label>
@@ -22,5 +14,4 @@
         <% }); %>
     </div>
 </div>
-</body>
-</html>
+<% include _foot.ejs %>
