@@ -1,32 +1,38 @@
 {
-    "name": "trendz",
-    "version": "0.1.0",
-    "description": "Manage your project with trends",
-    "main": "web.js",
-    "private": true,
-    "scripts": {
-        "start": "node ./app.js",
-        "test": "echo \"Error: no test specified\" && exit 1"
+    "name"          : "trendz",
+    "version"       : "0.1.0",
+    "description"   : "Manage your project with trends",
+    "main"          : "web.js",
+    "private"       : true,
+    "scripts"       : {
+        "start" : "node ./app.js",
+        "test"  : "echo \"Error: no test specified\" && exit 1"
     },
+    "contributors": [
+        {
+            "name"  : "Stanislas Chollet",
+            "email" : "stanislas.chollet@gmail.com"
+        }
+    ],
     "dependencies": {
-        "express": "4.0.x",
-        "morgan": "1.0.x",
-        "express-session": "1.0.x",
-        "serve-static": "1.0.x",
-        "cookie-parser": "1.0.x",
-        "body-parser": "1.0.x",
-        "method-override": "1.0.x",
-        "mongoose": "3.8.x",
-        "ejs": "1.0.x",
-        "passport": "0.2.x",
-        "passport-local": "1.0.x",
-        "node-inspector": "0.7.x",
-        "connect-flash": "0.1.x",
-        "bcrypt-nodejs" : "latest"
+        "express"               : "4.0.0",
+        "morgan"                : "~1.0.0",
+        "express-session"       : "~1.0.0",
+        "serve-static"          : "~1.0.0",
+        "cookie-parser"         : "~1.0.0",
+        "body-parser"           : "~1.0.0",
+        "method-override"       : "~1.0.0",
+        "mongoose"              : "~3.8.0",
+        "ejs"                   : "~1.0.0",
+        "passport"              : "~0.2.0",
+        "passport-local"        : "~1.0.0",
+        "connect-flash"         : "~0.1.0",
+        "bcrypt-nodejs"         : "latest"
     },
     "devDependencies": {
-        "grunt": "~0.4.4",
-        "grunt-contrib-sass": "~0.7.3",
-        "grunt-contrib-watch": "~0.6.1"
+        "grunt"                 : "~0.4.4",
+        "grunt-contrib-sass"    : "~0.7.3",
+        "grunt-contrib-watch"   : "~0.6.1",
+        "node-inspector"        : "~0.7.0"
     }
 }

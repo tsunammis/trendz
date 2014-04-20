@@ -7,11 +7,12 @@ var express        = require('express'),
     cookieParser   = require('cookie-parser'),
     expressSession = require('express-session'),
     passport       = require('passport'),
-    connectFlash   = require('connect-flash');
+    connectFlash   = require('connect-flash'),
+    console        = require('console'),
+    configDB       = require('./config/database.js');
 
 var app = express();
 
-var configDB = require('./config/database.js');
 mongoose.connect(configDB.url); // connect to our database
 
 require('./config/passport')(passport);
@@ -22,7 +23,7 @@ app.set('port', process.env.PORT || 5000);
 app.set('views', __dirname + '/views');
 app.set('view engine', 'ejs');
 app.set('secret', 'mysecretkey');
-app.use(morgan());
+app.use(morgan('dev'));
 app.use(cookieParser());
 app.use(bodyParser());
 app.use(methodOverride());
@@ -32,12 +33,6 @@ app.use(passport.initialize());
 app.use(passport.session()); // persistent login sessions
 app.use(connectFlash()); // use connect-flash for flash messages stored in session
 app.use(serveStatic(__dirname + '/public'));
-
-// Controllers
-// var pagesCtrl = require('./controllers/pages.js');
-// var usersCtrl = require('./controllers/users.js');
-// app.get('/users', usersCtrl.list);
-// app.use('/', pagesCtrl.router);
 
 require('./controllers/passport.js')(app, passport);
 require('./controllers/status.js')(app);
