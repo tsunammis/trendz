@@ -1,22 +1,22 @@
 var request     = require('supertest'),
-    testTools   = require('./tools');
+    testTools   = require('./tools'),
+    app         = require('./mock.app');
 
-var app = require('../config/app')();
+describe('GET /users/53584239a1294f5a24940590', function() {
 
-describe('GET /users/534da334b9f6c07517f6cbb9', function() {
     it('it is OK', function(done) {
         request(app)
-            .get('/users/534da334b9f6c07517f6cbb9')
-            .set('Authorization', testTools.buildBasicAuthorization('user1@test.lan', 'user1@test.lan'))
+            .get('/users/53584239a1294f5a24940590')
+            .set('Authorization', testTools.buildBasicAuthorization('chuck@norris.com', 'chuck@norris.com'))
             .expect('Content-Type', /json/)
-            // .expect('Content-Length', '20')
             .expect(200, done);
     });
 
     it('Unauthorized', function(done) {
         request(app)
-            .get('/users/534da334b9f6c07517f6cbb9')
+            .get('/users/53584239a1294f5a24940590')
             .expect(401, done);
     });
+
 });
 

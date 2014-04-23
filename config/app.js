@@ -7,25 +7,24 @@ var morgan              = require('morgan'),
     passport            = require('passport'),
     DefaultCtrl         = require('../controllers/default.js'),
     UsersCtrl           = require('../controllers/users.js'),
+    StatusCtrl          = require('../controllers/status.js'),
     app                 = express();
 
-module.exports = function() {
+// Configuration
+require('../config/mongo')();
+require('../config/passport')(passport);
 
-    // Configuration
-    require('../config/mongo')();
-    require('../config/passport')(passport);
+app.set('port', Configuration.port);
+app.use(morgan(Configuration.env));
+app.use(cookieParser());
+app.use(bodyParser());
+app.use(methodOverride());
+app.use(passport.initialize());
 
-    app.set('port', Configuration.port);
-    app.use(morgan(Configuration.env));
-    app.use(cookieParser());
-    app.use(bodyParser());
-    app.use(methodOverride());
-    app.use(passport.initialize());
+// Routes
+app.use('/',        passport.authenticate('basic', { session: false }));
+app.use('/users',   UsersCtrl.router);
+app.use('/status',  StatusCtrl.router);
+app.use(DefaultCtrl.errorHandler);
 
-    // Routes
-    app.use('/',        passport.authenticate('basic', { session: false }));
-    app.use('/users',   UsersCtrl.router);
-    app.use(DefaultCtrl.error404);
-
-    return app;
-};
+module.exports = app;

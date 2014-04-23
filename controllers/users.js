@@ -12,16 +12,16 @@ var user = function(req, res, next) {
 
     var promiseUser = UserService.findReadOnlyById(req.params.id);
 
-    promiseUser.then(function (user) {
+    promiseUser.then(function (data) {
 
-        user = UserAdapter.hiddenFields(user);
-        user = UserAdapter.hateoasize(user);
+        data = UserAdapter.hiddenFields(data);
+        data = UserAdapter.hateoasize(['self', 'status'], data);
         res
             .contentType('application/json')
-            .send(JSON.stringify(user));
+            .send(JSON.stringify(data));
 
     }, function(err) {
-        handleError(err);
+        next(err);
     });
 
 };
@@ -33,18 +33,16 @@ var userStatus = function(req, res, next) {
 
     var promiseStatus = StatusService.findReadOnlyByUserId(req.params.id);
 
-    promiseStatus.then(function (status) {
+    promiseStatus.then(function (data) {
 
+        data = data.map(StatusAdapter.hiddenFields);
+        data = data.map(StatusAdapter.hateoasizeSelf);
         res
             .contentType('application/json')
-            .send(JSON.stringify(
-                status
-                    .map(StatusAdapter.hiddenFields)
-                    .map(StatusAdapter.hateoasize)
-            ));
+            .send(JSON.stringify(data));
 
     }, function(err) {
-        handleError(err);
+        next(err);
     });
 };
 

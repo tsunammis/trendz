@@ -1,5 +1,23 @@
-var fixtures = require('pow-mongoose-fixtures');
+var MongoClient     = require('mongodb').MongoClient,
+    DataFixtures    = require('./fixtures.data'),
+    Configuration   = require('../config/configuration'),
+    console         = require('../config/configuration');
 
-module.exports = function() {
-    fixtures.load(__dirname + '/fixtures.data.js');
-}
+// Connect to the db
+MongoClient.connect(Configuration.mongodb, function(err, db) {
+
+    if (err) {
+        return console.dir(err);
+    }
+
+    var collectionUsers = db.collection('users');
+    var collectionStatus = db.collection('status');
+
+    collectionUsers.remove(function(err) {
+        collectionUsers.insert(DataFixtures.Users, {w:1}, function(err, result) {});
+    });
+    collectionStatus.remove(function(err) {
+        collectionStatus.insert(DataFixtures.Status, {w:1}, function(err, result) {});
+    });
+
+});

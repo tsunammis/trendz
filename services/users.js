@@ -9,11 +9,11 @@ var User = require('../models/user.js');
 var findReadOnlyById = function(id) {
 
     return User
-            .findOne({
-                _id: id
-            })
-            .lean(true)
-            .exec();
+        .findOne({
+            _id: id
+        })
+        .lean(true)
+        .exec();
 };
 
 module.exports.findReadOnlyById = findReadOnlyById;
