@@ -8,6 +8,7 @@ describe('GET /users/53584239a1294f5a24940590/status', function() {
         request(app)
             .get('/users/53584239a1294f5a24940590/status')
             .set('Authorization', testTools.buildBasicAuthorization('chuck@norris.com', 'chuck@norris.com'))
+            .set('Content-Type', 'application/json')
             .expect('Content-Type', /json/)
             .expect(200, done);
     });
@@ -26,6 +27,7 @@ describe('GET /status/53584239a1294f5a24940690', function() {
         request(app)
             .get('/status/53584239a1294f5a24940690')
             .set('Authorization', testTools.buildBasicAuthorization('chuck@norris.com', 'chuck@norris.com'))
+            .set('Content-Type', 'application/json')
             .expect('Content-Type', /json/)
             .expect(200, done);
     });
