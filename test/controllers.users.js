@@ -2,7 +2,7 @@ var request     = require('supertest'),
     testTools   = require('./tools'),
     app         = require('./mock.app');
 
-describe('GET /users/53584239a1294f5a24940590', function() {
+describe('GET /users/:id', function() {
 
     it('it is OK', function(done) {
         request(app)

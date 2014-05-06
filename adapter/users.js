@@ -1,18 +1,6 @@
 var Configuration   = require('../config/configuration'),
-    ArrayHelper     = require('../helpers/array');
-
-/**
- * Hide data before exposing on Web services
- *
- * @param {User} user
- */
-var hiddenFields = function(user) {
-
-    user.password = undefined;
-    user.__v = undefined;
-
-    return user;
-};
+    ArrayHelper     = require('../helpers/array'),
+    _               = require('underscore');
 
 /**
  * Add 'links' data to entity to respect the HATEOAS guidelines
@@ -21,7 +9,7 @@ var hiddenFields = function(user) {
  */
 var hateoasize = function(types, user) {
 
-    if (-1 < types.indexOf('self')) {
+    if (_.contains(types, 'self')) {
         ArrayHelper.pushToPropertyUnknow(user, 'links', {
             'rel'   : 'self',
             'href'  : Configuration.getRootUrl() + '/users/' + user._id,
@@ -29,7 +17,7 @@ var hateoasize = function(types, user) {
         });
     }
 
-    if (-1 < types.indexOf('status')) {
+    if (_.contains(types, 'status')) {
         ArrayHelper.pushToPropertyUnknow(user, 'links', {
             'rel'   : 'status',
             'href'  : Configuration.getRootUrl() + '/users/' + user._id + '/status',
@@ -41,16 +29,4 @@ var hateoasize = function(types, user) {
     return user;
 };
 
-/**
- * Add 'links' data to entity to respect the HATEOAS guidelines
- *
- * @param {User} user
- */
-var hateoasizeSelf = function(user) {
-
-    return hateoasize(['self'], user);
-};
-
-module.exports.hiddenFields     = hiddenFields;
-module.exports.hateoasize       = hateoasize;
-module.exports.hateoasizeSelf   = hateoasizeSelf;
+module.exports.hateoasize = hateoasize;

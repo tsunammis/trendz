@@ -1,6 +1,7 @@
 var express         = require('express'),
     StatusService   = require('../services/status'),
-    StatusAdapter   = require('../adapter/status');
+    StatusAdapter   = require('../adapter/status'),
+    ObjectHelper    = require('../helpers/object');
 
 /**
  * GET  /:id
@@ -11,7 +12,7 @@ var status = function(req, res, next) {
 
     promiseStatus.then(function (data) {
 
-        data = StatusAdapter.hiddenFields(data);
+        data = ObjectHelper.removeProperties(['__v'], data);
         data = StatusAdapter.hateoasize(['self'], data);
         res
             .contentType('application/json')

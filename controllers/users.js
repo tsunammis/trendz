@@ -3,7 +3,8 @@ var express         = require('express'),
     UserService     = require('../services/users'),
     UserAdapter     = require('../adapter/users'),
     StatusService   = require('../services/status'),
-    StatusAdapter   = require('../adapter/status');
+    StatusAdapter   = require('../adapter/status'),
+    ObjectHelper    = require('../helpers/object');
 
 /**
  * GET  /:id
@@ -14,7 +15,7 @@ var user = function(req, res, next) {
 
     promiseUser.then(function (data) {
 
-        data = UserAdapter.hiddenFields(data);
+        data = ObjectHelper.removeProperties(['__v', 'password'], data);
         data = UserAdapter.hateoasize(['self', 'status'], data);
         res
             .contentType('application/json')
@@ -35,8 +36,12 @@ var userStatus = function(req, res, next) {
 
     promiseStatus.then(function (data) {
 
-        data = data.map(StatusAdapter.hiddenFields);
-        data = data.map(StatusAdapter.hateoasizeSelf);
+        data = data.map(function(object) {
+            ObjectHelper.removeProperties(['__v', 'password'], object);
+        });
+        data = data.map(function(object) {
+            StatusAdapter.hateoasize(['self'], object);
+        });
         res
             .contentType('application/json')
             .send(JSON.stringify(data));

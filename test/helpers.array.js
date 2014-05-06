@@ -1,7 +1,7 @@
 var ArrayHelper     = require('../helpers/array'),
     expect          = require("chai").expect;
 
-describe('ArrayHelper', function(){
+describe('helpers.array', function(){
 
     it('pushToPropertyUnknow() - Push object to property (array) of an object', function() {
 

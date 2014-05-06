@@ -1,5 +1,5 @@
 var BasicStrategy = require('passport-http').BasicStrategy,
-    User          = require('../models/user.js');
+    User          = require('../models/user');
 
 module.exports = function(passport) {
 

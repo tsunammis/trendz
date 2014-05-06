@@ -1,5 +1,5 @@
 var mongoose            = require('mongoose'),
-    Configuration       = require('../config/configuration.js');
+    Configuration       = require('../config/configuration');
 
 module.exports = function() {
 
