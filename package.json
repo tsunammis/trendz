@@ -6,7 +6,7 @@
     "private"       : true,
     "scripts"       : {
         "start"     : "node ./app.js",
-        "test"      : "./node_modules/mocha/bin/mocha --recursive"
+        "test"      : "TRENDZ_MONGODB_PATH=mongodb://localhost/trendztest ./node_modules/mocha/bin/mocha"
     },
     "contributors": [
         {
@@ -23,7 +23,9 @@
         "passport"          : "~0.2.0",
         "passport-http"     : "~0.2.2",
         "underscore"        : "~1.5.2",
-        "bcrypt-nodejs"     : "latest"
+        "bcrypt-nodejs"     : "latest",
+        "cli-color"         : "~0.3.2",
+        "validator"         : "~3.11.2"
     },
     "devDependencies": {
         "mocha"                 : "^1.18.2",
