@@ -1,4 +1,4 @@
-var Project = require('../models/project');
+var Project = require('../models').Project;
 
 /**
  * Find project by ID.
@@ -7,7 +7,6 @@ var Project = require('../models/project');
  * @param {string} id
  */
 var findReadOnlyById = function(id) {
-
     return Project
         .findOne({
             _id: id
@@ -16,4 +15,6 @@ var findReadOnlyById = function(id) {
         .exec();
 };
 
-module.exports.findReadOnlyById = findReadOnlyById;
+module.exports = {
+    findReadOnlyById: findReadOnlyById
+};

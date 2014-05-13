@@ -7,7 +7,6 @@
  * @param item
  */
 var pushToPropertyUnknow = function(object, property, item) {
-
     if (!object.hasOwnProperty(property)) {
         object[property] = [];
     }

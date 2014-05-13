@@ -1,4 +1,4 @@
-var Status = require('../models/status');
+var Status = require('../models').Status;
 
 /**
  * Find status by ID.
@@ -7,7 +7,6 @@ var Status = require('../models/status');
  * @param {string} id
  */
 var findReadOnlyById = function(id) {
-
     return Status
         .findOne({
             _id: id
@@ -23,7 +22,6 @@ var findReadOnlyById = function(id) {
  * @param {string} userId
  */
 var findReadOnlyByUserId = function(userId) {
-
     return Status
         .find({ user: userId })
         .limit(20)
@@ -32,5 +30,7 @@ var findReadOnlyByUserId = function(userId) {
         .exec();
 };
 
-module.exports.findReadOnlyById     = findReadOnlyById;
-module.exports.findReadOnlyByUserId = findReadOnlyByUserId;
+module.exports = {
+    findReadOnlyById: findReadOnlyById,
+    findReadOnlyByUserId: findReadOnlyByUserId
+};

@@ -5,7 +5,6 @@
  * @param {Object} object
  */
 var removeProperties = function(properties, object) {
-
     // @TODO See to use node callback
     if (!Array.isArray(properties)) {
         throw new Error('properties is not an array');

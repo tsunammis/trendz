@@ -4,7 +4,6 @@
  * @constructor
  */
 function Configuration() {
-    
     this.env        = process.env.NODE_ENV || 'dev';
     this.port       = process.env.PORT || 5000;
     this.host       = process.env.TRENDZ_HOST || "localhost";
@@ -15,7 +14,6 @@ function Configuration() {
  * Get root URL of application
  */
 Configuration.prototype.getRootUrl = function() {
-    
     var url = 'http://' + this.host;
     url += (80 !== this.port) ? ':' + this.port : '';
     return url;

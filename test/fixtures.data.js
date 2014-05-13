@@ -1,20 +1,16 @@
-var bcrypt      = require('bcrypt-nodejs'),
+var UserHelper  = require('../helpers/user'),
     ObjectId    = require('mongodb').BSONNative.ObjectID;
-
-var generateHash = function(password) {
-    return bcrypt.hashSync(password, bcrypt.genSaltSync(8), null);
-};
 
 module.exports.Users = [
     {
         _id         : new ObjectId('53584239a1294f5a24940590'),
         email       : 'chuck@norris.com',
-        password    : generateHash('chuck@norris.com')
+        password    : UserHelper.generateHash('chuck@norris.com')
     },
     {
         _id         : new ObjectId('53584239a1294f5a24940591'),
         email       : 'mark.nuremberg@mail.com',
-        password    : generateHash('mark.nuremberg@mail.com')
+        password    : UserHelper.generateHash('mark.nuremberg@mail.com')
     }
 ];
 

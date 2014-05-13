@@ -4,14 +4,10 @@ var morgan              = require('morgan'),
     Configuration       = require('../config/configuration'),
     express             = require('express'),
     passport            = require('passport'),
-    DefaultCtrl         = require('../controllers/default'),
-    UsersCtrl           = require('../controllers/users'),
-    StatusCtrl          = require('../controllers/status'),
-    ProjectCtrl         = require('../controllers/project'),
+    controllers         = require('../controllers'),
     app                 = express();
 
 // Configuration
-require('../config/mongo')();
 require('../config/passport')(passport);
 
 app.set('port', Configuration.port);
@@ -22,9 +18,9 @@ app.use(passport.initialize());
 
 // Routes
 app.use('/',        passport.authenticate('basic', { session: false }));
-app.use('/users',   UsersCtrl.router);
-app.use('/status',  StatusCtrl.router);
-app.use('/project', ProjectCtrl.router);
-app.use(DefaultCtrl.errorHandler);
+app.use('/users',   controllers.User.router);
+app.use('/status',  controllers.Status.router);
+app.use('/project', controllers.Project.router);
+app.use(controllers.Default.errorHandler);
 
 module.exports = app;

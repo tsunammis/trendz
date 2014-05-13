@@ -1,5 +1,6 @@
-var BasicStrategy = require('passport-http').BasicStrategy,
-    User          = require('../models/user');
+var BasicStrategy   = require('passport-http').BasicStrategy,
+    User            = require('../models').User,
+    UserHelper      = require('../helpers/user');
 
 module.exports = function(passport) {
 
@@ -26,7 +27,7 @@ module.exports = function(passport) {
             }
 
             // if the user is found but the password is wrong
-            if (!user.validPassword(password)) {
+            if (!UserHelper.comparePassword(password, user.password)) {
                 return done(null, false);
             }
 

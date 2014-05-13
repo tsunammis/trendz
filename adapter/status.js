@@ -8,7 +8,6 @@ var Configuration   = require('../config/configuration'),
  * @param {Status} status
  */
 var hateoasize = function(types, status) {
-
     if (_.contains(types, 'self')) {
         ArrayHelper.pushToPropertyUnknow(status, 'links', {
             'rel'   : 'self',

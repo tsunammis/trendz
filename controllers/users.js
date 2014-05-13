@@ -1,16 +1,15 @@
 var express         = require('express'),
-    User            = require('../models/user'),
-    UserService     = require('../services/users'),
-    UserAdapter     = require('../adapter/users'),
-    StatusService   = require('../services/status'),
-    StatusAdapter   = require('../adapter/status'),
+    User            = require('../models').User,
+    UserService     = require('../services').User,
+    UserAdapter     = require('../adapter').User,
+    StatusService   = require('../services').Status,
+    StatusAdapter   = require('../adapter').Status,
     ObjectHelper    = require('../helpers/object');
 
 /**
  * POST  /
  */
 var create = function(req, res, next) {
-
     var promiseUser = UserService.findReadOnlyById(req.params.id);
 
     promiseUser.then(function (data) {
@@ -31,7 +30,6 @@ var create = function(req, res, next) {
  * GET  /:id
  */
 var show = function(req, res, next) {
-
     var promiseUser = UserService.findReadOnlyById(req.params.id);
 
     promiseUser.then(function (data) {
@@ -52,7 +50,6 @@ var show = function(req, res, next) {
  * GET  /:id/status
  */
 var userStatus = function(req, res, next) {
-
     var promiseStatus = StatusService.findReadOnlyByUserId(req.params.id);
 
     promiseStatus.then(function (data) {

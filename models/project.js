@@ -1,12 +1,13 @@
-var mongoose = require('mongoose'),
-    Schema   = mongoose.Schema,
-    User     = require('./user');
-  
-var projectSchema = new Schema({
-    name        : String,
-    slug        : String,
-    createdAt   : { type: Date, default: Date.now },
-    users       : [ Schema.Types.ObjectId ]
-});
+/**
+ * Project object model.
+ */
+module.exports = function(db, conn) {
+    var projectSchema = new db.Schema({
+        name        : String,
+        slug        : String,
+        createdAt   : { type: Date, default: Date.now },
+        users       : [ db.Schema.Types.ObjectId ]
+    });
 
-module.exports = mongoose.model('Project', projectSchema);
+    return conn.model('Project', projectSchema);
+};

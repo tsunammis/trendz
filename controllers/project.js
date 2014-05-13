@@ -1,14 +1,13 @@
 var express         = require('express'),
-    Project         = require('../models/project'),
-    ProjectService  = require('../services/project'),
-    ProjectAdapter  = require('../adapter/project'),
+    Project         = require('../models').Project,
+    ProjectService  = require('../services').Project,
+    ProjectAdapter  = require('../adapter').Project,
     ObjectHelper    = require('../helpers/object');
 
 /**
  * POST  /
  */
 var create = function(req, res, next) {
-
     var project = new Project();
     project.name = req.body.name;
     // project.slug = req.body.name;
@@ -35,7 +34,6 @@ var create = function(req, res, next) {
  * GET  /:id
  */
 var self = function(req, res, next) {
-
     var promiseProject = ProjectService.findReadOnlyById(req.params.id);
 
     promiseProject.then(function (data) {
