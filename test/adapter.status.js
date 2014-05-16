@@ -1,4 +1,4 @@
-var adapterStatus   = require('../adapter/status'),
+var adapterStatus   = require('../adapter').Status,
     expect          = require("chai").expect;
 
 describe('adapter.status', function(){

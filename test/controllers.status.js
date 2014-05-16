@@ -39,6 +39,3 @@ describe('GET /status/:id', function() {
     });
 
 });
-
-
-

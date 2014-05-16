@@ -1,4 +1,4 @@
-var adapterProject  = require('../adapter/project'),
+var adapterProject  = require('../adapter').Project,
     expect          = require("chai").expect;
 
 describe('adapter.project', function(){
