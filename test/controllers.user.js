@@ -19,4 +19,3 @@ describe('GET /users/:id', function() {
     });
 
 });
-

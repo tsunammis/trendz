@@ -14,27 +14,13 @@ module.exports.Users = [
     }
 ];
 
-module.exports.Status = [
-    {
-        _id         : new ObjectId('53584239a1294f5a24940690'),
-        content     : 'first status of user 1',
-        createdAt   : Date.now,
-        user        : module.exports.Users[0]._id
-    },
-    {
-        _id         : new ObjectId('53584239a1294f5a24940691'),
-        content     : 'first status of user 2',
-        createdAt   : Date.now,
-        user        : module.exports.Users[1]._id
-    }
-];
-
 module.exports.Projects = [
     {
         _id         : new ObjectId('53584239a1294f5a24940390'),
         name        : 'Make the new revolution',
         slug        : 'make_the_new_revolution',
         createdAt   : Date.now,
+        owner       : module.exports.Users[1]._id,
         users       : [
             module.exports.Users[1]._id
         ]
@@ -44,9 +30,39 @@ module.exports.Projects = [
         name        : 'Build new home',
         slug        : 'build_new_home',
         createdAt   : Date.now,
+        owner       : module.exports.Users[0]._id,
         users       : [
             module.exports.Users[1]._id,
             module.exports.Users[0]._id
         ]
     }
+];
+
+module.exports.Status = [
+    {
+        _id         : new ObjectId('53584239a1294f5a24940690'),
+        content     : 'I begin my first project',
+        createdAt   : Date.now,
+        owner       : module.exports.Users[0]._id
+    },
+    {
+        _id         : new ObjectId('53584239a1294f5a24940691'),
+        content     : 'Hello everybody',
+        createdAt   : Date.now,
+        owner       : module.exports.Users[1]._id,
+        project     : module.exports.Projects[0]._id
+    },
+    {
+        _id         : new ObjectId('53584239a1294f5a24940692'),
+        content     : 'the new fruit juice of MissFruit is awesome !',
+        createdAt   : Date.now,
+        owner       : module.exports.Users[0]._id
+    },
+    {
+        _id         : new ObjectId('53584239a1294f5a24940693'),
+        content     : 'there are somebody here ?',
+        createdAt   : Date.now,
+        owner       : module.exports.Users[0]._id,
+        project     : module.exports.Projects[0]._id
+    },
 ];

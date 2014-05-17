@@ -6,7 +6,8 @@ module.exports = function(db, conn) {
         name        : String,
         slug        : String,
         createdAt   : { type: Date, default: Date.now },
-        users       : [ db.Schema.Types.ObjectId ]
+        owner       : { type: db.Schema.Types.ObjectId, ref: 'User' },
+        users       : [{ type: db.Schema.Types.ObjectId, ref: 'User' }]
     });
 
     return conn.model('Project', projectSchema);

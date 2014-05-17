@@ -5,7 +5,7 @@ module.exports = function(db, conn) {
     var statusSchema = new db.Schema({
         content     : String,
         createdAt   : { type: Date, default: Date.now },
-        user        : { type: db.Schema.Types.ObjectId, ref: 'User' },
+        owner       : { type: db.Schema.Types.ObjectId, ref: 'User' },
         project     : { type: db.Schema.Types.ObjectId, ref: 'Project' }
     });
 

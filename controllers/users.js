@@ -30,6 +30,9 @@ var create = function(req, res, next) {
  * GET  /:id
  */
 var show = function(req, res, next) {
+    
+    console.log('plop');
+    
     var promiseUser = UserService.findReadOnlyById(req.params.id);
 
     promiseUser.then(function (data) {

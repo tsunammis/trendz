@@ -92,5 +92,4 @@ describe('adapter.project', function(){
             .to.match(/\/project\/[0-9a-f]{24}\/status$/);
 
     });
-
 });

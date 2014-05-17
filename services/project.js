@@ -15,6 +15,22 @@ var findReadOnlyById = function(id) {
         .exec();
 };
 
+/**
+ * Find project by Slug.
+ * The data return are Read Only (Plain Objet) instead of MongooseDocument
+ *
+ * @param {string} slug
+ */
+var findReadOnlyBySlug = function(slug) {
+    return Project
+        .findOne({
+            slug: slug
+        })
+        .lean(true)
+        .exec();
+};
+
 module.exports = {
-    findReadOnlyById: findReadOnlyById
+    findReadOnlyById: findReadOnlyById,
+    findReadOnlyBySlug: findReadOnlyBySlug
 };
