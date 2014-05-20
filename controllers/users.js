@@ -14,7 +14,7 @@ var create = function(req, res, next) {
 
     promiseUser.then(function (data) {
 
-        data = UserAdapter.hiddenFields(data);
+        data = UserAdapter.removeProperties(data);
         data = UserAdapter.hateoasize(['self', 'status'], data);
         res
             .contentType('application/json')
@@ -30,15 +30,19 @@ var create = function(req, res, next) {
  * GET  /:id
  */
 var show = function(req, res, next) {
-    
-    console.log('plop');
-    
-    var promiseUser = UserService.findReadOnlyById(req.params.id);
 
-    promiseUser.then(function (data) {
+    UserService.findReadOnlyById(req.params.id)
+    .then(function (data) {
+        if (data == null) {
+            var error = new Error('User not found');
+            error.status = 404;
+            next(error);
+            return;
+        }
 
         data = ObjectHelper.removeProperties(['__v', 'password'], data);
         data = UserAdapter.hateoasize(['self', 'status'], data);
+
         res
             .contentType('application/json')
             .send(JSON.stringify(data));
@@ -56,7 +60,6 @@ var userStatus = function(req, res, next) {
     var promiseStatus = StatusService.findReadOnlyByUserId(req.params.id);
 
     promiseStatus.then(function (data) {
-
         data = data.map(function(object) {
             ObjectHelper.removeProperties(['__v', 'password'], object);
         });
