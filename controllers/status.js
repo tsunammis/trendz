@@ -9,7 +9,7 @@ var express         = require('express'),
     _               = require('underscore');
 
 /**
- * GET  /:id
+ * GET  /status/:id
  */
 var show = function(req, res, next) {
 
@@ -40,7 +40,7 @@ var show = function(req, res, next) {
 };
 
 /**
- * GET  /:id/status
+ * GET  /users/:id/status
  * Parameters: page=1 / per_page=10
  */
 var listByUser = function(req, res, next) {
@@ -53,7 +53,7 @@ var listByUser = function(req, res, next) {
         if (!user) {
             return when.reject(new HttpErrors.NotFound('User not found'));
         }
-        return StatusService.findReadOnlyByUserId(user._id);
+        return StatusService.findReadOnlyByUserId(req.params.id);
     })
     .then(function (listStatus) {
         listStatus = listStatus

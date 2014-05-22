@@ -9,7 +9,8 @@ var express         = require('express'),
     StringValidator = require('../validator').String,
     UserValidator   = require('../validator').User,
     when            = require('when'),
-    _               = require('underscore');
+    _               = require('underscore'),
+    errors          = require('../validator').Errors;
 
 /**
  * POST  /
@@ -37,18 +38,15 @@ var create = function(req, res, next) {
         user = user.toObject();
         user = ObjectHelper.removeProperties(['__v', 'password'], user);
         user = UserAdapter.hateoasize(['self', 'status'], user);
-        
         res
             .contentType('application/json')
             .send(201, JSON.stringify(user));
     })
     .then(null, function(err) {
-        console.dir(err);
         if (_.has(err, 'code')) {
             return next(new HttpErrors.BadRequest(err.message, err.code));
-        } else {
-            return next(new HttpErrors.BadRequest(err.message));
         }
+        return next(err);
     });
 };
 
@@ -63,24 +61,22 @@ var show = function(req, res, next) {
     })
     .then(function (data) {
         if (!data) {
-            return when.reject(new HttpErrors.NotFound('User not found'));
+            return when.reject(new HttpErrors.NotFound(errors[14].message, errors[14].code));
         }
-
         data = ObjectHelper.removeProperties(['__v', 'password'], data);
         data = UserAdapter.hateoasize(['self', 'status'], data);
-
         res
             .contentType('application/json')
             .send(JSON.stringify(data));
 
     }).then(null, function(err) {
-        if (_.has(err, 'name') 
-                && (err.name == 'CastError' || err.name == 'string.document_id' )) {
+        if (_.has(err, 'code') && err.code != 14) {
+            return next(new HttpErrors.BadRequest(err.message, err.code));
+        } else if (_.has(err, 'name') && err.name == 'CastError') {
             return next(new HttpErrors.BadRequest("The id's format isn't valid"));
         }
         return next(err);
     });
-
 };
 
 module.exports = {

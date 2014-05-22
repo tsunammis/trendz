@@ -12,5 +12,6 @@ module.exports = [
     { 'code': 10,   'name': 'string.not_null',                  'message': "the string must be not null" },
     { 'code': 11,   'name': 'email.format',                     'message': "the email's format is not valid" },
     { 'code': 12,   'name': 'string.slug',                      'message': "the slug's format is not valid" },
-    { 'code': 13,   'name': 'string.document_id',               'message': "the id's format is not valid" }
+    { 'code': 13,   'name': 'string.document_id',               'message': "the id's format is not valid" },
+    { 'code': 14,   'name': 'user.not_found',                   'message': "user not found" }
 ];

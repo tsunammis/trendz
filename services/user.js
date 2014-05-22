@@ -1,5 +1,6 @@
-var User    = require('../models').User,
-    when    = require('when');
+var User        = require('../models').User,
+    ObjectId    = require('mongoose').Types.ObjectId,
+    when        = require('when');
 
 /**
  * Find user by ID.
@@ -10,7 +11,7 @@ var User    = require('../models').User,
 var findReadOnlyById = function(id) {
     return User
         .findOne({
-            _id: id
+            _id: new ObjectId(id)
         })
         .lean(true)
         .exec();

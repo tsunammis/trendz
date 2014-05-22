@@ -1,4 +1,5 @@
-var Status = require('../models').Status;
+var Status      = require('../models').Status,
+    ObjectId    = require('mongoose').Types.ObjectId;
 
 /**
  * Find status by ID.
@@ -9,7 +10,7 @@ var Status = require('../models').Status;
 var findReadOnlyById = function(id) {
     return Status
         .findOne({
-            _id: id
+            _id: new ObjectId(id)
         })
         .lean(true)
         .exec();
@@ -23,7 +24,7 @@ var findReadOnlyById = function(id) {
  */
 var findReadOnlyByUserId = function(userId) {
     return Status
-        .find({ owner: userId })
+        .find({ 'owner': new ObjectId(userId) })
         .limit(20)
         .lean()
         .sort('-createdAt')

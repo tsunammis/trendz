@@ -1,5 +1,5 @@
 var UserHelper  = require('../helpers/user'),
-    ObjectId    = require('mongodb').BSONNative.ObjectID;
+    ObjectId    = require('mongoose').Types.ObjectId;
 
 module.exports.Users = [
     {
