@@ -79,7 +79,6 @@ describe('POST /users', function() {
         
         request(app)
             .post('/users')
-            .set('Authorization', testTools.buildBasicAuthorization('chuck@norris.com', 'chuck@norris.com'))
             .set('Content-Type', 'application/json')
             .send({ password: 'my', password_confirm: 'my', email: 'chuck@crosoft.com'})
             .expect('Content-Type', /json/)
@@ -110,7 +109,6 @@ describe('POST /users', function() {
         
         request(app)
             .post('/users')
-            .set('Authorization', testTools.buildBasicAuthorization('chuck@norris.com', 'chuck@norris.com'))
             .set('Content-Type', 'application/json')
             .send({ password: 'azertyuiopqsdfgh', password_confirm: 'azertyuiopqsdfgh', email: 'chuck@crosoft.com'})
             .expect('Content-Type', /json/)
@@ -141,7 +139,6 @@ describe('POST /users', function() {
         
         request(app)
             .post('/users')
-            .set('Authorization', testTools.buildBasicAuthorization('chuck@norris.com', 'chuck@norris.com'))
             .set('Content-Type', 'application/json')
             .send({ password: 'myPassword', password_confirm: 'myPass', email: 'chuck@crosoft.com'})
             .expect('Content-Type', /json/)
@@ -172,7 +169,6 @@ describe('POST /users', function() {
         
         request(app)
             .post('/users')
-            .set('Authorization', testTools.buildBasicAuthorization('chuck@norris.com', 'chuck@norris.com'))
             .set('Content-Type', 'application/json')
             .send({ password: 'myPassword', password_confirm: 'myPassword', email: 'chuck@norris.com'})
             .expect('Content-Type', /json/)
@@ -203,7 +199,6 @@ describe('POST /users', function() {
         
         request(app)
             .post('/users')
-            .set('Authorization', testTools.buildBasicAuthorization('chuck@norris.com', 'chuck@norris.com'))
             .set('Content-Type', 'application/json')
             .send({ password: 'myPassword', password_confirm: 'myPassword', email: 'chuck@norris'})
             .expect('Content-Type', /json/)
@@ -234,7 +229,6 @@ describe('POST /users', function() {
         
         request(app)
             .post('/users')
-            .set('Authorization', testTools.buildBasicAuthorization('chuck@norris.com', 'chuck@norris.com'))
             .set('Content-Type', 'application/json')
             .send({ password: 'myPassword', password_confirm: 'myPassword', email: 'chuck@god.com'})
             .expect('Content-Type', /json/)
