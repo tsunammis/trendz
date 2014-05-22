@@ -23,10 +23,10 @@ var findReadOnlyById = function(id) {
  */
 var findReadOnlyByUserId = function(userId) {
     return Status
-        .find({ user: userId })
+        .find({ owner: userId })
         .limit(20)
         .lean()
-        .sort('-date')
+        .sort('-createdAt')
         .exec();
 };
 

@@ -4,26 +4,52 @@ var express         = require('express'),
     UserAdapter     = require('../adapter').User,
     StatusService   = require('../services').Status,
     StatusAdapter   = require('../adapter').Status,
-    ObjectHelper    = require('../helpers/object');
+    ObjectHelper    = require('../helpers/object'),
+    HttpErrors      = require('../helpers/http.errors'),
+    StringValidator = require('../validator').String,
+    UserValidator   = require('../validator').User,
+    when            = require('when'),
+    _               = require('underscore');
 
 /**
  * POST  /
  */
 var create = function(req, res, next) {
-    var promiseUser = UserService.findReadOnlyById(req.params.id);
-
-    promiseUser.then(function (data) {
-
-        data = UserAdapter.removeProperties(data);
-        data = UserAdapter.hateoasize(['self', 'status'], data);
+    
+    UserValidator.samePassword(req.body.password, req.body.password_confirm)
+    .then(function() {
+        return UserValidator.password(req.body.password);
+    })
+    .then(function() {
+        return UserValidator.email(req.body.email);
+    })
+    .then(function() {
+        return UserValidator.emailNotExist(req.body.email);
+    })
+    .then(function() {
+        return User.create({
+            email: req.body.email,
+            password: req.body.password
+        });
+    })
+    .then(function(user) {
+        
+        user = user.toObject();
+        user = ObjectHelper.removeProperties(['__v', 'password'], user);
+        user = UserAdapter.hateoasize(['self', 'status'], user);
+        
         res
             .contentType('application/json')
-            .send(JSON.stringify(data));
-
-    }, function(err) {
-        next(err);
+            .send(201, JSON.stringify(user));
+    })
+    .then(null, function(err) {
+        console.dir(err);
+        if (_.has(err, 'code')) {
+            return next(new HttpErrors.BadRequest(err.message, err.code));
+        } else {
+            return next(new HttpErrors.BadRequest(err.message));
+        }
     });
-
 };
 
 /**
@@ -31,13 +57,13 @@ var create = function(req, res, next) {
  */
 var show = function(req, res, next) {
 
-    UserService.findReadOnlyById(req.params.id)
+    StringValidator.isDocumentId(req.params.id)
+    .then(function(value) {
+        return UserService.findReadOnlyById(value);
+    })
     .then(function (data) {
-        if (data == null) {
-            var error = new Error('User not found');
-            error.status = 404;
-            next(error);
-            return;
+        if (!data) {
+            return when.reject(new HttpErrors.NotFound('User not found'));
         }
 
         data = ObjectHelper.removeProperties(['__v', 'password'], data);
@@ -47,37 +73,17 @@ var show = function(req, res, next) {
             .contentType('application/json')
             .send(JSON.stringify(data));
 
-    }, function(err) {
-        next(err);
+    }).then(null, function(err) {
+        if (_.has(err, 'name') 
+                && (err.name == 'CastError' || err.name == 'string.document_id' )) {
+            return next(new HttpErrors.BadRequest("The id's format isn't valid"));
+        }
+        return next(err);
     });
 
 };
 
-/**
- * GET  /:id/status
- */
-var userStatus = function(req, res, next) {
-    var promiseStatus = StatusService.findReadOnlyByUserId(req.params.id);
-
-    promiseStatus.then(function (data) {
-        data = data.map(function(object) {
-            ObjectHelper.removeProperties(['__v', 'password'], object);
-        });
-        data = data.map(function(object) {
-            StatusAdapter.hateoasize(['self'], object);
-        });
-        res
-            .contentType('application/json')
-            .send(JSON.stringify(data));
-
-    }, function(err) {
-        next(err);
-    });
+module.exports = {
+    create: create,
+    show: show
 };
-
-var router = express.Router();
-router.route('/').post(create);
-router.route('/:id').get(show);
-router.route('/:id/status').get(userStatus);
-
-module.exports.router = router;

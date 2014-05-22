@@ -19,17 +19,17 @@ describe('adapter.project', function(){
 
         expect(project)
             .to.have.property('links')
-                .that.is.an('array');
+            .that.is.an('array');
 
         var self = project.links[0];
 
         expect(self)
             .to.have.property('rel')
-                .to.equal('self');
+            .to.equal('self');
 
         expect(self)
             .to.have.property('method')
-                .to.equal('GET');
+            .to.equal('GET');
 
         expect(self)
             .to.have.property('href')

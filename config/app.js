@@ -17,10 +17,15 @@ app.use(methodOverride());
 app.use(passport.initialize());
 
 // Routes
-app.use('/',        passport.authenticate('basic', { session: false }));
-app.use('/users',   controllers.User.router);
-app.use('/status',  controllers.Status.router);
-app.use('/project', controllers.Project.router);
+app.use('/', passport.authenticate('basic', { session: false }));
+
+app.route('/users').post(controllers.User.create);
+app.route('/users/:id').get(controllers.User.show);
+app.route('/users/:id/status').get(controllers.Status.listByUser);
+app.route('/status/:id').get(controllers.Status.show);
+app.route('/project').post(controllers.Project.create);
+app.route('/project/:id').get(controllers.Project.show);
+
 app.use(controllers.Default.errorHandler);
 
 module.exports = app;

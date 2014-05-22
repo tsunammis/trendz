@@ -2,16 +2,14 @@ var validator       = require('validator'),
     ProjectService  = require('../services').Project,
     when            = require('when'),
     sequence        = require('when/sequence'),
-    stringValidator = require('./string');
+    stringValidator = require('./string'),
+    Errors          = require('./errors');
 
 var name = function(name) {
     if (name.length <= 2 || name.length > 30) {
-        return when.reject({
-            'name'      : 'project.name',
-            'message'   : 'the length of name must contain between 3 and 30 characters'
-        });
+        return when.reject(Errors[1]);
     }
-    return when.resolve();
+    return when.resolve(name);
 };
 
 var slug = function(slug) {
@@ -25,17 +23,11 @@ var slugExist = function(slug) {
     return ProjectService.findReadOnlyBySlug(slug)
         .then(function(data) {
             if (data !== null) {
-                return when.resolve();
+                return when.resolve(slug);
             }
-            return when.reject({
-                'name'      : 'user.slug.doesnt_exist',
-                'message'   : 'this slug doesn\'t exist'
-            });
+            return when.reject(Errors[2]);
         }, function(err) {
-            return when.reject({
-                'name'      : 'connection.error',
-                'message'   : 'Error durring connection with mongo'
-            }); 
+            return when.reject(Errors[3]);
         });
 };
 
@@ -43,17 +35,11 @@ var slugNotExist = function(slug) {
     return ProjectService.findReadOnlyBySlug(slug)
         .then(function(data) {
             if (data !== null) {
-                return when.reject({
-                    'name'      : 'user.slug.already_exist',
-                    'message'   : 'this slug already exist'
-                });
+                return when.reject(Errors[4]);
             }
-            return when.resolve();
+            return when.resolve(slug);
         }, function(err) {
-            return when.reject({
-                'name'      : 'connection.error',
-                'message'   : 'Error durring connection with mongo'
-            }); 
+            return when.reject(Errors[3]); 
         });
 };
 

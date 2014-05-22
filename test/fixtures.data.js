@@ -42,26 +42,26 @@ module.exports.Status = [
     {
         _id         : new ObjectId('53584239a1294f5a24940690'),
         content     : 'I begin my first project',
-        createdAt   : Date.now,
+        createdAt   : new Date(2014, 5, 21, 14, 30, 15),
         owner       : module.exports.Users[0]._id
     },
     {
         _id         : new ObjectId('53584239a1294f5a24940691'),
         content     : 'Hello everybody',
-        createdAt   : Date.now,
+        createdAt   : new Date(2014, 5, 21, 15, 31, 45),
         owner       : module.exports.Users[1]._id,
         project     : module.exports.Projects[0]._id
     },
     {
         _id         : new ObjectId('53584239a1294f5a24940692'),
         content     : 'the new fruit juice of MissFruit is awesome !',
-        createdAt   : Date.now,
+        createdAt   : new Date(2014, 5, 21, 17, 30, 45),
         owner       : module.exports.Users[0]._id
     },
     {
         _id         : new ObjectId('53584239a1294f5a24940693'),
         content     : 'there are somebody here ?',
-        createdAt   : Date.now,
+        createdAt   : new Date(2014, 5, 21, 18, 30, 45),
         owner       : module.exports.Users[0]._id,
         project     : module.exports.Projects[0]._id
     },

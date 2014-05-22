@@ -33,7 +33,7 @@ var create = function(req, res, next) {
 /**
  * GET  /:id
  */
-var self = function(req, res, next) {
+var show = function(req, res, next) {
     var promiseProject = ProjectService.findReadOnlyById(req.params.id);
 
     promiseProject.then(function (data) {
@@ -50,32 +50,7 @@ var self = function(req, res, next) {
 
 };
 
-/**
- * PUT  /:id
- */
-var update = function(req, res, next) {
-
+module.exports = {
+    create: create,
+    show: show
 };
-
-/**
- * GET  /:id/users
- */
-var users = function(req, res, next) {
-
-};
-
-/**
- * GET  /:id/status
- */
-var status = function(req, res, next) {
-
-};
-
-var router = express.Router();
-router.route('/').post(create);
-router.route('/:id').get(self);
-router.route('/:id').put(update);
-router.route('/:id/users').get(users);
-router.route('/:id/status').get(status);
-
-module.exports.router = router;
