@@ -13,7 +13,12 @@ var express         = require('express'),
     errors          = require('../validator').Errors;
 
 /**
- * POST  /
+ * POST  /users
+ * 
+ * Parameters:
+ *  - email | Respect email format
+ *  - password | Min length: 3 and Max length: 15
+ *  - password_confirm | Must be the same with 'password'
  */
 var create = function(req, res, next) {
     
@@ -51,7 +56,10 @@ var create = function(req, res, next) {
 };
 
 /**
- * GET  /:id
+ * GET  /users/:id
+ * 
+ * Parameters:
+ *  - id | Respect the format of Mongo's Id
  */
 var show = function(req, res, next) {
 
