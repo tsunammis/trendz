@@ -1,5 +1,8 @@
 module.exports = function(grunt) {
 
+    // Load all grunt tasks
+    require('matchdep').filterDev('grunt-*').forEach(grunt.loadNpmTasks);
+
     // Project configuration.
     grunt.initConfig({
         pkg: grunt.file.readJSON('package.json'),
@@ -10,9 +13,6 @@ module.exports = function(grunt) {
             ]
         }
     });
-    
-    // Load the plugin that provides the "jshint" task.
-    grunt.loadNpmTasks('grunt-contrib-jshint');
     
     // Default task(s).
     grunt.registerTask('default', ['jshint']);
