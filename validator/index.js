@@ -1,4 +1,4 @@
-var UserValidator       = require('./user')
+var UserValidator       = require('./user'),
     ProjectValidator    = require('./project'),
     StringValidator     = require('./string'),
     StatusValidator     = require('./status'),

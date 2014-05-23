@@ -5,7 +5,7 @@ var readline            = require('readline'),
     cli                 = require('../helpers/console'),
     Status              = require('../models').Status,
     statusValidator     = require('../validator').Status,
-    userService         = require('../services').User
+    userService         = require('../services').User,
     userValidator       = require('../validator').User,
     projectValidator    = require('../validator').Project,
     projectService      = require('../services').Project,
@@ -25,7 +25,7 @@ a.ask(function(response) {
     userService.findReadOnlyByEmail(response.owner)
     .then(function(user) {
         response.owner = user._id;
-        if (response.project != null && response.length > 0) {
+        if (response.project && response.length > 0) {
             return projectService.findReadOnlyBySlug(response.project)
                 .then(function(project) {
                     response.project = project._id;
@@ -38,9 +38,8 @@ a.ask(function(response) {
     })
     .then(function (createdStatus) {
         cli.line();
-        cli.line(cli.colorOk("The status \"") 
-            + cli.colorHighlightOk(createdStatus.content) 
-            + cli.colorOk("\" has been created.")
+        cli.line(
+            cli.colorOk('The status "') + cli.colorHighlightOk(createdStatus.content) + cli.colorOk('" has been created.')
         );
         cli.ok("Thanks.");
         a.close();

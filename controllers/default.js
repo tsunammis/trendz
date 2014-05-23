@@ -16,7 +16,7 @@ var errorHandler = function(err, req, res, next) {
     }
     
     res.status(err.status || 500);
-    res.contentType('application/json')
+    res.contentType('application/json');
     res.send(error);
 };
 

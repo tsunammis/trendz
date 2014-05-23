@@ -30,8 +30,6 @@ module.exports = {
     ok: ok,
     error: error,
     line: line,
-    colorHighlightOk: colorHighlightOk,
-    
     colorGreen: colorGreen, 
     colorRed: colorRed,
     colorHighlightOk: colorHighlightOk,

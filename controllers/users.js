@@ -80,7 +80,7 @@ var show = function(req, res, next) {
     }).then(null, function(err) {
         if (_.has(err, 'code') && !(err instanceof HttpErrors.NotFound)) {
             return next(new HttpErrors.BadRequest(err.message, err.code));
-        } else if (_.has(err, 'name') && err.name == 'CastError') {
+        } else if (_.has(err, 'name') && err.name === 'CastError') {
             return next(new HttpErrors.BadRequest(errors[13].message, errors[13].code));
         }
         return next(err);

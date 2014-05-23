@@ -23,11 +23,10 @@ a.ask(function(response) {
     var createPromise = User.create(response)
         .then(function (createdUser) {
             cli.line();
-            cli.line(cli.colorOk("The user ") 
-                + cli.colorHighlightOk(createdUser.email) 
-                + cli.colorOk(" has been registered with ") 
-                + cli.colorHighlightOk(plainPassword) 
-                + cli.colorOk(" password.")
+            cli.line(
+                cli.colorOk("The user ") + cli.colorHighlightOk(createdUser.email) +
+                cli.colorOk(" has been registered with ") + cli.colorHighlightOk(plainPassword) +
+                cli.colorOk(" password.")
             );
             cli.ok("Thanks.");
             a.close();

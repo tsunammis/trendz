@@ -27,9 +27,8 @@ a.ask(function(response) {
     })
     .then(function (createdProject) {
         cli.line();
-        cli.line(cli.colorOk("The project ") 
-            + cli.colorHighlightOk(response.name) 
-            + cli.colorOk(" has been created.")
+        cli.line(
+            cli.colorOk("The project ")  + cli.colorHighlightOk(response.name) + cli.colorOk(" has been created.")
         );
         cli.ok("Thanks.");
         a.close();

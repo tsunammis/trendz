@@ -47,7 +47,7 @@ var emailNotExist = function(mail) {
 };
 
 var samePassword = function(password, confirmPassword) {
-    if (password != confirmPassword) {
+    if (password !== confirmPassword) {
         return when.reject(Errors[9]);
     }
     return when.resolve(password);

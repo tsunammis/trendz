@@ -15,8 +15,8 @@ var a = new CommandAsker([
 
 a.ask(function(response) {
     cli.line();
-    cli.line(cli.colorOk("BasicAuth: ") 
-        + cli.colorHighlightOk(testTools.buildBasicAuthorization(response.login, response.password))
+    cli.line(
+        cli.colorOk("BasicAuth: ") + cli.colorHighlightOk(testTools.buildBasicAuthorization(response.login, response.password))
     );
     a.close(0);
 });

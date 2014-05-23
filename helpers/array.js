@@ -12,6 +12,6 @@ var pushToPropertyUnknow = function(object, property, item) {
     }
 
     object[property].push(item);
-}
+};
 
 module.exports.pushToPropertyUnknow = pushToPropertyUnknow;
