@@ -4,11 +4,6 @@ module.exports = function(grunt) {
     grunt.initConfig({
         pkg: grunt.file.readJSON('package.json'),
         jshint: {
-            options: {
-                curly: true,
-                eqeqeq: true,
-                eqnull: true
-            },
             uses_defaults: [
                 'app.js', 
                 '{adapter,cli,config,controllers,helpers,models,services,test,validator}/**/*.js'
@@ -16,10 +11,9 @@ module.exports = function(grunt) {
         }
     });
     
-    // Load the plugin that provides the "uglify" task.
+    // Load the plugin that provides the "jshint" task.
     grunt.loadNpmTasks('grunt-contrib-jshint');
     
     // Default task(s).
     grunt.registerTask('default', ['jshint']);
-
 };
