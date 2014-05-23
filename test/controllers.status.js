@@ -51,14 +51,54 @@ describe('GET /users/:id/status', function() {
         request(app)
             .get('/users/12584239a1294f5a24940590/status')
             .set('Authorization', testTools.buildBasicAuthorization('chuck@norris.com', 'chuck@norris.com'))
-            .expect(404, done);
+            .expect(400)
+            .end(function(err, res) {
+                
+                if (err) {
+                    return done(err);
+                }
+                
+                expect(res)
+                    .to.have.property('body')
+                    .that.is.an('object');
+                
+                expect(res.body)
+                    .to.have.property('message')
+                    .to.equal("user not found");
+                    
+                expect(res.body)
+                    .to.have.property('code')
+                    .to.equal(14);
+                    
+                return done();
+            });
     });
     
     it("User ID's format is not good (Bad Request)", function(done) {
         request(app)
             .get('/users/1234/status')
             .set('Authorization', testTools.buildBasicAuthorization('chuck@norris.com', 'chuck@norris.com'))
-            .expect(400, done);
+            .expect(400)
+            .end(function(err, res) {
+                
+                if (err) {
+                    return done(err);
+                }
+                
+                expect(res)
+                    .to.have.property('body')
+                    .that.is.an('object');
+                
+                expect(res.body)
+                    .to.have.property('message')
+                    .to.equal("the id's format is not valid");
+                    
+                expect(res.body)
+                    .to.have.property('code')
+                    .to.equal(13);
+                    
+                return done();
+            });
     });
 
 });
@@ -92,8 +132,260 @@ describe('GET /status/:id', function() {
         request(app)
             .get('/status/1234')
             .set('Authorization', testTools.buildBasicAuthorization('chuck@norris.com', 'chuck@norris.com'))
-            .expect(400, done);
+            .expect(400)
+            .end(function(err, res) {
+                
+                if (err) {
+                    return done(err);
+                }
+                
+                expect(res)
+                    .to.have.property('body')
+                    .that.is.an('object');
+                
+                expect(res.body)
+                    .to.have.property('message')
+                    .to.equal("the id's format is not valid");
+                    
+                expect(res.body)
+                    .to.have.property('code')
+                    .to.equal(13);
+                    
+                return done();
+            });
             
+    });
+    
+    it("Status not found", function(done) {
+        
+        request(app)
+            .get('/status/aaa84239a1294f5a24940690')
+            .set('Authorization', testTools.buildBasicAuthorization('chuck@norris.com', 'chuck@norris.com'))
+            .set('Content-Type', 'application/json')
+            .expect('Content-Type', /json/)
+            .expect(404)
+            .end(function(err, res) {
+                
+                if (err) {
+                    return done(err);
+                }
+                
+                expect(res)
+                    .to.have.property('body')
+                    .that.is.an('object');
+                
+                expect(res.body)
+                    .to.have.property('message')
+                    .to.equal("status not found");
+                    
+                expect(res.body)
+                    .to.have.property('code')
+                    .to.equal(15);
+                    
+                return done();
+            });
+    });
+    
+    it('Not authorized to access this data (Unauthorized)', function(done) {
+        request(app)
+            .get('/status/53584239a1294f5a24940690')
+            .set('Content-Type', 'application/json')
+            .expect(401, done);
+    });
+
+});
+
+describe('POST /status', function() {
+
+    it('Content length is too short', function(done) {
+        
+        request(app)
+            .post('/status')
+            .set('Authorization', testTools.buildBasicAuthorization('chuck@norris.com', 'chuck@norris.com'))
+            .set('Content-Type', 'application/json')
+            .send({ content: '' })
+            .expect('Content-Type', /json/)
+            .expect(400)
+            .end(function(err, res) {
+                
+                if (err) {
+                    return done(err);
+                }
+                
+                expect(res)
+                    .to.have.property('body')
+                    .that.is.an('object');
+                
+                expect(res.body)
+                    .to.have.property('message')
+                    .to.equal("status.content's length must be between 1 and 300 caracters.");
+                    
+                expect(res.body)
+                    .to.have.property('code')
+                    .to.equal(17);
+                    
+                return done();
+            });
+    });
+    
+    it('Content length is too long', function(done) {
+        
+        var length301 =
+            'azertyuiopazertyuiopazertyuiopazertyuiopazertyuiopazertyuiopazertyuiopazertyuiopazertyuiopazertyuiop' +
+            'azertyuiopazertyuiopazertyuiopazertyuiopazertyuiopazertyuiopazertyuiopazertyuiopazertyuiopazertyuiop' +
+            'azertyuiopazertyuiopazertyuiopazertyuiopazertyuiopazertyuiopazertyuiopazertyuiopazertyuiopazertyuiop' +
+            'a';
+        
+        request(app)
+            .post('/status')
+            .set('Authorization', testTools.buildBasicAuthorization('chuck@norris.com', 'chuck@norris.com'))
+            .set('Content-Type', 'application/json')
+            .send({ content: length301 })
+            .expect('Content-Type', /json/)
+            .expect(400)
+            .end(function(err, res) {
+                
+                if (err) {
+                    return done(err);
+                }
+                
+                expect(res)
+                    .to.have.property('body')
+                    .that.is.an('object');
+                
+                expect(res.body)
+                    .to.have.property('message')
+                    .to.equal("status.content's length must be between 1 and 300 caracters.");
+                    
+                expect(res.body)
+                    .to.have.property('code')
+                    .to.equal(17);
+                    
+                return done();
+            });
+    });
+    
+    it('Bad project ID', function(done) {
+        
+        request(app)
+            .post('/status')
+            .set('Authorization', testTools.buildBasicAuthorization('chuck@norris.com', 'chuck@norris.com'))
+            .set('Content-Type', 'application/json')
+            .send({ content: 'Hello everyone !', project: '1234' })
+            .expect('Content-Type', /json/)
+            .expect(400)
+            .end(function(err, res) {
+                
+                if (err) {
+                    return done(err);
+                }
+                
+                expect(res)
+                    .to.have.property('body')
+                    .that.is.an('object');
+                
+                expect(res.body)
+                    .to.have.property('message')
+                    .to.equal("the id's format is not valid");
+                    
+                expect(res.body)
+                    .to.have.property('code')
+                    .to.equal(13);
+                    
+                return done();
+            });
+    });
+    
+    it('Not authorized to access this data (Unauthorized)', function(done) {
+        request(app)
+            .post('/status')
+            .set('Content-Type', 'application/json')
+            .send({})
+            .expect(401, done);
+    });
+    
+    it('It is OK (without project)', function(done) {
+        
+        request(app)
+            .post('/status')
+            .set('Authorization', testTools.buildBasicAuthorization('chuck@norris.com', 'chuck@norris.com'))
+            .set('Content-Type', 'application/json')
+            .send({ content: 'Hello everyone !' })
+            .expect('Content-Type', /json/)
+            .expect(201)
+            .end(function(err, res) {
+                
+                if (err) {
+                    return done(err);
+                }
+                
+                expect(res.body)
+                    .to.contain.keys('_id', 'content', 'owner', 'createdAt', 'links');
+                    
+                expect(res.body)
+                    .to.not.contain.keys('__v');
+                    
+                expect(res.body.content)
+                    .to.equal('Hello everyone !');
+                    
+                return done();
+            });
+    });
+    
+    it('It is OK (with project)', function(done) {
+        
+        request(app)
+            .post('/status')
+            .set('Authorization', testTools.buildBasicAuthorization('chuck@norris.com', 'chuck@norris.com'))
+            .set('Content-Type', 'application/json')
+            .send({ content: 'Hello everyone !', project: '53584239a1294f5a24940391' })
+            .expect('Content-Type', /json/)
+            .expect(201)
+            .end(function(err, res) {
+                
+                if (err) {
+                    return done(err);
+                }
+                
+                expect(res.body)
+                    .to.contain.keys('_id', 'content', 'owner', 'project', 'createdAt', 'links');
+                    
+                expect(res.body)
+                    .to.not.contain.keys('__v');
+                    
+                expect(res.body.content)
+                    .to.equal('Hello everyone !');
+                    
+                return done();
+            });
+    });
+    
+    it('The user does not belong to the project', function(done) {
+        
+        request(app)
+            .post('/status')
+            .set('Authorization', testTools.buildBasicAuthorization('chuck@norris.com', 'chuck@norris.com'))
+            .set('Content-Type', 'application/json')
+            .send({ content: 'Hello everyone !', project: '53584239a1294f5a24940390' })
+            .expect('Content-Type', /json/)
+            .expect(401)
+            .end(function(err, res) {
+                
+                if (err) {
+                    return done(err);
+                }
+                
+                expect(res.body)
+                    .to.contain.keys('_id', 'content', 'owner', 'project', 'createdAt', 'links');
+                    
+                expect(res.body)
+                    .to.not.contain.keys('__v');
+                    
+                expect(res.body.content)
+                    .to.equal('Hello everyone !');
+                    
+                return done();
+            });
     });
 
 });

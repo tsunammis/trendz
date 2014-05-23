@@ -1,4 +1,5 @@
-var Project = require('../models').Project;
+var Project     = require('../models').Project,
+    ObjectId    = require('mongoose').Types.ObjectId;
 
 /**
  * Find project by ID.
@@ -9,7 +10,7 @@ var Project = require('../models').Project;
 var findReadOnlyById = function(id) {
     return Project
         .findOne({
-            _id: id
+            _id: new ObjectId(id)
         })
         .lean(true)
         .exec();

@@ -13,5 +13,9 @@ module.exports = [
     { 'code': 11,   'name': 'email.format',                     'message': "the email's format is not valid" },
     { 'code': 12,   'name': 'string.slug',                      'message': "the slug's format is not valid" },
     { 'code': 13,   'name': 'string.document_id',               'message': "the id's format is not valid" },
-    { 'code': 14,   'name': 'user.not_found',                   'message': "user not found" }
+    { 'code': 14,   'name': 'user.not_found',                   'message': "user not found" },
+    { 'code': 15,   'name': 'status.not_found',                 'message': "status not found" },
+    { 'code': 16,   'name': 'user.doesnt_exist',                'message': "user id doesn't exist" },
+    { 'code': 17,   'name': 'status.content',                   'message': "status.content's length must be between 1 and 300 caracters." },
+    { 'code': 18,   'name': 'project.doesnt_exist',             'message': "project not found" },
 ];

@@ -41,7 +41,27 @@ describe('GET /users/:id', function() {
         request(app)
             .get('/users/12584239a1294f5a24940590')
             .set('Authorization', testTools.buildBasicAuthorization('chuck@norris.com', 'chuck@norris.com'))
-            .expect(404, done);
+            .expect(404)
+            .end(function(err, res) {
+                
+                if (err) {
+                    return done(err);
+                }
+                
+                expect(res)
+                    .to.have.property('body')
+                    .that.is.an('object');
+                
+                expect(res.body)
+                    .to.have.property('message')
+                    .to.equal("user not found");
+                    
+                expect(res.body)
+                    .to.have.property('code')
+                    .to.equal(14);
+                    
+                return done();
+            });
     });
     
     it("ID's format is not good (Bad Request)", function(done) {
@@ -52,7 +72,7 @@ describe('GET /users/:id', function() {
             .end(function(err, res) {
                 
                 if (err) {
-                    done(err);
+                    return done(err);
                 }
                 
                 expect(res)
@@ -67,7 +87,7 @@ describe('GET /users/:id', function() {
                     .to.have.property('code')
                     .to.equal(13);
                     
-                done();
+                return done();
             });
     });
 
@@ -86,7 +106,7 @@ describe('POST /users', function() {
             .end(function(err, res) {
                 
                 if (err) {
-                    done(err);
+                    return done(err);
                 }
                 
                 expect(res)
@@ -101,7 +121,7 @@ describe('POST /users', function() {
                     .to.have.property('code')
                     .to.equal(5);
                     
-                done();
+                return done();
             });
     });
     
@@ -116,7 +136,7 @@ describe('POST /users', function() {
             .end(function(err, res) {
                 
                 if (err) {
-                    done(err);
+                    return done(err);
                 }
                 
                 expect(res)
@@ -131,7 +151,7 @@ describe('POST /users', function() {
                     .to.have.property('code')
                     .to.equal(6);
                     
-                done();
+                return done();
             });
     });
 
@@ -146,7 +166,7 @@ describe('POST /users', function() {
             .end(function(err, res) {
                 
                 if (err) {
-                    done(err);
+                    return done(err);
                 }
                 
                 expect(res)
@@ -161,7 +181,7 @@ describe('POST /users', function() {
                     .to.have.property('code')
                     .to.equal(9);
                     
-                done();
+                return done();
             });
     });
     
@@ -176,7 +196,7 @@ describe('POST /users', function() {
             .end(function(err, res) {
                 
                 if (err) {
-                    done(err);
+                    return done(err);
                 }
                 
                 expect(res)
@@ -191,7 +211,7 @@ describe('POST /users', function() {
                     .to.have.property('code')
                     .to.equal(8);
                     
-                done();
+                return done();
             });
     });
     
@@ -206,7 +226,7 @@ describe('POST /users', function() {
             .end(function(err, res) {
                 
                 if (err) {
-                    done(err);
+                    return done(err);
                 }
                 
                 expect(res)
@@ -221,7 +241,7 @@ describe('POST /users', function() {
                     .to.have.property('code')
                     .to.equal(11);
                     
-                done();
+                return done();
             });
     });
     
@@ -236,7 +256,7 @@ describe('POST /users', function() {
             .end(function(err, res) {
                 
                 if (err) {
-                    done(err);
+                    return done(err);
                 }
                 
                 expect(res)
@@ -253,7 +273,7 @@ describe('POST /users', function() {
                 expect(res.body)
                     .to.have.property('links');
                     
-                done();
+                return done();
             });
     });
 

@@ -78,10 +78,10 @@ var show = function(req, res, next) {
             .send(JSON.stringify(data));
 
     }).then(null, function(err) {
-        if (_.has(err, 'code') && err.code != 14) {
+        if (_.has(err, 'code') && !(err instanceof HttpErrors.NotFound)) {
             return next(new HttpErrors.BadRequest(err.message, err.code));
         } else if (_.has(err, 'name') && err.name == 'CastError') {
-            return next(new HttpErrors.BadRequest("The id's format isn't valid"));
+            return next(new HttpErrors.BadRequest(errors[13].message, errors[13].code));
         }
         return next(err);
     });

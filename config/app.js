@@ -25,6 +25,7 @@ app.use('/', passport.authenticate('basic', { session: false }));
 // Routes protected
 app.route('/users/:id').get(controllers.User.show);
 app.route('/users/:id/status').get(controllers.Status.listByUser);
+app.route('/status').post(controllers.Status.create);
 app.route('/status/:id').get(controllers.Status.show);
 app.route('/project').post(controllers.Project.create);
 app.route('/project/:id').get(controllers.Project.show);
