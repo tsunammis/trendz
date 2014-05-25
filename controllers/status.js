@@ -77,6 +77,12 @@ var show = function(req, res, next) {
         if (!data) {
             return when.reject(new HttpErrors.NotFound(errors[15].message, errors[15].code));
         }
+        
+        // If status has project, check if user has rights to see it
+        if (!data.project) {
+            // @Todo check rights
+        }
+        
         data = ObjectHelper.removeProperties(['__v'], data);
         data = StatusAdapter.hateoasize(['self'], data);
         res
