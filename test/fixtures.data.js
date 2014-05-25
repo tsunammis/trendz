@@ -64,5 +64,5 @@ module.exports.Status = [
         createdAt   : new Date(2014, 5, 21, 18, 30, 45),
         owner       : module.exports.Users[0]._id,
         project     : module.exports.Projects[0]._id
-    },
+    }
 ];

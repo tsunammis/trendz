@@ -84,25 +84,47 @@ var show = function(req, res, next) {
     .then(function(value) {
         return StatusService.findReadOnlyById(value);
     })
-    .then(function (data) {
-        if (!data) {
+    .then(function (status) {
+        if (!status) {
             return when.reject(new HttpErrors.NotFound(errors[15].message, errors[15].code));
         }
-        
-        // If status has project, check if user has rights to see it
-        if (!data.project) {
-            // @Todo check rights
+
+        if (_.has(status, 'project') && status.project) {
+            return StringValidator.isDocumentId(status.project)
+                .then(function(value) {
+                    return ProjectService.findReadOnlyById(value)
+                        .then(function(project) {
+
+                            if (!project) {
+                                return when.reject(new HttpErrors.Unauthorized(errors[19].message, errors[19].code));
+                            }
+
+                            // User is able to access this project
+                            // @Todo Use request to mongo to determine ability
+                            var isAble = _.find(project.users, function(userId) {
+                                return userId.toString() === req.user._id.toString();
+                            });
+
+                            if (!isAble) {
+                                return when.reject(new HttpErrors.Unauthorized(errors[19].message, errors[19].code));
+                            }
+
+                            return when.resolve(status);
+                        });
+                });
+        } else {
+            return when.resolve(status);
         }
-        
-        data = ObjectHelper.removeProperties(['__v'], data);
-        data = StatusAdapter.hateoasize(['self'], data);
+    })
+    .then(function(status) {
+        status = ObjectHelper.removeProperties(['__v'], status);
+        status = StatusAdapter.hateoasize(['self'], status);
         res
             .contentType('application/json')
-            .send(JSON.stringify(data));
-
+            .send(JSON.stringify(status));
     })
     .then(null, function(err) {
-        if (_.has(err, 'code') && !(err instanceof HttpErrors.NotFound)) {
+        if (_.has(err, 'code') && !(err instanceof HttpErrors.NotFound) && !(err instanceof HttpErrors.Unauthorized)) {
             return next(new HttpErrors.BadRequest(err.message, err.code));
         } else if (_.has(err, 'name') && err.name === 'CastError') {
             return next(new HttpErrors.BadRequest(errors[13].message, errors[13].code));

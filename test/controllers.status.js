@@ -193,6 +193,36 @@ describe('GET /status/:id', function() {
             .expect(401, done);
     });
 
+    it('Not authorized to access this data (User Not belong to project)', function(done) {
+
+        request(app)
+            .get('/status/53584239a1294f5a24940691')
+            .set('Authorization', testTools.buildBasicAuthorization('chuck@norris.com', 'chuck@norris.com'))
+            .set('Content-Type', 'application/json')
+            .expect('Content-Type', /json/)
+            .expect(401)
+            .end(function(err, res) {
+
+                if (err) {
+                    return done(err);
+                }
+
+                expect(res)
+                    .to.have.property('body')
+                    .that.is.an('object');
+
+                expect(res.body)
+                    .to.have.property('message')
+                    .to.equal("user not belong to project");
+
+                expect(res.body)
+                    .to.have.property('code')
+                    .to.equal(19);
+
+                return done();
+            });
+    });
+
 });
 
 describe('POST /status', function() {
@@ -381,7 +411,7 @@ describe('POST /status', function() {
 
                 expect(res.body)
                     .to.have.property('message')
-                    .to.equal("user not belong to this project");
+                    .to.equal("user not belong to project");
 
                 expect(res.body)
                     .to.have.property('code')
