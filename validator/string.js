@@ -17,7 +17,7 @@ var isEmail = function(mail) {
 };
 
 var isSlug = function(slug) {
-    if (slug !== null && slug.length > 0 && !slug.match(/^[a-z0-9-]+$/)) {
+    if (slug !== null && slug.length > 0 && !slug.match(/^[a-z0-9-_]+$/)) {
         return when.reject(Errors[12]);
     }
     return when.resolve(slug);

@@ -13,10 +13,10 @@ var name = function(name) {
 };
 
 var slug = function(slug) {
-    return sequence([
-            stringValidator.isNotNull,
-            stringValidator.isSlug
-        ], slug);
+    if (validator.isNull(slug) || slug.length <= 2 || slug.length > 30) {
+        return when.reject(Errors[20]);
+    }
+    return stringValidator.isSlug(slug);
 };
 
 var slugExist = function(slug) {

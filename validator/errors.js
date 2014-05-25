@@ -1,9 +1,9 @@
 module.exports = [
     { 'code': 0,    'name': 'unknow',                           'message': "Unknow error" },
-    { 'code': 1,    'name': 'project.name',                     'message': "the length of name must contain between 3 and 30 characters" },
-    { 'code': 2,    'name': 'user.slug.doesnt_exist',           'message': "this slug doesn't exist" },
+    { 'code': 1,    'name': 'project.name.length',              'message': "project.name's length must be between 3 and 30 caracters" },
+    { 'code': 2,    'name': 'project.slug.doesnt_exist',        'message': "project.slug doesn't exist" },
     { 'code': 3,    'name': 'connection.error',                 'message': "Error durring connection with mongo" },
-    { 'code': 4,    'name': 'user.slug.already_exist',          'message': "this slug already exist" },
+    { 'code': 4,    'name': 'project.slug.already_exist',       'message': "project.slug already exist" },
     { 'code': 5,    'name': 'user.password.length.too_short',   'message': "the password's length is too short (3 min caracters)" },
     { 'code': 6,    'name': 'user.password.length.too_long',    'message': "the password's length is too long (15 caracters max)" },
     { 'code': 7,    'name': 'user.email.doesnt_exist',          'message': "this email is not registered" },
@@ -18,5 +18,6 @@ module.exports = [
     { 'code': 16,   'name': 'user.doesnt_exist',                'message': "user id doesn't exist" },
     { 'code': 17,   'name': 'status.content',                   'message': "status.content's length must be between 1 and 300 caracters." },
     { 'code': 18,   'name': 'project.doesnt_exist',             'message': "project not found" },
-    { 'code': 19,   'name': 'project.not_belong',               'message': "user not belong to project" }
+    { 'code': 19,   'name': 'project.not_belong',               'message': "user not belong to project" },
+    { 'code': 20,   'name': 'project.slug.length',              'message': "project.slug's length must be between 3 and 30 caracters" }
 ];

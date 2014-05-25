@@ -1,7 +1,6 @@
 #!/usr/bin/env node
 
-var readline            = require('readline'),
-    CommandAsker        = require('command-asker'),
+var CommandAsker        = require('command-asker'),
     cli                 = require('../helpers/console'),
     Project             = require('../models').Project,
     projectValidator    = require('../validator').Project,
