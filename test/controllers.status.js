@@ -370,20 +370,23 @@ describe('POST /status', function() {
             .expect('Content-Type', /json/)
             .expect(401)
             .end(function(err, res) {
-                
+
                 if (err) {
                     return done(err);
                 }
-                
+
+                expect(res)
+                    .to.have.property('body')
+                    .that.is.an('object');
+
                 expect(res.body)
-                    .to.contain.keys('_id', 'content', 'owner', 'project', 'createdAt', 'links');
-                    
+                    .to.have.property('message')
+                    .to.equal("user not belong to this project");
+
                 expect(res.body)
-                    .to.not.contain.keys('__v');
-                    
-                expect(res.body.content)
-                    .to.equal('Hello everyone !');
-                    
+                    .to.have.property('code')
+                    .to.equal(19);
+
                 return done();
             });
     });

@@ -18,4 +18,5 @@ module.exports = [
     { 'code': 16,   'name': 'user.doesnt_exist',                'message': "user id doesn't exist" },
     { 'code': 17,   'name': 'status.content',                   'message': "status.content's length must be between 1 and 300 caracters." },
     { 'code': 18,   'name': 'project.doesnt_exist',             'message': "project not found" },
+    { 'code': 19,   'name': 'project.not_belong',               'message': "user not belong to this project" }
 ];

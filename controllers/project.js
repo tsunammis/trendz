@@ -1,5 +1,4 @@
-var express         = require('express'),
-    Project         = require('../models').Project,
+var Project         = require('../models').Project,
     ProjectService  = require('../services').Project,
     ProjectAdapter  = require('../adapter').Project,
     ObjectHelper    = require('../helpers/object');
