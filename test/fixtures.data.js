@@ -54,6 +54,16 @@ module.exports.Projects = [
         users       : [
             module.exports.Users[2]._id
         ]
+    },
+    {
+        _id         : new ObjectId('53584239a1294f5a24940393'),
+        name        : 'Project mutable (put)',
+        slug        : 'project_mutable_put',
+        createdAt   : new Date(2014, 4, 15, 9, 15, 10),
+        owner       : module.exports.Users[2]._id,
+        users       : [
+            module.exports.Users[2]._id
+        ]
     }
 ];
 
@@ -84,5 +94,12 @@ module.exports.Status = [
         createdAt   : new Date(2014, 5, 21, 18, 30, 45),
         owner       : module.exports.Users[0]._id,
         project     : module.exports.Projects[0]._id
+    },
+    {
+        _id         : new ObjectId('53584239a1294f5a24940694'),
+        content     : 'World cup ! In soccer',
+        createdAt   : new Date(2014, 5, 21, 19, 35, 50),
+        owner       : module.exports.Users[2]._id,
+        project     : module.exports.Projects[3]._id
     }
 ];

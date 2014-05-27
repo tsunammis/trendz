@@ -3,34 +3,6 @@ var request     = require('supertest'),
     app         = require('./mock.app'),
     expect      = require("chai").expect;
 
-describe('PUT /project/:id', function() {
-
-    it('it is OK (with additional users)', function(done) {
-        done();
-    });
-
-    it("Additional user(s) doesn't exists", function(done) {
-        done();
-    });
-    
-    it('Name bad format', function(done) {
-        done();
-    });
-    
-    it('Slug bad format', function(done) {
-        done();
-    });
-    
-    it('Slug already exist', function(done) {
-        done();
-    });
-
-    it('Unauthorized', function(done) {
-        done();
-    });
-
-});
-
 describe('GET /project/:id', function() {
 
     it('it is OK', function(done) {
@@ -337,6 +309,253 @@ describe('POST /project', function() {
             .set('Content-Type', 'application/json')
             .send({})
             .expect(401, done);
+    });
+
+});
+
+describe('PUT /project/:id', function() {
+
+    it('it is OK (with additional users)', function(done) {
+        done();
+    });
+
+    it("Name's length is too short", function(done) {
+        request(app)
+            .put('/project/53584239a1294f5a24940393')
+            .set('Authorization', testTools.buildBasicAuthorization('larry@mail.com', 'larry@mail.com'))
+            .set('Content-Type', 'application/json')
+            .send({
+                name: 'my'
+            })
+            .expect('Content-Type', /json/)
+            .expect(400)
+            .end(function(err, res) {
+
+                if (err) {
+                    return done(err);
+                }
+
+                expect(res)
+                    .to.have.property('body')
+                    .that.is.an('object');
+
+                expect(res.body)
+                    .to.have.property('message')
+                    .to.equal("project.name's length must be between 3 and 30 caracters");
+
+                expect(res.body)
+                    .to.have.property('code')
+                    .to.equal(1);
+
+                return done();
+            });
+    });
+
+    it("Name's length is too long", function(done) {
+        request(app)
+            .put('/project/53584239a1294f5a24940393')
+            .set('Authorization', testTools.buildBasicAuthorization('larry@mail.com', 'larry@mail.com'))
+            .set('Content-Type', 'application/json')
+            .send({
+                name: 'My new project My new project M'
+            })
+            .expect('Content-Type', /json/)
+            .expect(400)
+            .end(function(err, res) {
+
+                if (err) {
+                    return done(err);
+                }
+
+                expect(res)
+                    .to.have.property('body')
+                    .that.is.an('object');
+
+                expect(res.body)
+                    .to.have.property('message')
+                    .to.equal("project.name's length must be between 3 and 30 caracters");
+
+                expect(res.body)
+                    .to.have.property('code')
+                    .to.equal(1);
+
+                return done();
+            });
+    });
+
+    it("Slug's length is too short", function(done) {
+        request(app)
+            .put('/project/53584239a1294f5a24940393')
+            .set('Authorization', testTools.buildBasicAuthorization('larry@mail.com', 'larry@mail.com'))
+            .set('Content-Type', 'application/json')
+            .send({
+                slug: 'my'
+            })
+            .expect('Content-Type', /json/)
+            .expect(400)
+            .end(function(err, res) {
+
+                if (err) {
+                    return done(err);
+                }
+
+                expect(res)
+                    .to.have.property('body')
+                    .that.is.an('object');
+
+                expect(res.body)
+                    .to.have.property('message')
+                    .to.equal("project.slug's length must be between 3 and 30 caracters");
+
+                expect(res.body)
+                    .to.have.property('code')
+                    .to.equal(20);
+
+                return done();
+            });
+    });
+
+    it("Slug's length is too long", function(done) {
+        request(app)
+            .put('/project/53584239a1294f5a24940393')
+            .set('Authorization', testTools.buildBasicAuthorization('larry@mail.com', 'larry@mail.com'))
+            .set('Content-Type', 'application/json')
+            .send({
+                slug: 'my_new_project_my_new_project_m'
+            })
+            .expect('Content-Type', /json/)
+            .expect(400)
+            .end(function(err, res) {
+
+                if (err) {
+                    return done(err);
+                }
+
+                expect(res)
+                    .to.have.property('body')
+                    .that.is.an('object');
+
+                expect(res.body)
+                    .to.have.property('message')
+                    .to.equal("project.slug's length must be between 3 and 30 caracters");
+
+                expect(res.body)
+                    .to.have.property('code')
+                    .to.equal(20);
+
+                return done();
+            });
+    });
+
+    it("Slug's format is not valid", function(done) {
+        request(app)
+            .put('/project/53584239a1294f5a24940393')
+            .set('Authorization', testTools.buildBasicAuthorization('larry@mail.com', 'larry@mail.com'))
+            .set('Content-Type', 'application/json')
+            .send({
+                slug: 'my n'
+            })
+            .expect('Content-Type', /json/)
+            .expect(400)
+            .end(function(err, res) {
+
+                if (err) {
+                    return done(err);
+                }
+
+                expect(res)
+                    .to.have.property('body')
+                    .that.is.an('object');
+
+                expect(res.body)
+                    .to.have.property('message')
+                    .to.equal("the slug's format is not valid");
+
+                expect(res.body)
+                    .to.have.property('code')
+                    .to.equal(12);
+
+                return done();
+            });
+    });
+
+    it('Slug already exist', function(done) {
+        request(app)
+            .put('/project/53584239a1294f5a24940393')
+            .set('Authorization', testTools.buildBasicAuthorization('larry@mail.com', 'larry@mail.com'))
+            .set('Content-Type', 'application/json')
+            .send({
+                slug: 'build_new_home'
+            })
+            .expect('Content-Type', /json/)
+            .expect(400)
+            .end(function(err, res) {
+
+                if (err) {
+                    return done(err);
+                }
+
+                expect(res)
+                    .to.have.property('body')
+                    .that.is.an('object');
+
+                expect(res.body)
+                    .to.have.property('message')
+                    .to.equal("project.slug already exist");
+
+                expect(res.body)
+                    .to.have.property('code')
+                    .to.equal(4);
+
+                return done();
+            });
+    });
+
+    it('Project not found', function(done) {
+        request(app)
+            .put('/project/aaa84239a1294f5a24940390')
+            .set('Authorization', testTools.buildBasicAuthorization('chuck@norris.com', 'chuck@norris.com'))
+            .set('Content-Type', 'application/json')
+            .send({})
+            .expect(404, done);
+    });
+
+    it('Unauthorized (without credentials)', function(done) {
+        request(app)
+            .put('/project/53584239a1294f5a24940390')
+            .set('Content-Type', 'application/json')
+            .send({})
+            .expect(401, done);
+    });
+
+    it('Unauthorized (not rights on this project)', function(done) {
+        request(app)
+            .put('/project/53584239a1294f5a24940390')
+            .set('Authorization', testTools.buildBasicAuthorization('chuck@norris.com', 'chuck@norris.com'))
+            .set('Content-Type', 'application/json')
+            .expect('Content-Type', /json/)
+            .send({})
+            .expect(401)
+            .end(function(err, res) {
+
+                if (err) {
+                    return done(err);
+                }
+
+                expect(res)
+                    .to.have.property('body')
+                    .that.is.an('object');
+
+                expect(res.body)
+                    .to.have.property('message')
+                    .to.equal("user not belong to project");
+
+                expect(res.body)
+                    .to.have.property('code')
+                    .to.equal(19);
+
+                return done();
+            });
     });
 
 });
