@@ -31,7 +31,23 @@ var findReadOnlyByUserId = function(userId) {
         .exec();
 };
 
+/**
+ * Find status by ProjectID.
+ * The data return are Read Only (Plain Objet) instead of MongooseDocument
+ *
+ * @param {string} projectId
+ */
+var findReadOnlyByProjectId = function(projectId) {
+    return Status
+        .find({ 'project': new ObjectId(projectId) })
+        .limit(20)
+        .lean()
+        .sort('-createdAt')
+        .exec();
+};
+
 module.exports = {
     findReadOnlyById: findReadOnlyById,
-    findReadOnlyByUserId: findReadOnlyByUserId
+    findReadOnlyByUserId: findReadOnlyByUserId,
+    findReadOnlyByProjectId: findReadOnlyByProjectId
 };

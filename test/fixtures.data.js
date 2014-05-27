@@ -2,6 +2,7 @@ var UserHelper  = require('../helpers/user'),
     ObjectId    = require('mongoose').Types.ObjectId;
 
 module.exports.Users = [
+    // Immutable users
     {
         _id         : new ObjectId('53584239a1294f5a24940590'),
         email       : 'chuck@norris.com',
@@ -11,15 +12,22 @@ module.exports.Users = [
         _id         : new ObjectId('53584239a1294f5a24940591'),
         email       : 'mark.nuremberg@mail.com',
         password    : UserHelper.generateHash('mark.nuremberg@mail.com')
+    },
+    // Mutable users
+    {
+        _id         : new ObjectId('53584239a1294f5a24940593'),
+        email       : 'larry@mail.com',
+        password    : UserHelper.generateHash('larry@mail.com')
     }
 ];
 
 module.exports.Projects = [
+    // Immutable projects
     {
         _id         : new ObjectId('53584239a1294f5a24940390'),
         name        : 'Make the new revolution',
         slug        : 'make_the_new_revolution',
-        createdAt   : Date.now,
+        createdAt   : new Date(2014, 3, 1, 16, 46, 50),
         owner       : module.exports.Users[1]._id,
         users       : [
             module.exports.Users[1]._id
@@ -29,16 +37,28 @@ module.exports.Projects = [
         _id         : new ObjectId('53584239a1294f5a24940391'),
         name        : 'Build new home',
         slug        : 'build_new_home',
-        createdAt   : Date.now,
+        createdAt   : new Date(2014, 4, 14, 9, 10, 10),
         owner       : module.exports.Users[0]._id,
         users       : [
             module.exports.Users[1]._id,
             module.exports.Users[0]._id
         ]
+    },
+    // Mutable projects
+    {
+        _id         : new ObjectId('53584239a1294f5a24940392'),
+        name        : 'Project mutable',
+        slug        : 'project_mutable',
+        createdAt   : new Date(2014, 4, 15, 9, 15, 10),
+        owner       : module.exports.Users[2]._id,
+        users       : [
+            module.exports.Users[2]._id
+        ]
     }
 ];
 
 module.exports.Status = [
+    // Immutable status
     {
         _id         : new ObjectId('53584239a1294f5a24940690'),
         content     : 'I begin my first project',

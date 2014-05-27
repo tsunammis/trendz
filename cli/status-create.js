@@ -1,15 +1,12 @@
 #!/usr/bin/env node
 
-var readline            = require('readline'),
-    CommandAsker        = require('command-asker'),
+var CommandAsker        = require('command-asker'),
     cli                 = require('../helpers/console'),
     Status              = require('../models').Status,
-    statusValidator     = require('../validator').Status,
     userService         = require('../services').User,
     userValidator       = require('../validator').User,
     projectValidator    = require('../validator').Project,
-    projectService      = require('../services').Project,
-    when                = require('when');
+    projectService      = require('../services').Project;
 
 cli.banner();
 cli.ok("Interactive command to add new status");
@@ -25,7 +22,7 @@ a.ask(function(response) {
     userService.findReadOnlyByEmail(response.owner)
     .then(function(user) {
         response.owner = user._id;
-        if (response.project && response.length > 0) {
+        if (response.project && response.project.length > 0) {
             return projectService.findReadOnlyBySlug(response.project)
                 .then(function(project) {
                     response.project = project._id;

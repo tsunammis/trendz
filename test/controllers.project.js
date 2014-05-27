@@ -3,6 +3,101 @@ var request     = require('supertest'),
     app         = require('./mock.app'),
     expect      = require("chai").expect;
 
+describe('PUT /project/:id', function() {
+
+    it('it is OK (with additional users)', function(done) {
+        done();
+    });
+
+    it("Additional user(s) doesn't exists", function(done) {
+        done();
+    });
+    
+    it('Name bad format', function(done) {
+        done();
+    });
+    
+    it('Slug bad format', function(done) {
+        done();
+    });
+    
+    it('Slug already exist', function(done) {
+        done();
+    });
+
+    it('Unauthorized', function(done) {
+        done();
+    });
+
+});
+
+describe('GET /project/:id', function() {
+
+    it('it is OK', function(done) {
+        request(app)
+            .get('/project/53584239a1294f5a24940391')
+            .set('Authorization', testTools.buildBasicAuthorization('chuck@norris.com', 'chuck@norris.com'))
+            .set('Content-Type', 'application/json')
+            .expect('Content-Type', /json/)
+            .expect(200)
+            .end(function(err, res) {
+
+                if (err) {
+                    return done(err);
+                }
+
+                expect(res.body)
+                    .to.contain.keys('_id', 'name', 'slug', 'owner', 'users', 'createdAt', 'links');
+
+                expect(res.body)
+                    .to.not.contain.keys('__v');
+
+                expect(res.body.name)
+                    .to.equal('Build new home');
+
+                expect(res.body.slug)
+                    .to.equal('build_new_home');
+
+                return done();
+            });
+    });
+
+    it("Project's ID format is not good (Bad Request)", function(done) {
+        request(app)
+            .get('/project/1234')
+            .set('Authorization', testTools.buildBasicAuthorization('chuck@norris.com', 'chuck@norris.com'))
+            .set('Content-Type', 'application/json')
+            .expect('Content-Type', /json/)
+            .expect(400, done);
+    });
+
+    it('Project not found', function(done) {
+        request(app)
+            .get('/project/aaa84239a1294f5a24940390')
+            .set('Authorization', testTools.buildBasicAuthorization('chuck@norris.com', 'chuck@norris.com'))
+            .set('Content-Type', 'application/json')
+            .expect('Content-Type', /json/)
+            .expect(404, done);
+    });
+
+    it('Unauthorized (without credentials)', function(done) {
+        request(app)
+            .get('/project/53584239a1294f5a24940390')
+            .set('Content-Type', 'application/json')
+            .expect(401, done);
+    });
+    
+    it('Unauthorized (not rights on this project)', function(done) {
+        request(app)
+            .get('/project/53584239a1294f5a24940390')
+            .set('Authorization', testTools.buildBasicAuthorization('chuck@norris.com', 'chuck@norris.com'))
+            .set('Content-Type', 'application/json')
+            .expect('Content-Type', /json/)
+            .expect(401, done);
+    });
+
+});
+
 describe('POST /project', function() {
 
     it('it is OK', function(done) {
@@ -37,7 +132,7 @@ describe('POST /project', function() {
                 return done();
             });
     });
-    
+
     it("Name's length is too short", function(done) {
         request(app)
             .post('/project')
@@ -202,7 +297,7 @@ describe('POST /project', function() {
                 return done();
             });
     });
-    
+
     it('Slug already exist', function(done) {
         request(app)
             .post('/project')
@@ -242,82 +337,6 @@ describe('POST /project', function() {
             .set('Content-Type', 'application/json')
             .send({})
             .expect(401, done);
-    });
-
-});
-
-describe('PUT /project', function() {
-
-    it('it is OK (with additional users)', function(done) {
-        done();
-    });
-
-    it("Additional user(s) doesn't exists", function(done) {
-        done();
-    });
-    
-    it('Name bad format', function(done) {
-        done();
-    });
-    
-    it('Slug bad format', function(done) {
-        done();
-    });
-    
-    it('Slug already exist', function(done) {
-        done();
-    });
-
-    it('Unauthorized', function(done) {
-        done();
-    });
-
-});
-
-describe('GET /project/:id', function() {
-
-    it('it is OK', function(done) {
-        done();
-    });
-
-    it("Project's ID format is not good (Bad Request)", function(done) {
-        done();
-    });
-
-    it('Project not found', function(done) {
-        done();
-    });
-
-    it('Unauthorized (without credentials)', function(done) {
-        done();
-    });
-    
-    it('Unauthorized (not rights on this project)', function(done) {
-        done();
-    });
-
-});
-
-describe('GET /project/:id/status', function() {
-
-    it('it is OK', function(done) {
-        done();
-    });
-
-    it("Project's ID format is not good (Bad Request)", function(done) {
-        done();
-    });
-
-    it('Project not found', function(done) {
-        done();
-    });
-
-    it('Unauthorized (without credentials)', function(done) {
-        done();
-    });
-    
-    it('Unauthorized (not rights on this project)', function(done) {
-        done();
     });
 
 });
