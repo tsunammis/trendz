@@ -182,8 +182,109 @@ var show = function(req, res, next) {
         });
 };
 
+/**
+ * GET  /me/project
+ */
+var listByCurrentUser = function(req, res, next) {
+    UserService.findReadOnlyById(req.user._id)
+        .then(function(user) {
+            if (!user) {
+                return when.reject(new HttpErrors.NotFound(errors[14].message, errors[14].code));
+            }
+            return ProjectService.findReadOnlyByUser(user._id, '_id name slug');
+        })
+        .then(function(projects) {
+
+            projects = projects
+                .map(function(object) {
+                    return ObjectHelper.removeProperties(['__v'], object);
+                })
+                .map(function(object) {
+                    return ProjectAdapter.hateoasize(['self'], object);
+                });
+
+            var data = {
+                data: projects
+            };
+
+            /*
+             @Todo Hyperlinks
+             next	Shows the URL of the immediate next page of results.
+             last	Shows the URL of the last page of results.
+             first	Shows the URL of the first page of results.
+             prev	Shows the URL of the immediate previous page of results.
+             */
+
+            res
+                .contentType('application/json')
+                .send(JSON.stringify(data));
+        })
+        .then(null, function(err) {
+            if (_.has(err, 'code') && !(err instanceof HttpErrors.NotFound) && !(err instanceof HttpErrors.Unauthorized)) {
+                return next(new HttpErrors.BadRequest(err.message, err.code));
+            } else if (_.has(err, 'name') && err.name === 'CastError') {
+                return next(new HttpErrors.BadRequest(errors[13].message, errors[13].code));
+            }
+            return next(err);
+        });
+
+};
+
+/**
+ * GET  /users/:id/project
+ */
+var listByUser = function(req, res, next) {
+
+    StringValidator.isDocumentId(req.params.id)
+        .then(function(value) {
+            return UserService.findReadOnlyById(value);
+        })
+        .then(function(user) {
+            if (!user) {
+                return when.reject(new HttpErrors.NotFound(errors[14].message, errors[14].code));
+            }
+            return ProjectService.findReadOnlyByUser(user._id, '_id name slug');
+        })
+        .then(function(projects) {
+
+            projects = projects
+                .map(function(object) {
+                    return ObjectHelper.removeProperties(['__v'], object);
+                })
+                .map(function(object) {
+                    return ProjectAdapter.hateoasize(['self'], object);
+                });
+
+            var data = {
+                data: projects
+            };
+
+            /*
+             @Todo Hyperlinks
+             next	Shows the URL of the immediate next page of results.
+             last	Shows the URL of the last page of results.
+             first	Shows the URL of the first page of results.
+             prev	Shows the URL of the immediate previous page of results.
+             */
+
+            res
+                .contentType('application/json')
+                .send(JSON.stringify(data));
+        })
+        .then(null, function(err) {
+            if (_.has(err, 'code') && !(err instanceof HttpErrors.NotFound) && !(err instanceof HttpErrors.Unauthorized)) {
+                return next(new HttpErrors.BadRequest(err.message, err.code));
+            } else if (_.has(err, 'name') && err.name === 'CastError') {
+                return next(new HttpErrors.BadRequest(errors[13].message, errors[13].code));
+            }
+            return next(err);
+        });
+};
+
 module.exports = {
     create: create,
     update: update,
-    show: show
+    show: show,
+    listByCurrentUser: listByCurrentUser,
+    listByUser: listByUser
 };

@@ -33,6 +33,7 @@ module.exports.Projects = [
         name        : 'Make the new revolution',
         slug        : 'make_the_new_revolution',
         createdAt   : new Date(2014, 3, 1, 16, 46, 50),
+        updatedAt   : new Date(2014, 3, 1, 16, 46, 50),
         owner       : module.exports.Users[1]._id,
         users       : [
             module.exports.Users[1]._id
@@ -43,6 +44,7 @@ module.exports.Projects = [
         name        : 'Build new home',
         slug        : 'build_new_home',
         createdAt   : new Date(2014, 4, 14, 9, 10, 10),
+        updatedAt   : new Date(2014, 4, 14, 9, 10, 10),
         owner       : module.exports.Users[0]._id,
         users       : [
             module.exports.Users[1]._id,
@@ -55,6 +57,7 @@ module.exports.Projects = [
         name        : 'Project mutable',
         slug        : 'project_mutable',
         createdAt   : new Date(2014, 4, 15, 9, 15, 10),
+        updatedAt   : new Date(2014, 4, 15, 9, 15, 10),
         owner       : module.exports.Users[2]._id,
         users       : [
             module.exports.Users[2]._id
@@ -64,7 +67,8 @@ module.exports.Projects = [
         _id         : new ObjectId('53584239a1294f5a24940393'),
         name        : 'Project mutable (put)',
         slug        : 'project_mutable_put',
-        createdAt   : new Date(2014, 4, 15, 9, 15, 10),
+        createdAt   : new Date(2014, 4, 15, 10, 15, 10),
+        updatedAt   : new Date(2014, 4, 15, 10, 15, 10),
         owner       : module.exports.Users[2]._id,
         users       : [
             module.exports.Users[2]._id

@@ -559,3 +559,115 @@ describe('PUT /project/:id', function() {
     });
 
 });
+
+describe('GET /users/:id/project', function() {
+
+    it('it is OK', function(done) {
+        request(app)
+            .get('/users/53584239a1294f5a24940591/project')
+            .set('Authorization', testTools.buildBasicAuthorization('chuck@norris.com', 'chuck@norris.com'))
+            .set('Content-Type', 'application/json')
+            .expect('Content-Type', /json/)
+            .expect(function(res) {
+
+                expect(res)
+                    .to.have.property('body')
+                    .that.is.an('object');
+
+                var body = res.body;
+
+                expect(body)
+                    .to.have.property('data')
+                    .that.is.an('array');
+
+                expect(body.data.length)
+                    .to.equal(2);
+
+                project1 = body.data[0];
+
+                expect(project1)
+                    .to.contain.keys('_id', 'name', 'slug', 'links');
+
+                expect(project1)
+                    .to.not.contain.keys('__v');
+
+                expect(project1.slug)
+                    .to.equal('build_new_home');
+
+            })
+            .expect(200, done);
+    });
+
+    it("User's ID format is not good (Bad Request)", function(done) {
+        request(app)
+            .get('/users/84239a1294f5a24940591/project')
+            .set('Authorization', testTools.buildBasicAuthorization('chuck@norris.com', 'chuck@norris.com'))
+            .set('Content-Type', 'application/json')
+            .expect('Content-Type', /json/)
+            .expect(400, done);
+    });
+
+    it('User not found', function(done) {
+        request(app)
+            .get('/users/aaa84239a1294f5a24940390/project')
+            .set('Authorization', testTools.buildBasicAuthorization('chuck@norris.com', 'chuck@norris.com'))
+            .set('Content-Type', 'application/json')
+            .expect('Content-Type', /json/)
+            .expect(404, done);
+    });
+
+    it('Unauthorized (without credentials)', function(done) {
+        request(app)
+            .get('/users/53584239a1294f5a24940390/project')
+            .set('Content-Type', 'application/json')
+            .expect(401, done);
+    });
+
+});
+
+describe('GET /me/project', function() {
+
+    it('it is OK', function(done) {
+        request(app)
+            .get('/me/project')
+            .set('Authorization', testTools.buildBasicAuthorization('mark.nuremberg@mail.com', 'mark.nuremberg@mail.com'))
+            .set('Content-Type', 'application/json')
+            .expect('Content-Type', /json/)
+            .expect(function(res) {
+
+                expect(res)
+                    .to.have.property('body')
+                    .that.is.an('object');
+
+                var body = res.body;
+
+                expect(body)
+                    .to.have.property('data')
+                    .that.is.an('array');
+
+                expect(body.data.length)
+                    .to.equal(2);
+
+                project1 = body.data[0];
+
+                expect(project1)
+                    .to.contain.keys('_id', 'name', 'slug', 'links');
+
+                expect(project1)
+                    .to.not.contain.keys('__v');
+
+                expect(project1.slug)
+                    .to.equal('build_new_home');
+
+            })
+            .expect(200, done);
+    });
+
+    it('Unauthorized (without credentials)', function(done) {
+        request(app)
+            .get('/me/project')
+            .set('Content-Type', 'application/json')
+            .expect(401, done);
+    });
+
+});

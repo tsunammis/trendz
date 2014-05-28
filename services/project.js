@@ -46,8 +46,31 @@ var findReadOnlyBySlug = function(slug) {
         .exec();
 };
 
+/**
+ * Find projects by user.
+ * The data return are Read Only (Plain Objet) instead of MongooseDocument
+ *
+ * @param {string} userId
+ * @param {string} select (Optional)
+ */
+var findReadOnlyByUser = function(userId, select) {
+
+    var query = Project
+        .find({})
+        .where('users').in([new ObjectId(userId)])
+        .lean(true)
+        .sort('-updatedAt');
+
+    if (select) {
+        query.select(select);
+    }
+
+    return query.exec();
+};
+
 module.exports = {
     findById: findById,
     findReadOnlyById: findReadOnlyById,
-    findReadOnlyBySlug: findReadOnlyBySlug
+    findReadOnlyBySlug: findReadOnlyBySlug,
+    findReadOnlyByUser: findReadOnlyByUser
 };
