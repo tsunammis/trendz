@@ -103,6 +103,52 @@ describe('GET /users/:id/status', function() {
 
 });
 
+describe('GET /me/status', function() {
+
+    it('it is OK', function(done) {
+        request(app)
+            .get('/me/status')
+            .set('Authorization', testTools.buildBasicAuthorization('chuck@norris.com', 'chuck@norris.com'))
+            .set('Content-Type', 'application/json')
+            .expect('Content-Type', /json/)
+            .expect(function(res) {
+
+                expect(res)
+                    .to.have.property('body')
+                    .that.is.an('object');
+
+                var body = res.body;
+
+                expect(body)
+                    .to.have.property('data')
+                    .that.is.an('array');
+
+                expect(body.data.length)
+                    .to.equal(3);
+
+                status1 = body.data[0];
+
+                expect(status1)
+                    .to.contain.keys('_id', 'content', 'owner', 'createdAt', 'project', 'links');
+
+                expect(status1)
+                    .to.not.contain.keys('__v');
+
+                expect(status1.content)
+                    .to.equal('there are somebody here ?');
+
+            })
+            .expect(200, done);
+    });
+
+    it('Not authorized to access this data (Unauthorized)', function(done) {
+        request(app)
+            .get('/me/status')
+            .expect(401, done);
+    });
+
+});
+
 describe('GET /status/:id', function() {
 
     it('it is OK', function(done) {

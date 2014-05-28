@@ -191,12 +191,52 @@ var listByUser = function(req, res, next) {
 };
 
 /**
+ * GET  /me/status
+ */
+var listByCurrentUser = function(req, res, next) {
+
+    StatusService.findReadOnlyByUserId(req.user._id)
+        .then(function (listStatus) {
+            listStatus = listStatus
+                .map(function(object) {
+                    return ObjectHelper.removeProperties(['__v'], object);
+                })
+                .map(function(object) {
+                    return StatusAdapter.hateoasize(['self'], object);
+                });
+
+            var data = {
+                data: listStatus
+            };
+
+            /*
+             @Todo Hyperlinks
+             next	Shows the URL of the immediate next page of results.
+             last	Shows the URL of the last page of results.
+             first	Shows the URL of the first page of results.
+             prev	Shows the URL of the immediate previous page of results.
+             */
+
+            res
+                .contentType('application/json')
+                .send(JSON.stringify(data));
+
+        })
+        .then(null, function(err) {
+            if (_.has(err, 'code')) {
+                return next(new HttpErrors.BadRequest(err.message, err.code));
+            } else if (_.has(err, 'name') && err.name === 'CastError') {
+                return next(new HttpErrors.BadRequest(errors[13].message, errors[13].code));
+            }
+            return next(err);
+        });
+};
+
+/**
  * GET  /project/:id/status
  *
  * Parameters:
  *  - id | Respect the format of Mongo's Id
- *  - page=1 | Pagination
- *  - per_page=10 | Pagination
  */
 var listByProject = function(req, res, next) {
 
@@ -261,5 +301,6 @@ module.exports = {
     create: create,
     show: show,
     listByUser: listByUser,
+    listByCurrentUser: listByCurrentUser,
     listByProject: listByProject
 };

@@ -25,6 +25,7 @@ app.use('/', passport.authenticate('basic', { session: false }));
 // Routes protected
 app.route('/me').get(controllers.User.self);
 app.route('/me').put(controllers.User.update);
+app.route('/me/status').get(controllers.Status.listByCurrentUser);
 app.route('/users/:id').get(controllers.User.show);
 app.route('/users/:id/status').get(controllers.Status.listByUser);
 app.route('/status').post(controllers.Status.create);
