@@ -36,6 +36,7 @@ app.route('/project').post(controllers.Project.create);
 app.route('/project/:id').put(controllers.Project.update);
 app.route('/project/:id').get(controllers.Project.show);
 app.route('/project/:id/status').get(controllers.Status.listByProject);
+app.route('/project/:id/users').get(controllers.User.listByProject);
 
 // Handle error(s)
 app.use(controllers.Default.errorHandler);

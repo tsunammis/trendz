@@ -33,6 +33,27 @@ var findReadOnlyById = function(id) {
 };
 
 /**
+ * Find user by list of IDs.
+ * The data return are Read Only (Plain Objet) instead of MongooseDocument
+ *
+ * @param {array} ids
+ */
+var findReadOnlyByIds = function(ids, select) {
+
+    var query = User
+        .find({})
+        .where('_id').in(ids)
+        .lean(true)
+        .sort('email');
+
+    if (select) {
+        query.select(select);
+    }
+
+    return query.exec();
+};
+
+/**
  * Find user by email.
  * The data return are Read Only (Plain Objet) instead of MongooseDocument
  *
@@ -49,6 +70,7 @@ var findReadOnlyByEmail = function(email) {
 
 module.exports = {
     findById: findById,
-    findReadOnlyById:    findReadOnlyById,
+    findReadOnlyById: findReadOnlyById,
+    findReadOnlyByIds: findReadOnlyByIds,
     findReadOnlyByEmail: findReadOnlyByEmail
 };

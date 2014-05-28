@@ -7,7 +7,8 @@ var User            = require('../models').User,
     UserValidator   = require('../validator').User,
     when            = require('when'),
     _               = require('underscore'),
-    errors          = require('../validator').Errors;
+    errors          = require('../validator').Errors,
+    ProjectService  = require('../services').Project;
 
 /**
  * POST  /users
@@ -169,9 +170,69 @@ var show = function(req, res, next) {
     });
 };
 
+/**
+ * GET  /project/:id/users
+ *
+ * Parameters:
+ *  - id | Respect the format of Mongo's Id
+ */
+var listByProject = function(req, res, next) {
+
+    StringValidator.isDocumentId(req.params.id)
+        .then(function(value) {
+            return ProjectService.findReadOnlyById(value);
+        })
+        .then(function(project) {
+
+            // Check if the project doesn't exist
+            if (!project) {
+                return when.reject(new HttpErrors.NotFound(errors[18].message, errors[18].code));
+            }
+
+            // User is able to access this project
+            // @Todo Use query to mongo to determine ability
+            var isAble = _.find(project.users, function(userId) {
+                return userId.toString() === req.user._id.toString();
+            });
+
+            if (!isAble) {
+                return when.reject(new HttpErrors.Unauthorized(errors[19].message, errors[19].code));
+            }
+
+            return UserService.findReadOnlyByIds(project.users, '_id email');
+        })
+        .then(function(users) {
+
+            users = users
+                .map(function(object) {
+                    return ObjectHelper.removeProperties(['__v', 'password'], object);
+                })
+                .map(function(object) {
+                    return UserAdapter.hateoasize(['self'], object);
+                });
+
+            var data = {
+                data: users
+            };
+
+            res
+                .contentType('application/json')
+                .send(200, JSON.stringify(data));
+        })
+        .then(null, function(err) {
+            if (_.has(err, 'code') && !(err instanceof HttpErrors.NotFound) && !(err instanceof HttpErrors.Unauthorized)) {
+                return next(new HttpErrors.BadRequest(err.message, err.code));
+            } else if (_.has(err, 'name') && err.name === 'CastError') {
+                return next(new HttpErrors.BadRequest(errors[13].message, errors[13].code));
+            }
+            return next(err);
+        });
+};
+
 module.exports = {
     create: create,
     update: update,
     self: self,
-    show: show
+    show: show,
+    listByProject: listByProject
 };

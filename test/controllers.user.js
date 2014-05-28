@@ -534,3 +534,68 @@ describe('PUT /me', function() {
     });
 
 });
+
+describe('GET /project/:id/users', function() {
+
+    it('it is OK', function(done) {
+        request(app)
+            .get('/project/53584239a1294f5a24940391/users')
+            .set('Authorization', testTools.buildBasicAuthorization('chuck@norris.com', 'chuck@norris.com'))
+            .set('Content-Type', 'application/json')
+            .expect('Content-Type', /json/)
+            .expect(function(res) {
+
+                expect(res)
+                    .to.have.property('body')
+                    .that.is.an('object');
+
+                var body = res.body;
+
+                expect(body)
+                    .to.have.property('data')
+                    .that.is.an('array');
+
+                expect(body.data.length)
+                    .to.equal(2);
+
+                user1 = body.data[0];
+
+                expect(user1)
+                    .to.contain.keys('_id', 'email', 'links');
+
+                expect(user1)
+                    .to.not.contain.keys('__v');
+
+                expect(user1.email)
+                    .to.equal('chuck@norris.com');
+
+            })
+            .expect(200, done);
+    });
+
+    it("Project's ID format is not good (Bad Request)", function(done) {
+        request(app)
+            .get('/project/239a1294f5a24940591/users')
+            .set('Authorization', testTools.buildBasicAuthorization('chuck@norris.com', 'chuck@norris.com'))
+            .set('Content-Type', 'application/json')
+            .expect('Content-Type', /json/)
+            .expect(400, done);
+    });
+
+    it('Project not found', function(done) {
+        request(app)
+            .get('/project/aaa84239a1294f5a24940390/users')
+            .set('Authorization', testTools.buildBasicAuthorization('chuck@norris.com', 'chuck@norris.com'))
+            .set('Content-Type', 'application/json')
+            .expect('Content-Type', /json/)
+            .expect(404, done);
+    });
+
+    it('Unauthorized (without credentials)', function(done) {
+        request(app)
+            .get('/project/53584239a1294f5a24940390/users')
+            .set('Content-Type', 'application/json')
+            .expect(401, done);
+    });
+
+});
