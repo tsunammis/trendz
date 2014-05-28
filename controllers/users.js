@@ -119,6 +119,25 @@ var update = function(req, res, next) {
 };
 
 /**
+ * GET  /me
+ */
+var self = function(req, res, next) {
+
+    var user = req.user;
+
+    if (!user) {
+        next(errors[14]);
+    }
+
+    user = user.toObject();
+    user = ObjectHelper.removeProperties(['__v', 'password'], user);
+    user = UserAdapter.hateoasize(['self', 'status'], user);
+    res
+        .contentType('application/json')
+        .send(JSON.stringify(user));
+};
+
+/**
  * GET  /users/:id
  * 
  * Parameters:
@@ -153,5 +172,6 @@ var show = function(req, res, next) {
 module.exports = {
     create: create,
     update: update,
+    self: self,
     show: show
 };
