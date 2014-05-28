@@ -36,7 +36,6 @@ var create = function(req, res, next) {
         });
     })
     .then(function(user) {
-        
         user = user.toObject();
         user = ObjectHelper.removeProperties(['__v', 'password'], user);
         user = UserAdapter.hateoasize(['self', 'status'], user);
@@ -50,6 +49,73 @@ var create = function(req, res, next) {
         }
         return next(err);
     });
+};
+
+/**
+ * PUT  /me
+ *
+ * Parameters:
+ *  - email | Optional | Respect email format
+ *  - password | Optional | Min length: 3 and Max length: 15
+ *  - password_confirm | Optional | Must be the same with 'password'
+ */
+var update = function(req, res, next) {
+
+    var changes         = req.body,
+        promisePassword = null,
+        promiseEmail    = null;
+
+    if (_.has(changes, 'password') && _.has(changes, 'password_confirm')) {
+        promisePassword = UserValidator.samePassword(changes.password, changes.password_confirm)
+            .then(function() {
+                return UserValidator.password(changes.password);
+            });
+    }
+
+    if (_.has(changes, 'email')) {
+        promiseEmail = UserValidator.email(changes.email)
+            .then(function() {
+                return UserService.findReadOnlyByEmail(changes.email);
+            })
+            .then(function(user) {
+                if (user && user._id !== req.user._id) {
+                    return when.reject(errors[8]);
+                } else {
+                    return when.resolve();
+                }
+            });
+    }
+
+    UserService.findById(req.user._id)
+        .then(function() {
+            return (promisePassword !== null) ? promisePassword : when.resolve();
+        })
+        .then(function() {
+            return (promiseEmail !== null) ? promiseEmail : when.resolve();
+        })
+        .then(function() {
+            // Update object with changes
+            Object.keys(changes).forEach(function(key) {
+                req.user.set(key, changes[key]);
+            });
+            return req.user.save();
+        })
+        .then(function() {
+            user = req.user.toObject();
+            user = ObjectHelper.removeProperties(['__v', 'password'], user);
+            user = UserAdapter.hateoasize(['self', 'status'], user);
+            res
+                .contentType('application/json')
+                .send(JSON.stringify(user));
+        })
+        .then(null, function(err) {
+            if (_.has(err, 'code')) {
+                return next(new HttpErrors.BadRequest(err.message, err.code));
+            } else if (_.has(err, 'name') && err.name === 'CastError') {
+                return next(new HttpErrors.BadRequest(errors[13].message, errors[13].code));
+            }
+            return next(err);
+        });
 };
 
 /**
@@ -86,5 +152,6 @@ var show = function(req, res, next) {
 
 module.exports = {
     create: create,
+    update: update,
     show: show
 };

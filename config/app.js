@@ -23,6 +23,7 @@ app.route('/users').post(controllers.User.create);
 app.use('/', passport.authenticate('basic', { session: false }));
 
 // Routes protected
+app.route('/me').put(controllers.User.update);
 app.route('/users/:id').get(controllers.User.show);
 app.route('/users/:id/status').get(controllers.Status.listByUser);
 app.route('/status').post(controllers.Status.create);

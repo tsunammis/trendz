@@ -18,6 +18,11 @@ module.exports.Users = [
         _id         : new ObjectId('53584239a1294f5a24940593'),
         email       : 'larry@mail.com',
         password    : UserHelper.generateHash('larry@mail.com')
+    },
+    {
+        _id         : new ObjectId('53584239a1294f5a24940594'),
+        email       : 'put_user@mail.com',
+        password    : UserHelper.generateHash('put_user@mail.com')
     }
 ];
 

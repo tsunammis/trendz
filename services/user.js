@@ -4,6 +4,21 @@ var User        = require('../models').User,
 
 /**
  * Find user by ID.
+ * The data return are a MongooseDocument
+ *
+ * @param {string} id
+ * @return {MongooseDocument}
+ */
+var findById = function(id) {
+    return User
+        .findOne({
+            _id: new ObjectId(id)
+        })
+        .exec();
+};
+
+/**
+ * Find user by ID.
  * The data return are Read Only (Plain Objet) instead of MongooseDocument
  *
  * @param {string} id
@@ -33,6 +48,7 @@ var findReadOnlyByEmail = function(email) {
 };
 
 module.exports = {
+    findById: findById,
     findReadOnlyById:    findReadOnlyById,
     findReadOnlyByEmail: findReadOnlyByEmail
 };

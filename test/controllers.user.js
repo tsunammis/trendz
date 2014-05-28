@@ -278,3 +278,223 @@ describe('POST /users', function() {
     });
 
 });
+
+describe('PUT /me', function() {
+
+    it('Password is too short', function(done) {
+        request(app)
+            .put('/me')
+            .set('Content-Type', 'application/json')
+            .set('Authorization', testTools.buildBasicAuthorization('put_user@mail.com', 'put_user@mail.com'))
+            .send({ password: 'my', password_confirm: 'my'})
+            .expect('Content-Type', /json/)
+            .expect(400)
+            .end(function(err, res) {
+
+                if (err) {
+                    return done(err);
+                }
+
+                expect(res)
+                    .to.have.property('body')
+                    .that.is.an('object');
+
+                expect(res.body)
+                    .to.have.property('message')
+                    .to.equal("the password's length is too short (3 min caracters)");
+
+                expect(res.body)
+                    .to.have.property('code')
+                    .to.equal(5);
+
+                return done();
+            });
+    });
+
+    it('Password is too long', function(done) {
+        request(app)
+            .put('/me')
+            .set('Content-Type', 'application/json')
+            .set('Authorization', testTools.buildBasicAuthorization('put_user@mail.com', 'put_user@mail.com'))
+            .send({ password: 'azertyuiopqsdfgh', password_confirm: 'azertyuiopqsdfgh' })
+            .expect('Content-Type', /json/)
+            .expect(400)
+            .end(function(err, res) {
+
+                if (err) {
+                    return done(err);
+                }
+
+                expect(res)
+                    .to.have.property('body')
+                    .that.is.an('object');
+
+                expect(res.body)
+                    .to.have.property('message')
+                    .to.equal("the password's length is too long (15 caracters max)");
+
+                expect(res.body)
+                    .to.have.property('code')
+                    .to.equal(6);
+
+                return done();
+            });
+    });
+
+    it('Password and his confirmation are not the same', function(done) {
+        request(app)
+            .put('/me')
+            .set('Content-Type', 'application/json')
+            .set('Authorization', testTools.buildBasicAuthorization('put_user@mail.com', 'put_user@mail.com'))
+            .send({ password: 'myPassword', password_confirm: 'myPass' })
+            .expect('Content-Type', /json/)
+            .expect(400)
+            .end(function(err, res) {
+
+                if (err) {
+                    return done(err);
+                }
+
+                expect(res)
+                    .to.have.property('body')
+                    .that.is.an('object');
+
+                expect(res.body)
+                    .to.have.property('message')
+                    .to.equal('Both password are not the same');
+
+                expect(res.body)
+                    .to.have.property('code')
+                    .to.equal(9);
+
+                return done();
+            });
+    });
+
+    it('Email already exist', function(done) {
+        request(app)
+            .put('/me')
+            .set('Content-Type', 'application/json')
+            .set('Authorization', testTools.buildBasicAuthorization('put_user@mail.com', 'put_user@mail.com'))
+            .send({ email: 'chuck@norris.com'})
+            .expect('Content-Type', /json/)
+            .expect(400)
+            .end(function(err, res) {
+
+                if (err) {
+                    return done(err);
+                }
+
+                expect(res)
+                    .to.have.property('body')
+                    .that.is.an('object');
+
+                expect(res.body)
+                    .to.have.property('message')
+                    .to.equal('this email is already registered');
+
+                expect(res.body)
+                    .to.have.property('code')
+                    .to.equal(8);
+
+                return done();
+            });
+    });
+
+    it('Email format is not good', function(done) {
+        request(app)
+            .put('/me')
+            .set('Content-Type', 'application/json')
+            .set('Authorization', testTools.buildBasicAuthorization('put_user@mail.com', 'put_user@mail.com'))
+            .send({ email: 'chuck@norris'})
+            .expect('Content-Type', /json/)
+            .expect(400)
+            .end(function(err, res) {
+
+                if (err) {
+                    return done(err);
+                }
+
+                expect(res)
+                    .to.have.property('body')
+                    .that.is.an('object');
+
+                expect(res.body)
+                    .to.have.property('message')
+                    .to.equal("the email's format is not valid");
+
+                expect(res.body)
+                    .to.have.property('code')
+                    .to.equal(11);
+
+                return done();
+            });
+    });
+
+    it('Not authorized to access this data (Unauthorized)', function(done) {
+        request(app)
+            .put('/me')
+            .expect(401, done);
+    });
+
+    describe('It is ok', function() {
+
+        it('It is ok (email)', function() {
+            request(app)
+                .put('/me')
+                .set('Content-Type', 'application/json')
+                .set('Authorization', testTools.buildBasicAuthorization('put_user@mail.com', 'put_user@mail.com'))
+                .send({ email: 'put_user_updated@mail.com'})
+                .expect('Content-Type', /json/)
+                .expect(function(res) {
+
+                    expect(res)
+                        .to.have.property('body')
+                        .that.is.an('object');
+
+                    expect(res.body)
+                        .to.have.property('email')
+                        .to.equal('put_user_updated@mail.com');
+
+                    expect(res.body)
+                        .to.have.property('links');
+
+                    expect(res.body)
+                        .to.have.property('_id')
+                        .to.equal('53584239a1294f5a24940594');
+
+                })
+                .expect(200);
+        });
+
+        it('It is ok (password)', function() {
+            request(app)
+                .put('/me')
+                .set('Content-Type', 'application/json')
+                .set('Authorization', testTools.buildBasicAuthorization('put_user_updated@mail.com', 'put_user_updated@mail.com'))
+                .send({ password: 'put_user_updated@mail.com', password_confirm: 'put_user_updated@mail.com' })
+                .expect('Content-Type', /json/)
+                .expect(function(res) {
+
+                    expect(res)
+                        .to.have.property('body')
+                        .that.is.an('object');
+
+                    expect(res.body)
+                        .to.have.property('email')
+                        .to.equal('put_user_updated@mail.com');
+
+                    expect(res.body)
+                        .to.have.property('links');
+
+                    expect(res.body)
+                        .to.have.property('_id')
+                        .to.equal('53584239a1294f5a24940594');
+
+                })
+                .expect(200);
+        });
+
+    });
+
+});
