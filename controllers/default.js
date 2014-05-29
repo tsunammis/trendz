@@ -14,7 +14,6 @@ var errorHandler = function(err, req, res, next) {
     if (_.has(err, 'code')) {
         error.code = err.code;
     }
-    
     res.status(err.status || 500);
     res.contentType('application/json');
     res.send(error);

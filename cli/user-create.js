@@ -1,9 +1,8 @@
 #!/usr/bin/env node
 
-var readline        = require('readline'),
-    CommandAsker    = require('command-asker'),
+var CommandAsker    = require('command-asker'),
     cli             = require('../helpers/console'),
-    UserHelper      = require('../helpers/user'),
+    userHelper      = require('../helpers/user'),
     User            = require('../models').User,
     userValidator   = require('../validator').User;
 
@@ -18,9 +17,9 @@ var a = new CommandAsker([
 
 a.ask(function(response) {
     var plainPassword = response.password;
-    response.password = UserHelper.generateHash(response.password);
+    response.password = userHelper.generateHash(response.password);
     
-    var createPromise = User.create(response)
+    User.create(response)
         .then(function (createdUser) {
             cli.line();
             cli.line(

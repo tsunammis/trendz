@@ -1,9 +1,9 @@
 var validator       = require('validator'),
-    UserService     = require('../services').User,
-    when            = require('when'),
-    sequence        = require('when/sequence'),
+    userService     = require('../services').User,
     stringValidator = require('./string'),
-    Errors          = require('./errors');
+    errors          = require('./errors'),
+    when            = require('when'),
+    sequence        = require('when/sequence');
 
 var email = function(email) {
     return sequence([
@@ -14,41 +14,41 @@ var email = function(email) {
 
 var password = function(password) {
     if (password.length < 3) {
-        return when.reject(Errors[5]);
+        return when.reject(errors[5]);
     }
     if (password.length > 15) {
-        return when.reject(Errors[6]);
+        return when.reject(errors[6]);
     }
     return when.resolve(password);
 };
 
 var emailExist = function(mail) {
-    return UserService.findReadOnlyByEmail(mail)
+    return userService.findReadOnlyByEmail(mail)
         .then(function(data) {
             if (data !== null) {
                 return when.resolve(mail);
             }
-            return when.reject(Errors[7]);
+            return when.reject(errors[7]);
         }, function(err) {
-            return when.reject(Errors[3]); 
+            return when.reject(errors[3]); 
         });
 };
 
 var emailNotExist = function(mail) {
-    return UserService.findReadOnlyByEmail(mail)
+    return userService.findReadOnlyByEmail(mail)
         .then(function(data) {
             if (data !== null) {
-                return when.reject(Errors[8]);   
+                return when.reject(errors[8]);   
             }
             return when.resolve(mail);
         }, function(err) {
-            return when.reject(Errors[3]); 
+            return when.reject(errors[3]); 
         });
 };
 
 var samePassword = function(password, confirmPassword) {
     if (password !== confirmPassword) {
-        return when.reject(Errors[9]);
+        return when.reject(errors[9]);
     }
     return when.resolve(password);
 };

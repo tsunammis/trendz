@@ -9,18 +9,13 @@ var removeProperties = function(properties, object) {
     if (!Array.isArray(properties)) {
         throw new Error('properties is not an array');
     }
-
     var length = properties.length;
-
     for (var i=0; i < length; i++) {
-
         if (!object.hasOwnProperty(properties[i])) {
             continue;
         }
-
         object[properties[i]] = undefined;
     }
-
     return object;
 };
 
@@ -55,7 +50,7 @@ var areEqual = function(x, y) {
     var p = Object.keys(x);
     return Object.keys(y).every(function (i) { return p.indexOf(i) !== -1; }) ?
         p.every(function (i) { return areEqual(x[i], y[i]); }) : false;
-}
+};
 
 module.exports = {
     removeProperties: removeProperties,

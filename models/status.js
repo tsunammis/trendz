@@ -8,6 +8,5 @@ module.exports = function(db, conn) {
         owner       : { type: db.Schema.Types.ObjectId, ref: 'User' },
         project     : { type: db.Schema.Types.ObjectId, ref: 'Project' }
     });
-
     return conn.model('Status', statusSchema);
 };

@@ -4,9 +4,9 @@ var CommandAsker        = require('command-asker'),
     cli                 = require('../helpers/console'),
     Status              = require('../models').Status,
     userService         = require('../services').User,
+    projectService      = require('../services').Project,
     userValidator       = require('../validator').User,
-    projectValidator    = require('../validator').Project,
-    projectService      = require('../services').Project;
+    projectValidator    = require('../validator').Project;
 
 cli.banner();
 cli.ok("Interactive command to add new status");

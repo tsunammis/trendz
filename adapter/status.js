@@ -1,5 +1,5 @@
-var Configuration   = require('../config/configuration'),
-    ArrayHelper     = require('../helpers/array'),
+var configuration   = require('../config/configuration'),
+    arrayHelper     = require('../helpers/array'),
     _               = require('underscore');
 
 /**
@@ -9,13 +9,12 @@ var Configuration   = require('../config/configuration'),
  */
 var hateoasize = function(types, status) {
     if (_.contains(types, 'self')) {
-        ArrayHelper.pushToPropertyUnknow(status, 'links', {
+        arrayHelper.pushToPropertyUnknow(status, 'links', {
             'rel'   : 'self',
-            'href'  : Configuration.getRootUrl() + '/status/' + status._id,
+            'href'  : configuration.getRootUrl() + '/status/' + status._id,
             'method': 'GET'
         });
     }
-
     return status;
 };
 

@@ -1,4 +1,4 @@
-var ArrayHelper     = require('../helpers/array'),
+var arrayHelper     = require('../helpers/array'),
     expect          = require("chai").expect;
 
 describe('helpers.array', function(){
@@ -10,7 +10,7 @@ describe('helpers.array', function(){
         expect(testObject)
             .to.not.have.property('links');
 
-        ArrayHelper.pushToPropertyUnknow(testObject, 'links', { test: 'value' });
+        arrayHelper.pushToPropertyUnknow(testObject, 'links', { test: 'value' });
 
         expect(testObject)
             .to.have.property('links')

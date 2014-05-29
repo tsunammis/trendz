@@ -1,9 +1,9 @@
-var ProjectAdapter  = require('./project'),
-    StatusAdapter   = require('./status'),
-    UserAdapter     = require('./user');
+var projectAdapter  = require('./project'),
+    statusAdapter   = require('./status'),
+    userAdapter     = require('./user');
 
 module.exports = {
-    Project: ProjectAdapter,
-    Status: StatusAdapter,
-    User: UserAdapter
+    Project: projectAdapter,
+    Status: statusAdapter,
+    User: userAdapter
 };

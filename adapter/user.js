@@ -1,5 +1,5 @@
-var Configuration   = require('../config/configuration'),
-    ArrayHelper     = require('../helpers/array'),
+var configuration   = require('../config/configuration'),
+    arrayHelper     = require('../helpers/array'),
     _               = require('underscore');
 
 /**
@@ -9,22 +9,19 @@ var Configuration   = require('../config/configuration'),
  */
 var hateoasize = function(types, user) {
     if (_.contains(types, 'self')) {
-        ArrayHelper.pushToPropertyUnknow(user, 'links', {
+        arrayHelper.pushToPropertyUnknow(user, 'links', {
             'rel'   : 'self',
-            'href'  : Configuration.getRootUrl() + '/users/' + user._id,
+            'href'  : configuration.getRootUrl() + '/users/' + user._id,
             'method': 'GET'
         });
     }
-
     if (_.contains(types, 'status')) {
-        ArrayHelper.pushToPropertyUnknow(user, 'links', {
+        arrayHelper.pushToPropertyUnknow(user, 'links', {
             'rel'   : 'status',
-            'href'  : Configuration.getRootUrl() + '/users/' + user._id + '/status',
+            'href'  : configuration.getRootUrl() + '/users/' + user._id + '/status',
             'method': 'GET'
         });
     }
-
-
     return user;
 };
 

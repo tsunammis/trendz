@@ -1,13 +1,13 @@
-var UserValidator       = require('./user'),
-    ProjectValidator    = require('./project'),
-    StringValidator     = require('./string'),
-    StatusValidator     = require('./status'),
-    Errors              = require('./errors');
+var userValidator       = require('./user'),
+    projectValidator    = require('./project'),
+    stringValidator     = require('./string'),
+    statusValidator     = require('./status'),
+    errors              = require('./errors');
 
 module.exports = {
-    User: UserValidator,
-    Project: ProjectValidator,
-    String: StringValidator,
-    Status: StatusValidator,
-    Errors: Errors
+    User: userValidator,
+    Project: projectValidator,
+    String: stringValidator,
+    Status: statusValidator,
+    Errors: errors
 };

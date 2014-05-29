@@ -1,9 +1,9 @@
 var MongoClient     = require('mongodb').MongoClient,
     DataFixtures    = require('./fixtures.data'),
-    Configuration   = require('../config/configuration');
+    configuration   = require('../config/configuration');
 
 // Connect to the db
-MongoClient.connect(Configuration.mongodb, function(err, db) {
+MongoClient.connect(configuration.mongodb, function(err, db) {
 
     if (err) {
         return console.dir(err);

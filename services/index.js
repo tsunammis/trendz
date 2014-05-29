@@ -1,9 +1,9 @@
-var UserService    = require('./user'),
-    StatusService  = require('./status'),
-    ProjectService = require('./project');
+var userService    = require('./user'),
+    statusService  = require('./status'),
+    projectService = require('./project');
 
 module.exports = {
-    User: UserService,
-    Status: StatusService,
-    Project: ProjectService
+    User: userService,
+    Status: statusService,
+    Project: projectService
 };

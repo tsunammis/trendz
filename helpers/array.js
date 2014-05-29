@@ -10,7 +10,6 @@ var pushToPropertyUnknow = function(object, property, item) {
     if (!object.hasOwnProperty(property)) {
         object[property] = [];
     }
-
     object[property].push(item);
 };
 

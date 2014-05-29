@@ -4,8 +4,8 @@ var CommandAsker        = require('command-asker'),
     cli                 = require('../helpers/console'),
     Project             = require('../models').Project,
     projectValidator    = require('../validator').Project,
-    userService         = require('../services').User,
-    userValidator       = require('../validator').User;
+    userValidator       = require('../validator').User,
+    userService         = require('../services').User;
 
 cli.banner();
 cli.ok("Interactive command to add new project");
@@ -24,7 +24,7 @@ a.ask(function(response) {
         response.users = [user._id];
         return Project.create(response);
     })
-    .then(function (createdProject) {
+    .then(function (project) {
         cli.line();
         cli.line(
             cli.colorOk("The project ")  + cli.colorHighlightOk(response.name) + cli.colorOk(" has been created.")

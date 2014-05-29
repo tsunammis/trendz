@@ -1,6 +1,5 @@
 var User        = require('../models').User,
-    ObjectId    = require('mongoose').Types.ObjectId,
-    when        = require('when');
+    ObjectId    = require('mongoose').Types.ObjectId;
 
 /**
  * Find user by ID.

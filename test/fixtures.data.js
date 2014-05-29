@@ -1,4 +1,4 @@
-var UserHelper  = require('../helpers/user'),
+var userHelper  = require('../helpers/user'),
     ObjectId    = require('mongoose').Types.ObjectId;
 
 module.exports.Users = [
@@ -6,23 +6,23 @@ module.exports.Users = [
     {
         _id         : new ObjectId('53584239a1294f5a24940590'),
         email       : 'chuck@norris.com',
-        password    : UserHelper.generateHash('chuck@norris.com')
+        password    : userHelper.generateHash('chuck@norris.com')
     },
     {
         _id         : new ObjectId('53584239a1294f5a24940591'),
         email       : 'mark.nuremberg@mail.com',
-        password    : UserHelper.generateHash('mark.nuremberg@mail.com')
+        password    : userHelper.generateHash('mark.nuremberg@mail.com')
     },
     // Mutable users
     {
         _id         : new ObjectId('53584239a1294f5a24940593'),
         email       : 'larry@mail.com',
-        password    : UserHelper.generateHash('larry@mail.com')
+        password    : userHelper.generateHash('larry@mail.com')
     },
     {
         _id         : new ObjectId('53584239a1294f5a24940594'),
         email       : 'put_user@mail.com',
-        password    : UserHelper.generateHash('put_user@mail.com')
+        password    : userHelper.generateHash('put_user@mail.com')
     }
 ];
 

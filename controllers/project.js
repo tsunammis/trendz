@@ -1,14 +1,13 @@
 var Project             = require('../models').Project,
-    ProjectService      = require('../services').Project,
-    ProjectAdapter      = require('../adapter').Project,
-    ProjectValidator    = require('../validator').Project,
-    UserService         = require('../services').User,
-    UserValidator       = require('../validator').User,
-    StringValidator     = require('../validator').String,
-    HttpErrors          = require('../helpers/http.errors'),
+    projectAdapter      = require('../adapter').Project,
+    projectService      = require('../services').Project,
+    userService         = require('../services').User,
+    httpErrors          = require('../helpers/http.errors'),
+    objectHelper        = require('../helpers/object'),
+    projectValidator    = require('../validator').Project,
+    stringValidator     = require('../validator').String,
     errors              = require('../validator').Errors,
     _                   = require('underscore'),
-    ObjectHelper        = require('../helpers/object'),
     when                = require('when');
 
 /**
@@ -21,15 +20,15 @@ var Project             = require('../models').Project,
  */
 var create = function(req, res, next) {
 
-    var data = req.body;
-    var user = req.user;
+    var data = req.body,
+        user = req.user;
 
-    ProjectValidator.name(data.name)
+    projectValidator.name(data.name)
         .then(function() {
-            return ProjectValidator.slug(data.slug);
+            return projectValidator.slug(data.slug);
         })
         .then(function() {
-            return ProjectValidator.slugNotExist(data.slug);
+            return projectValidator.slugNotExist(data.slug);
         })
         .then(function() {
             return Project.create({
@@ -40,20 +39,18 @@ var create = function(req, res, next) {
             });
         })
         .then(function(project) {
-
             project = project.toObject();
-            project = ObjectHelper.removeProperties(['__v'], project);
-            project = ProjectAdapter.hateoasize(['self'], project);
-
+            project = objectHelper.removeProperties(['__v'], project);
+            project = projectAdapter.hateoasize(['self'], project);
             res
                 .contentType('application/json')
                 .send(201, JSON.stringify(project));
         })
         .then(null, function(err) {
             if (_.has(err, 'code')) {
-                return next(new HttpErrors.BadRequest(err.message, err.code));
+                return next(new httpErrors.BadRequest(err.message, err.code));
             } else if (_.has(err, 'name') && err.name === 'CastError') {
-                return next(new HttpErrors.BadRequest(errors[13].message, errors[13].code));
+                return next(new httpErrors.BadRequest(errors[13].message, errors[13].code));
             }
             return next(err);
         });
@@ -68,75 +65,76 @@ var create = function(req, res, next) {
  */
 var update = function(req, res, next) {
 
-    var changes = req.body;
-    var projectUpdated = null;
+    var changes = req.body,
+        project = null;
 
-    StringValidator.isDocumentId(req.params.id)
+    stringValidator.isDocumentId(req.params.id)
         .then(function(value) {
-            return ProjectService.findById(value)
-                .then(function(project) {
+            return projectService.findById(value);
+        })
+        .then(function(p) {
 
-                    // Check if the project doesn't exist
-                    if (!project) {
-                        return when.reject(new HttpErrors.NotFound(errors[18].message, errors[18].code));
-                    }
+            // Use variable inside different then()
+            project = p;
 
-                    var projectOld = project.toObject();
+            // Check if the project doesn't exist
+            if (!project) {
+                return when.reject(new httpErrors.NotFound(errors[18].message, errors[18].code));
+            }
 
-                    // User is able to access this project
-                    // @Todo Use request to mongo to determine ability
-                    var isAble = _.find(project.users, function(userId) {
-                        return userId.toString() === req.user._id.toString();
-                    });
+            var projectOld = project.toObject();
 
-                    if (!isAble) {
-                        return when.reject(new HttpErrors.Unauthorized(errors[19].message, errors[19].code));
-                    }
+            // User is able to access this project
+            // @Todo Use request to mongo to determine ability
+            var isAble = _.find(project.users, function(userId) {
+                return userId.toString() === req.user._id.toString();
+            });
 
-                    // Update object with changes
-                    Object.keys(changes).forEach(function(key) {
-                        project.set(key, changes[key]);
-                    });
+            if (!isAble) {
+                return when.reject(new httpErrors.Unauthorized(errors[19].message, errors[19].code));
+            }
 
-                    projectUpdated = project;
+            // Update object with changes
+            Object.keys(changes).forEach(function(key) {
+                project.set(key, changes[key]);
+            });
 
-                    // Check if the project has been modified
-                    if (ObjectHelper.areEqual(projectOld, project.toObject())) {
-                        return when.resolve(project);
-                    }
+            // Check if the project has been modified
+            if (objectHelper.areEqual(projectOld, project.toObject())) {
+                return when.resolve(project);
+            }
 
-                    return ProjectValidator.name(project.name)
-                        .then(function() {
-                            return ProjectValidator.slug(project.slug);
-                        })
-                        .then(function() {
-                            return ProjectService.findReadOnlyBySlug(project.slug);
-                        })
-                        .then(function(obj) {
-                            if (obj && obj._id !== project._id) {
-                                return when.reject(errors[4]);
-                            } else {
-                                return when.resolve(project);
-                            }
-                        })
-                        .then(function() {
-                            return project.save();
-                        });
-                });
+            return projectValidator.name(project.name);
         })
         .then(function() {
-            projectUpdated = projectUpdated.toObject();
-            projectUpdated = ObjectHelper.removeProperties(['__v'], projectUpdated);
-            projectUpdated = ProjectAdapter.hateoasize(['self'], projectUpdated);
+            return projectValidator.slug(project.slug);
+        })
+        .then(function() {
+            return projectService.findReadOnlyBySlug(project.slug);
+        })
+        .then(function(obj) {
+            if (obj && obj._id !== project._id) {
+                return when.reject(errors[4]);
+            } else {
+                return when.resolve(project);
+            }
+        })
+        .then(function() {
+            return project.save();
+        })
+        .then(function() {
+            var projectJson = project.toObject();
+            projectJson = objectHelper.removeProperties(['__v'], projectJson);
+            projectJson = projectAdapter.hateoasize(['self'], projectJson);
             res
                 .contentType('application/json')
-                .send(200, JSON.stringify(projectUpdated));
+                .send(200, JSON.stringify(projectJson));
         })
         .then(null, function(err) {
-            if (_.has(err, 'code') && !(err instanceof HttpErrors.NotFound) && !(err instanceof HttpErrors.Unauthorized)) {
-                return next(new HttpErrors.BadRequest(err.message, err.code));
+            if (_.has(err, 'code') && !(err instanceof httpErrors.NotFound) && !(err instanceof httpErrors.Unauthorized)) {
+                return next(new httpErrors.BadRequest(err.message, err.code));
             } else if (_.has(err, 'name') && err.name === 'CastError') {
-                return next(new HttpErrors.BadRequest(errors[13].message, errors[13].code));
+                return next(new httpErrors.BadRequest(errors[13].message, errors[13].code));
             }
             return next(err);
         });
@@ -146,37 +144,37 @@ var update = function(req, res, next) {
  * GET  /project/:id
  */
 var show = function(req, res, next) {
-    StringValidator.isDocumentId(req.params.id)
-        .then(function(value) {
-            return ProjectService.findReadOnlyById(value)
-                .then(function(project) {
+    stringValidator.isDocumentId(req.params.id)
+        .then(function(id) {
+            return projectService.findReadOnlyById(id);
+        })
+        .then(function(project) {
 
-                    if (!project) {
-                        return when.reject(new HttpErrors.NotFound(errors[18].message, errors[18].code));
-                    }
+            if (!project) {
+                return when.reject(new httpErrors.NotFound(errors[18].message, errors[18].code));
+            }
 
-                    // User is able to access this project
-                    // @Todo Use request to mongo to determine ability
-                    var isAble = _.find(project.users, function(userId) {
-                        return userId.toString() === req.user._id.toString();
-                    });
+            // User is able to access this project
+            // @Todo Use request to mongo to determine ability
+            var isAble = _.find(project.users, function(userId) {
+                return userId.toString() === req.user._id.toString();
+            });
 
-                    if (!isAble) {
-                        return when.reject(new HttpErrors.Unauthorized(errors[19].message, errors[19].code));
-                    }
+            if (!isAble) {
+                return when.reject(new httpErrors.Unauthorized(errors[19].message, errors[19].code));
+            }
 
-                    project = ObjectHelper.removeProperties(['__v'], project);
-                    project = ProjectAdapter.hateoasize(['self'], project);
-                    res
-                        .contentType('application/json')
-                        .send(JSON.stringify(project));
-                });
+            project = objectHelper.removeProperties(['__v'], project);
+            project = projectAdapter.hateoasize(['self'], project);
+            res
+                .contentType('application/json')
+                .send(JSON.stringify(project));
         })
         .then(null, function(err) {
-            if (_.has(err, 'code') && !(err instanceof HttpErrors.NotFound) && !(err instanceof HttpErrors.Unauthorized)) {
-                return next(new HttpErrors.BadRequest(err.message, err.code));
+            if (_.has(err, 'code') && !(err instanceof httpErrors.NotFound) && !(err instanceof httpErrors.Unauthorized)) {
+                return next(new httpErrors.BadRequest(err.message, err.code));
             } else if (_.has(err, 'name') && err.name === 'CastError') {
-                return next(new HttpErrors.BadRequest(errors[13].message, errors[13].code));
+                return next(new httpErrors.BadRequest(errors[13].message, errors[13].code));
             }
             return next(err);
         });
@@ -186,21 +184,21 @@ var show = function(req, res, next) {
  * GET  /me/project
  */
 var listByCurrentUser = function(req, res, next) {
-    UserService.findReadOnlyById(req.user._id)
+    userService.findReadOnlyById(req.user._id)
         .then(function(user) {
             if (!user) {
-                return when.reject(new HttpErrors.NotFound(errors[14].message, errors[14].code));
+                return when.reject(new httpErrors.NotFound(errors[14].message, errors[14].code));
             }
-            return ProjectService.findReadOnlyByUser(user._id, '_id name slug');
+            return projectService.findReadOnlyByUser(user._id, '_id name slug');
         })
         .then(function(projects) {
 
             projects = projects
                 .map(function(object) {
-                    return ObjectHelper.removeProperties(['__v'], object);
+                    return objectHelper.removeProperties(['__v'], object);
                 })
                 .map(function(object) {
-                    return ProjectAdapter.hateoasize(['self'], object);
+                    return projectAdapter.hateoasize(['self'], object);
                 });
 
             var data = {
@@ -220,39 +218,37 @@ var listByCurrentUser = function(req, res, next) {
                 .send(JSON.stringify(data));
         })
         .then(null, function(err) {
-            if (_.has(err, 'code') && !(err instanceof HttpErrors.NotFound) && !(err instanceof HttpErrors.Unauthorized)) {
-                return next(new HttpErrors.BadRequest(err.message, err.code));
+            if (_.has(err, 'code') && !(err instanceof httpErrors.NotFound) && !(err instanceof httpErrors.Unauthorized)) {
+                return next(new httpErrors.BadRequest(err.message, err.code));
             } else if (_.has(err, 'name') && err.name === 'CastError') {
-                return next(new HttpErrors.BadRequest(errors[13].message, errors[13].code));
+                return next(new httpErrors.BadRequest(errors[13].message, errors[13].code));
             }
             return next(err);
         });
-
 };
 
 /**
  * GET  /users/:id/project
  */
 var listByUser = function(req, res, next) {
-
-    StringValidator.isDocumentId(req.params.id)
+    stringValidator.isDocumentId(req.params.id)
         .then(function(value) {
-            return UserService.findReadOnlyById(value);
+            return userService.findReadOnlyById(value);
         })
         .then(function(user) {
             if (!user) {
-                return when.reject(new HttpErrors.NotFound(errors[14].message, errors[14].code));
+                return when.reject(new httpErrors.NotFound(errors[14].message, errors[14].code));
             }
-            return ProjectService.findReadOnlyByUser(user._id, '_id name slug');
+            return projectService.findReadOnlyByUser(user._id, '_id name slug');
         })
         .then(function(projects) {
 
             projects = projects
                 .map(function(object) {
-                    return ObjectHelper.removeProperties(['__v'], object);
+                    return objectHelper.removeProperties(['__v'], object);
                 })
                 .map(function(object) {
-                    return ProjectAdapter.hateoasize(['self'], object);
+                    return projectAdapter.hateoasize(['self'], object);
                 });
 
             var data = {
@@ -272,10 +268,10 @@ var listByUser = function(req, res, next) {
                 .send(JSON.stringify(data));
         })
         .then(null, function(err) {
-            if (_.has(err, 'code') && !(err instanceof HttpErrors.NotFound) && !(err instanceof HttpErrors.Unauthorized)) {
-                return next(new HttpErrors.BadRequest(err.message, err.code));
+            if (_.has(err, 'code') && !(err instanceof httpErrors.NotFound) && !(err instanceof httpErrors.Unauthorized)) {
+                return next(new httpErrors.BadRequest(err.message, err.code));
             } else if (_.has(err, 'name') && err.name === 'CastError') {
-                return next(new HttpErrors.BadRequest(errors[13].message, errors[13].code));
+                return next(new httpErrors.BadRequest(errors[13].message, errors[13].code));
             }
             return next(err);
         });

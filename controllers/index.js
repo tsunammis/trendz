@@ -1,11 +1,11 @@
-var DefaultCtrl     = require('./default'),
-    UsersCtr        = require('./users'),
-    StatusCtrl      = require('./status'),
-    ProjectCtrl     = require('./project');
+var defaultCtrl     = require('./default'),
+    usersCtr        = require('./users'),
+    statusCtrl      = require('./status'),
+    projectCtrl     = require('./project');
 
 module.exports = {
-    Default: DefaultCtrl,
-    User: UsersCtr,
-    Status: StatusCtrl,
-    Project: ProjectCtrl
+    Default: defaultCtrl,
+    User: usersCtr,
+    Status: statusCtrl,
+    Project: projectCtrl
 };

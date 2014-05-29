@@ -6,6 +6,5 @@ module.exports = function(db, conn) {
         email    : String,
         password : String
     });
-    
     return conn.model('User', userSchema);
 };
