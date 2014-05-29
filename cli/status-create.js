@@ -19,7 +19,7 @@ var a = new CommandAsker([
 ]);
 
 a.ask(function(response) {
-    userService.findReadOnlyByEmail(response.owner)
+    userService.findOneReadOnlyByEmail(response.owner)
     .then(function(user) {
         response.owner = user._id;
         if (response.project && response.project.length > 0) {

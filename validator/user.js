@@ -23,7 +23,7 @@ var password = function(password) {
 };
 
 var emailExist = function(mail) {
-    return userService.findReadOnlyByEmail(mail)
+    return userService.findOneReadOnlyByEmail(mail)
         .then(function(data) {
             if (data !== null) {
                 return when.resolve(mail);
@@ -35,7 +35,7 @@ var emailExist = function(mail) {
 };
 
 var emailNotExist = function(mail) {
-    return userService.findReadOnlyByEmail(mail)
+    return userService.findOneReadOnlyByEmail(mail)
         .then(function(data) {
             if (data !== null) {
                 return when.reject(errors[8]);   

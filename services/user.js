@@ -8,12 +8,17 @@ var User        = require('../models').User,
  * @param {string} id
  * @return {MongooseDocument}
  */
-var findById = function(id) {
-    return User
+var findOneById = function(id, select) {
+    var query = User
         .findOne({
             _id: new ObjectId(id)
-        })
-        .exec();
+        });
+
+    if (select) {
+        query.select(select);
+    }
+
+    return query.exec();
 };
 
 /**
@@ -22,13 +27,18 @@ var findById = function(id) {
  *
  * @param {string} id
  */
-var findReadOnlyById = function(id) {
-    return User
+var findOneReadOnlyById = function(id, select) {
+    var query = User
         .findOne({
             _id: new ObjectId(id)
         })
-        .lean(true)
-        .exec();
+        .lean(true);
+
+    if (select) {
+        query.select(select);
+    }
+
+    return query.exec();
 };
 
 /**
@@ -38,7 +48,6 @@ var findReadOnlyById = function(id) {
  * @param {array} ids
  */
 var findReadOnlyByIds = function(ids, select) {
-
     var query = User
         .find({})
         .where('_id').in(ids)
@@ -58,18 +67,23 @@ var findReadOnlyByIds = function(ids, select) {
  *
  * @param {string} email
  */
-var findReadOnlyByEmail = function(email) {
-    return User
+var findOneReadOnlyByEmail = function(email, select) {
+    var query = User
         .findOne({
             email: email
         })
-        .lean(true)
-        .exec();
+        .lean(true);
+
+    if (select) {
+        query.select(select);
+    }
+
+    return query.exec();
 };
 
 module.exports = {
-    findById: findById,
-    findReadOnlyById: findReadOnlyById,
+    findOneById: findOneById,
+    findOneReadOnlyById: findOneReadOnlyById,
     findReadOnlyByIds: findReadOnlyByIds,
-    findReadOnlyByEmail: findReadOnlyByEmail
+    findOneReadOnlyByEmail: findOneReadOnlyByEmail
 };

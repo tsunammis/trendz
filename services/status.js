@@ -7,13 +7,18 @@ var Status      = require('../models').Status,
  *
  * @param {string} id
  */
-var findReadOnlyById = function(id) {
-    return Status
+var findOneReadOnlyById = function(id, select) {
+    var query = Status
         .findOne({
             _id: new ObjectId(id)
         })
-        .lean(true)
-        .exec();
+        .lean(true);
+
+    if (select) {
+        query.select(select);
+    }
+
+    return query.exec();
 };
 
 /**
@@ -22,13 +27,18 @@ var findReadOnlyById = function(id) {
  *
  * @param {string} userId
  */
-var findReadOnlyByUserId = function(userId) {
-    return Status
+var findReadOnlyByUserId = function(userId, select) {
+    var query = Status
         .find({ 'owner': new ObjectId(userId) })
         .limit(20)
         .lean()
-        .sort('-createdAt')
-        .exec();
+        .sort('-createdAt');
+
+    if (select) {
+        query.select(select);
+    }
+
+    return query.exec();
 };
 
 /**
@@ -37,17 +47,22 @@ var findReadOnlyByUserId = function(userId) {
  *
  * @param {string} projectId
  */
-var findReadOnlyByProjectId = function(projectId) {
-    return Status
+var findReadOnlyByProjectId = function(projectId, select) {
+    var query = Status
         .find({ 'project': new ObjectId(projectId) })
         .limit(20)
         .lean()
-        .sort('-createdAt')
-        .exec();
+        .sort('-createdAt');
+
+    if (select) {
+        query.select(select);
+    }
+
+    return query.exec();
 };
 
 module.exports = {
-    findReadOnlyById: findReadOnlyById,
+    findOneReadOnlyById: findOneReadOnlyById,
     findReadOnlyByUserId: findReadOnlyByUserId,
     findReadOnlyByProjectId: findReadOnlyByProjectId
 };

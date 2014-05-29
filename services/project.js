@@ -9,7 +9,6 @@ var Project     = require('../models').Project,
  * @return {MongooseDocument}
  */
 var findOneById = function(id, select) {
-
     var query = Project
         .findOne({
             _id: new ObjectId(id)
@@ -29,7 +28,6 @@ var findOneById = function(id, select) {
  * @param {string} id
  */
 var findOneReadOnlyById = function(id, select) {
-
     var query = Project
         .findOne({
             _id: new ObjectId(id)
@@ -50,7 +48,6 @@ var findOneReadOnlyById = function(id, select) {
  * @param {string} slug
  */
 var findOneReadOnlyBySlug = function(slug, select) {
-
     var query = Project
         .findOne({
             slug: slug
@@ -72,7 +69,6 @@ var findOneReadOnlyBySlug = function(slug, select) {
  * @param {string} select (Optional)
  */
 var findReadOnlyByUser = function(userId, select) {
-
     var query = Project
         .find({})
         .where('users').in([new ObjectId(userId)])

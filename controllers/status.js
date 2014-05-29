@@ -75,7 +75,7 @@ var create = function(req, res, next) {
 var show = function(req, res, next) {
     stringValidator.isDocumentId(req.params.id)
         .then(function(id) {
-            return statusService.findReadOnlyById(id);
+            return statusService.findOneReadOnlyById(id);
         })
         .then(function (status) {
             if (!status) {
@@ -130,7 +130,7 @@ var show = function(req, res, next) {
 var listByUser = function(req, res, next) {
     stringValidator.isDocumentId(req.params.id)
         .then(function(id) {
-            return userService.findReadOnlyById(id);
+            return userService.findOneReadOnlyById(id);
         })
         .then(function (user) {
             if (!user) {

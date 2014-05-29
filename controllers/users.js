@@ -75,7 +75,7 @@ var update = function(req, res, next) {
     if (_.has(changes, 'email')) {
         promiseEmail = userValidator.email(changes.email)
             .then(function() {
-                return userService.findReadOnlyByEmail(changes.email);
+                return userService.findOneReadOnlyByEmail(changes.email);
             })
             .then(function(user) {
                 if (user && user._id !== req.user._id) {
@@ -86,7 +86,7 @@ var update = function(req, res, next) {
             });
     }
 
-    userService.findById(req.user._id)
+    userService.findOneById(req.user._id)
         .then(function() {
             return (promisePassword !== null) ? promisePassword : when.resolve();
         })
@@ -143,7 +143,7 @@ var self = function(req, res, next) {
 var show = function(req, res, next) {
     stringValidator.isDocumentId(req.params.id)
         .then(function(value) {
-            return userService.findReadOnlyById(value);
+            return userService.findOneReadOnlyById(value);
         })
         .then(function (data) {
             if (!data) {

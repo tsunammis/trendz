@@ -184,7 +184,7 @@ var show = function(req, res, next) {
  * GET  /me/project
  */
 var listByCurrentUser = function(req, res, next) {
-    userService.findReadOnlyById(req.user._id)
+    userService.findOneReadOnlyById(req.user._id)
         .then(function(user) {
             if (!user) {
                 return when.reject(new httpErrors.NotFound(errors[14].message, errors[14].code));
@@ -233,7 +233,7 @@ var listByCurrentUser = function(req, res, next) {
 var listByUser = function(req, res, next) {
     stringValidator.isDocumentId(req.params.id)
         .then(function(value) {
-            return userService.findReadOnlyById(value);
+            return userService.findOneReadOnlyById(value);
         })
         .then(function(user) {
             if (!user) {
