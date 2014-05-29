@@ -19,7 +19,7 @@ var slug = function(slug) {
 };
 
 var slugExist = function(slug) {
-    return projectService.findReadOnlyBySlug(slug)
+    return projectService.findOneReadOnlyBySlug(slug)
         .then(function(data) {
             if (data !== null) {
                 return when.resolve(slug);
@@ -31,7 +31,7 @@ var slugExist = function(slug) {
 };
 
 var slugNotExist = function(slug) {
-    return projectService.findReadOnlyBySlug(slug)
+    return projectService.findOneReadOnlyBySlug(slug)
         .then(function(data) {
             if (data !== null) {
                 return when.reject(errors[4]);

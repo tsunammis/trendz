@@ -174,7 +174,7 @@ var show = function(req, res, next) {
 var listByProject = function(req, res, next) {
     stringValidator.isDocumentId(req.params.id)
         .then(function(value) {
-            return projectService.findReadOnlyById(value);
+            return projectService.findOneReadOnlyById(value);
         })
         .then(function(project) {
             // Check if the project doesn't exist

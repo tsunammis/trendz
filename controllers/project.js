@@ -69,8 +69,8 @@ var update = function(req, res, next) {
         project = null;
 
     stringValidator.isDocumentId(req.params.id)
-        .then(function(value) {
-            return projectService.findById(value);
+        .then(function(id) {
+            return projectService.findOneById(id);
         })
         .then(function(p) {
 
@@ -110,7 +110,7 @@ var update = function(req, res, next) {
             return projectValidator.slug(project.slug);
         })
         .then(function() {
-            return projectService.findReadOnlyBySlug(project.slug);
+            return projectService.findOneReadOnlyBySlug(project.slug);
         })
         .then(function(obj) {
             if (obj && obj._id !== project._id) {
@@ -146,7 +146,7 @@ var update = function(req, res, next) {
 var show = function(req, res, next) {
     stringValidator.isDocumentId(req.params.id)
         .then(function(id) {
-            return projectService.findReadOnlyById(id);
+            return projectService.findOneReadOnlyById(id);
         })
         .then(function(project) {
 

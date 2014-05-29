@@ -28,7 +28,7 @@ var create = function(req, res, next) {
             if (_.has(req.body, 'project') && req.body.project) {
                 return stringValidator.isDocumentId(req.body.project)
                     .then(function(id) {
-                        return projectService.findReadOnlyById(id);
+                        return projectService.findOneReadOnlyById(id);
                     })
                     .then(function(project) {
                         if (!project) {
@@ -84,7 +84,7 @@ var show = function(req, res, next) {
             if (_.has(status, 'project') && status.project) {
                 return stringValidator.isDocumentId(status.project)
                     .then(function(id) {
-                        return projectService.findReadOnlyById(id);
+                        return projectService.findOneReadOnlyById(id);
                     })
                     .then(function(project) {
                         if (!project) {
@@ -222,7 +222,7 @@ var listByCurrentUser = function(req, res, next) {
 var listByProject = function(req, res, next) {
     stringValidator.isDocumentId(req.params.id)
         .then(function(id) {
-            return projectService.findReadOnlyById(id);
+            return projectService.findOneReadOnlyById(id);
         })
         .then(function (project) {
             if (!project) {

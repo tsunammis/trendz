@@ -8,12 +8,18 @@ var Project     = require('../models').Project,
  * @param {string} id
  * @return {MongooseDocument}
  */
-var findById = function(id) {
-    return Project
+var findOneById = function(id, select) {
+
+    var query = Project
         .findOne({
             _id: new ObjectId(id)
-        })
-        .exec();
+        });
+
+    if (select) {
+        query.select(select);
+    }
+
+    return query.exec();
 };
 
 /**
@@ -22,13 +28,19 @@ var findById = function(id) {
  *
  * @param {string} id
  */
-var findReadOnlyById = function(id) {
-    return Project
+var findOneReadOnlyById = function(id, select) {
+
+    var query = Project
         .findOne({
             _id: new ObjectId(id)
         })
-        .lean(true)
-        .exec();
+        .lean(true);
+
+    if (select) {
+        query.select(select);
+    }
+
+    return query.exec();
 };
 
 /**
@@ -37,13 +49,19 @@ var findReadOnlyById = function(id) {
  *
  * @param {string} slug
  */
-var findReadOnlyBySlug = function(slug) {
-    return Project
+var findOneReadOnlyBySlug = function(slug, select) {
+
+    var query = Project
         .findOne({
             slug: slug
         })
-        .lean(true)
-        .exec();
+        .lean(true);
+
+    if (select) {
+        query.select(select);
+    }
+
+    return query.exec();
 };
 
 /**
@@ -69,8 +87,8 @@ var findReadOnlyByUser = function(userId, select) {
 };
 
 module.exports = {
-    findById: findById,
-    findReadOnlyById: findReadOnlyById,
-    findReadOnlyBySlug: findReadOnlyBySlug,
+    findOneById: findOneById,
+    findOneReadOnlyById: findOneReadOnlyById,
+    findOneReadOnlyBySlug: findOneReadOnlyBySlug,
     findReadOnlyByUser: findReadOnlyByUser
 };

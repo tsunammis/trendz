@@ -23,7 +23,7 @@ a.ask(function(response) {
     .then(function(user) {
         response.owner = user._id;
         if (response.project && response.project.length > 0) {
-            return projectService.findReadOnlyBySlug(response.project)
+            return projectService.findOneReadOnlyBySlug(response.project)
                 .then(function(project) {
                     response.project = project._id;
                     return Status.create(response);
