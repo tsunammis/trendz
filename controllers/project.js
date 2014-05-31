@@ -91,7 +91,7 @@ var update = function(req, res, next) {
             });
 
             if (!isAble) {
-                return when.reject(new httpErrors.Unauthorized(errors[19].message, errors[19].code));
+                return when.reject(new httpErrors.Forbidden(errors[19].message, errors[19].code));
             }
 
             // Update object with changes
@@ -131,7 +131,7 @@ var update = function(req, res, next) {
                 .send(200, JSON.stringify(projectJson));
         })
         .then(null, function(err) {
-            if (_.has(err, 'code') && !(err instanceof httpErrors.NotFound) && !(err instanceof httpErrors.Unauthorized)) {
+            if (_.has(err, 'code') && !(err instanceof httpErrors.NotFound) && !(err instanceof httpErrors.Forbidden)) {
                 return next(new httpErrors.BadRequest(err.message, err.code));
             } else if (_.has(err, 'name') && err.name === 'CastError') {
                 return next(new httpErrors.BadRequest(errors[13].message, errors[13].code));
@@ -161,7 +161,7 @@ var show = function(req, res, next) {
             });
 
             if (!isAble) {
-                return when.reject(new httpErrors.Unauthorized(errors[19].message, errors[19].code));
+                return when.reject(new httpErrors.Forbidden(errors[19].message, errors[19].code));
             }
 
             project = objectHelper.removeProperties(['__v'], project);
@@ -171,7 +171,7 @@ var show = function(req, res, next) {
                 .send(JSON.stringify(project));
         })
         .then(null, function(err) {
-            if (_.has(err, 'code') && !(err instanceof httpErrors.NotFound) && !(err instanceof httpErrors.Unauthorized)) {
+            if (_.has(err, 'code') && !(err instanceof httpErrors.NotFound) && !(err instanceof httpErrors.Forbidden)) {
                 return next(new httpErrors.BadRequest(err.message, err.code));
             } else if (_.has(err, 'name') && err.name === 'CastError') {
                 return next(new httpErrors.BadRequest(errors[13].message, errors[13].code));
@@ -218,7 +218,7 @@ var listByCurrentUser = function(req, res, next) {
                 .send(JSON.stringify(data));
         })
         .then(null, function(err) {
-            if (_.has(err, 'code') && !(err instanceof httpErrors.NotFound) && !(err instanceof httpErrors.Unauthorized)) {
+            if (_.has(err, 'code') && !(err instanceof httpErrors.NotFound) && !(err instanceof httpErrors.ForbiddenForbidden)) {
                 return next(new httpErrors.BadRequest(err.message, err.code));
             } else if (_.has(err, 'name') && err.name === 'CastError') {
                 return next(new httpErrors.BadRequest(errors[13].message, errors[13].code));
@@ -268,7 +268,7 @@ var listByUser = function(req, res, next) {
                 .send(JSON.stringify(data));
         })
         .then(null, function(err) {
-            if (_.has(err, 'code') && !(err instanceof httpErrors.NotFound) && !(err instanceof httpErrors.Unauthorized)) {
+            if (_.has(err, 'code') && !(err instanceof httpErrors.NotFound) && !(err instanceof httpErrors.Forbidden)) {
                 return next(new httpErrors.BadRequest(err.message, err.code));
             } else if (_.has(err, 'name') && err.name === 'CastError') {
                 return next(new httpErrors.BadRequest(errors[13].message, errors[13].code));

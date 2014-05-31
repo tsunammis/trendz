@@ -234,7 +234,7 @@ var listByProject = function(req, res, next) {
                 return userId.toString() === req.user._id.toString();
             });
             if (!isAble) {
-                return when.reject(new httpErrors.Unauthorized(errors[19].message, errors[19].code));
+                return when.reject(new httpErrors.Forbidden(errors[19].message, errors[19].code));
             }
             return statusService.findReadOnlyByProjectId(req.params.id);
         })
@@ -264,7 +264,7 @@ var listByProject = function(req, res, next) {
                 .send(JSON.stringify(data));
         })
         .then(null, function(err) {
-            if (_.has(err, 'code') && !(err instanceof httpErrors.NotFound) && !(err instanceof httpErrors.Unauthorized)) {
+            if (_.has(err, 'code') && !(err instanceof httpErrors.NotFound) && !(err instanceof httpErrors.Forbidden)) {
                 return next(new httpErrors.BadRequest(err.message, err.code));
             } else if (_.has(err, 'name') && err.name === 'CastError') {
                 return next(new httpErrors.BadRequest(errors[13].message, errors[13].code));

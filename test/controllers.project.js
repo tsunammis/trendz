@@ -65,7 +65,7 @@ describe('GET /project/:id', function() {
             .set('Authorization', testTools.buildBasicAuthorization('chuck@norris.com', 'chuck@norris.com'))
             .set('Content-Type', 'application/json')
             .expect('Content-Type', /json/)
-            .expect(401, done);
+            .expect(403, done);
     });
 
 });
@@ -535,7 +535,7 @@ describe('PUT /project/:id', function() {
             .set('Content-Type', 'application/json')
             .expect('Content-Type', /json/)
             .send({})
-            .expect(401)
+            .expect(403)
             .end(function(err, res) {
 
                 if (err) {

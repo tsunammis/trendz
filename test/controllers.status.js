@@ -335,7 +335,7 @@ describe('GET /project/:id/status', function() {
             .set('Authorization', testTools.buildBasicAuthorization('chuck@norris.com', 'chuck@norris.com'))
             .set('Content-Type', 'application/json')
             .expect('Content-Type', /json/)
-            .expect(401, done);
+            .expect(403, done);
     });
 
 });
