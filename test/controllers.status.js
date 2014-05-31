@@ -235,13 +235,13 @@ describe('GET /status/:id', function() {
             .expect(401, done);
     });
 
-    it('Not authorized to access this data (User Not belong to project)', function(done) {
+    it('Not authorized to access this data (User not belong to project)', function(done) {
         request(app)
             .get('/status/53584239a1294f5a24940691')
             .set('Authorization', testTools.buildBasicAuthorization('chuck@norris.com', 'chuck@norris.com'))
             .set('Content-Type', 'application/json')
             .expect('Content-Type', /json/)
-            .expect(401)
+            .expect(403)
             .end(function(err, res) {
 
                 if (err) {
@@ -526,6 +526,104 @@ describe('POST /status', function() {
                 expect(res.body)
                     .to.have.property('code')
                     .to.equal(19);
+
+                return done();
+            });
+    });
+
+});
+
+describe('DELETE /status/:id', function() {
+
+    it('it is OK', function(done) {
+        request(app)
+            .delete('/status/53584239a1294f5a24940695')
+            .set('Authorization', testTools.buildBasicAuthorization('delete_status@mail.com', 'delete_status@mail.com'))
+            .expect(200, done);
+    });
+
+    it("ID's format is not good (Bad Request)", function(done) {
+        request(app)
+            .delete('/status/1234')
+            .set('Authorization', testTools.buildBasicAuthorization('chuck@norris.com', 'chuck@norris.com'))
+            .expect(400)
+            .end(function(err, res) {
+
+                if (err) {
+                    return done(err);
+                }
+
+                expect(res)
+                    .to.have.property('body')
+                    .that.is.an('object');
+
+                expect(res.body)
+                    .to.have.property('message')
+                    .to.equal("the id's format is not valid");
+
+                expect(res.body)
+                    .to.have.property('code')
+                    .to.equal(13);
+
+                return done();
+            });
+    });
+
+    it("Status not found", function(done) {
+        request(app)
+            .delete('/status/aaa84239a1294f5a24940690')
+            .set('Authorization', testTools.buildBasicAuthorization('chuck@norris.com', 'chuck@norris.com'))
+            .expect(404)
+            .end(function(err, res) {
+
+                if (err) {
+                    return done(err);
+                }
+
+                expect(res)
+                    .to.have.property('body')
+                    .that.is.an('object');
+
+                expect(res.body)
+                    .to.have.property('message')
+                    .to.equal("status not found");
+
+                expect(res.body)
+                    .to.have.property('code')
+                    .to.equal(15);
+
+                return done();
+            });
+    });
+
+    it('Not authorized to access this data (Unauthorized)', function(done) {
+        request(app)
+            .delete('/status/53584239a1294f5a24940691')
+            .expect(401, done);
+    });
+
+    it('Not authorized to access this data (User not owner of status)', function(done) {
+        request(app)
+            .delete('/status/53584239a1294f5a24940691')
+            .set('Authorization', testTools.buildBasicAuthorization('chuck@norris.com', 'chuck@norris.com'))
+            .expect(403)
+            .end(function(err, res) {
+
+                if (err) {
+                    return done(err);
+                }
+
+                expect(res)
+                    .to.have.property('body')
+                    .that.is.an('object');
+
+                expect(res.body)
+                    .to.have.property('message')
+                    .to.equal("you are not the owner of the status");
+
+                expect(res.body)
+                    .to.have.property('code')
+                    .to.equal(21);
 
                 return done();
             });

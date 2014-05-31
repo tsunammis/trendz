@@ -88,7 +88,7 @@ var show = function(req, res, next) {
                     })
                     .then(function(project) {
                         if (!project) {
-                            return when.reject(new httpErrors.Unauthorized(errors[19].message, errors[19].code));
+                            return when.reject(new httpErrors.BadRequest(errors[19].message, errors[19].code));
                         }
                         // User is able to access this project
                         // @Todo Use request to mongo to determine ability
@@ -96,7 +96,7 @@ var show = function(req, res, next) {
                             return userId.toString() === req.user._id.toString();
                         });
                         if (!isAble) {
-                            return when.reject(new httpErrors.Unauthorized(errors[19].message, errors[19].code));
+                            return when.reject(new httpErrors.Forbidden(errors[19].message, errors[19].code));
                         }
                         return when.resolve(status);
                     });
@@ -112,7 +112,44 @@ var show = function(req, res, next) {
                 .send(JSON.stringify(status));
         })
         .then(null, function(err) {
-            if (_.has(err, 'code') && !(err instanceof httpErrors.NotFound) && !(err instanceof httpErrors.Unauthorized)) {
+            if (_.has(err, 'code') && !(err instanceof httpErrors.NotFound) && !(err instanceof httpErrors.Forbidden)) {
+                return next(new httpErrors.BadRequest(err.message, err.code));
+            } else if (_.has(err, 'name') && err.name === 'CastError') {
+                return next(new httpErrors.BadRequest(errors[13].message, errors[13].code));
+            }
+            return next(err);
+        });
+};
+
+/**
+ * DELETE  /status/:id
+ *
+ * Parameters:
+ *  - id | Respect the format of Mongo's Id
+ */
+var remove = function(req, res, next) {
+    stringValidator.isDocumentId(req.params.id)
+        .then(function(id) {
+            return statusService.findOneReadOnlyById(id);
+        })
+        .then(function (status) {
+            if (!status) {
+                return when.reject(new httpErrors.NotFound(errors[15].message, errors[15].code));
+            }
+            // Check if the user is the owner
+            if (status.owner.toString() !== req.user._id.toString()) {
+                return when.reject(new httpErrors.Forbidden(errors[21].message, errors[21].code));
+            }
+            return statusService.removeById(status._id);
+        })
+        .then(function() {
+            res
+                .contentType('application/json')
+                .status(200)
+                .send();
+        })
+        .then(null, function(err) {
+            if (_.has(err, 'code') && !(err instanceof httpErrors.NotFound) && !(err instanceof httpErrors.Forbidden)) {
                 return next(new httpErrors.BadRequest(err.message, err.code));
             } else if (_.has(err, 'name') && err.name === 'CastError') {
                 return next(new httpErrors.BadRequest(errors[13].message, errors[13].code));
@@ -276,6 +313,7 @@ var listByProject = function(req, res, next) {
 module.exports = {
     create: create,
     show: show,
+    remove: remove,
     listByUser: listByUser,
     listByCurrentUser: listByCurrentUser,
     listByProject: listByProject

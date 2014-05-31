@@ -19,5 +19,6 @@ module.exports = [
     { 'code': 17,   'name': 'status.content',                   'message': "status.content's length must be between 1 and 300 caracters." },
     { 'code': 18,   'name': 'project.doesnt_exist',             'message': "project not found" },
     { 'code': 19,   'name': 'project.not_belong',               'message': "user not belong to project" },
-    { 'code': 20,   'name': 'project.slug.length',              'message': "project.slug's length must be between 3 and 30 caracters" }
+    { 'code': 20,   'name': 'project.slug.length',              'message': "project.slug's length must be between 3 and 30 caracters" },
+    { 'code': 21,   'name': 'status.not_owner',                 'message': "you are not the owner of the status" }
 ];

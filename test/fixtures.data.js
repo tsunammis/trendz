@@ -23,6 +23,11 @@ module.exports.Users = [
         _id         : new ObjectId('53584239a1294f5a24940594'),
         email       : 'put_user@mail.com',
         password    : userHelper.generateHash('put_user@mail.com')
+    },
+    {
+        _id         : new ObjectId('53584239a1294f5a24940595'),
+        email       : 'delete_status@mail.com',
+        password    : userHelper.generateHash('delete_status@mail.com')
     }
 ];
 
@@ -110,5 +115,11 @@ module.exports.Status = [
         createdAt   : new Date(2014, 5, 21, 19, 35, 50),
         owner       : module.exports.Users[2]._id,
         project     : module.exports.Projects[3]._id
+    },
+    {
+        _id         : new ObjectId('53584239a1294f5a24940695'),
+        content     : 'Status to delete',
+        createdAt   : new Date(2014, 5, 21, 19, 35, 50),
+        owner       : module.exports.Users[4]._id
     }
 ];

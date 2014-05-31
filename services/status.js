@@ -2,6 +2,36 @@ var Status      = require('../models').Status,
     ObjectId    = require('mongoose').Types.ObjectId;
 
 /**
+ * Remove status by ID.
+ *
+ * @param {string} id
+ */
+var removeById = function(id) {
+    return Status
+        .remove({
+            _id: new ObjectId(id)
+        });
+};
+
+/**
+ * Find status by ID.
+ *
+ * @param {string} id
+ */
+var findOneById = function(id, select) {
+    var query = Status
+        .findOne({
+            _id: new ObjectId(id)
+        });
+
+    if (select) {
+        query.select(select);
+    }
+
+    return query.exec();
+};
+
+/**
  * Find status by ID.
  * The data return are Read Only (Plain Objet) instead of MongooseDocument
  *
@@ -62,6 +92,8 @@ var findReadOnlyByProjectId = function(projectId, select) {
 };
 
 module.exports = {
+    removeById: removeById,
+    findOneById: findOneById,
     findOneReadOnlyById: findOneReadOnlyById,
     findReadOnlyByUserId: findReadOnlyByUserId,
     findReadOnlyByProjectId: findReadOnlyByProjectId
