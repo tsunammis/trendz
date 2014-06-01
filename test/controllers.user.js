@@ -599,3 +599,156 @@ describe('GET /project/:id/users', function() {
     });
 
 });
+
+describe('POST /project/:id/users', function() {
+
+    it('User not found', function(done) {
+        request(app)
+            .post('/project/53584239a1294f5a24940395/users')
+            .set('Authorization', testTools.buildBasicAuthorization('push_user_to_project@mail.com', 'push_user_to_project@mail.com'))
+            .set('Content-Type', 'application/json')
+            .send({ user: 'aaa84239a1294f5a24940598' })
+            .expect(400)
+            .end(function(err, res) {
+                if (err) {
+                    return done(err);
+                }
+
+                expect(res)
+                    .to.have.property('body')
+                    .that.is.an('object');
+
+                expect(res.body)
+                    .to.have.property('message')
+                    .to.equal("user not found");
+
+                expect(res.body)
+                    .to.have.property('code')
+                    .to.equal(14);
+
+                return done();
+            });
+    });
+
+    it('User already assigned', function(done) {
+        request(app)
+            .post('/project/53584239a1294f5a24940395/users')
+            .set('Authorization', testTools.buildBasicAuthorization('push_user_to_project@mail.com', 'push_user_to_project@mail.com'))
+            .set('Content-Type', 'application/json')
+            .send({ user: '53584239a1294f5a24940597' })
+            .expect(400)
+            .end(function(err, res) {
+                if (err) {
+                    return done(err);
+                }
+
+                expect(res)
+                    .to.have.property('body')
+                    .that.is.an('object');
+
+                expect(res.body)
+                    .to.have.property('message')
+                    .to.equal("the user is already assigned to the project");
+
+                expect(res.body)
+                    .to.have.property('code')
+                    .to.equal(23);
+
+                return done();
+            });
+    });
+
+    it('Project not found', function(done) {
+        request(app)
+            .post('/project/aaa84239a1294f5a24940395/users')
+            .set('Authorization', testTools.buildBasicAuthorization('push_user_to_project@mail.com', 'push_user_to_project@mail.com'))
+            .set('Content-Type', 'application/json')
+            .send({ user: '53584239a1294f5a24940598' })
+            .expect(404)
+            .end(function(err, res) {
+                if (err) {
+                    return done(err);
+                }
+
+                expect(res)
+                    .to.have.property('body')
+                    .that.is.an('object');
+
+                expect(res.body)
+                    .to.have.property('message')
+                    .to.equal("project not found");
+
+                expect(res.body)
+                    .to.have.property('code')
+                    .to.equal(18);
+
+                return done();
+            });
+    });
+
+    it("ID's format is not good (Bad Request)", function(done) {
+        request(app)
+            .post('/project/1234/users')
+            .set('Authorization', testTools.buildBasicAuthorization('push_user_to_project@mail.com', 'push_user_to_project@mail.com'))
+            .set('Content-Type', 'application/json')
+            .send({ user: '53584239a1294f5a24940598' })
+            .expect(400)
+            .end(function(err, res) {
+                if (err) {
+                    return done(err);
+                }
+
+                expect(res)
+                    .to.have.property('body')
+                    .that.is.an('object');
+
+                expect(res.body)
+                    .to.have.property('message')
+                    .to.equal("the id's format is not valid");
+
+                expect(res.body)
+                    .to.have.property('code')
+                    .to.equal(13);
+
+                return done();
+            });
+    });
+
+    it('Requester is not the owner', function(done) {
+        request(app)
+            .post('/project/53584239a1294f5a24940395/users')
+            .set('Authorization', testTools.buildBasicAuthorization('chuck@norris.com', 'chuck@norris.com'))
+            .set('Content-Type', 'application/json')
+            .send({ user: '53584239a1294f5a24940598' })
+            .expect(403)
+            .end(function(err, res) {
+                if (err) {
+                    return done(err);
+                }
+
+                expect(res)
+                    .to.have.property('body')
+                    .that.is.an('object');
+
+                expect(res.body)
+                    .to.have.property('message')
+                    .to.equal("you are not the owner of the project");
+
+                expect(res.body)
+                    .to.have.property('code')
+                    .to.equal(22);
+
+                return done();
+            });
+    });
+
+    it('It is ok', function(done) {
+        request(app)
+            .post('/project/53584239a1294f5a24940395/users')
+            .set('Authorization', testTools.buildBasicAuthorization('push_user_to_project@mail.com', 'push_user_to_project@mail.com'))
+            .set('Content-Type', 'application/json')
+            .send({ user: '53584239a1294f5a24940598' })
+            .expect(200, done);
+    });
+
+});

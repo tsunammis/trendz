@@ -4,41 +4,60 @@ var userHelper  = require('../helpers/user'),
 module.exports.Users = [
     // Immutable users
     {
+        // 0
         _id         : new ObjectId('53584239a1294f5a24940590'),
         email       : 'chuck@norris.com',
         password    : userHelper.generateHash('chuck@norris.com')
     },
     {
+        // 1
         _id         : new ObjectId('53584239a1294f5a24940591'),
         email       : 'mark.nuremberg@mail.com',
         password    : userHelper.generateHash('mark.nuremberg@mail.com')
     },
     // Mutable users
     {
+        // 2
         _id         : new ObjectId('53584239a1294f5a24940593'),
         email       : 'larry@mail.com',
         password    : userHelper.generateHash('larry@mail.com')
     },
     {
+        // 3
         _id         : new ObjectId('53584239a1294f5a24940594'),
         email       : 'put_user@mail.com',
         password    : userHelper.generateHash('put_user@mail.com')
     },
     {
+        // 4
         _id         : new ObjectId('53584239a1294f5a24940595'),
         email       : 'delete_status@mail.com',
         password    : userHelper.generateHash('delete_status@mail.com')
     },
     {
+        // 5
         _id         : new ObjectId('53584239a1294f5a24940596'),
         email       : 'delete_project@mail.com',
         password    : userHelper.generateHash('delete_project@mail.com')
+    },
+    {
+        // 6
+        _id         : new ObjectId('53584239a1294f5a24940597'),
+        email       : 'push_user_to_project@mail.com',
+        password    : userHelper.generateHash('push_user_to_project@mail.com')
+    },
+    {
+        // 7
+        _id         : new ObjectId('53584239a1294f5a24940598'),
+        email       : 'push_user_to_project2@mail.com',
+        password    : userHelper.generateHash('push_user_to_project2@mail.com')
     }
 ];
 
 module.exports.Projects = [
     // Immutable projects
     {
+        // 0
         _id         : new ObjectId('53584239a1294f5a24940390'),
         name        : 'Make the new revolution',
         slug        : 'make_the_new_revolution',
@@ -50,6 +69,7 @@ module.exports.Projects = [
         ]
     },
     {
+        // 1
         _id         : new ObjectId('53584239a1294f5a24940391'),
         name        : 'Build new home',
         slug        : 'build_new_home',
@@ -63,6 +83,7 @@ module.exports.Projects = [
     },
     // Mutable projects
     {
+        // 2
         _id         : new ObjectId('53584239a1294f5a24940392'),
         name        : 'Project mutable',
         slug        : 'project_mutable',
@@ -74,6 +95,7 @@ module.exports.Projects = [
         ]
     },
     {
+        // 3
         _id         : new ObjectId('53584239a1294f5a24940393'),
         name        : 'Project mutable (put)',
         slug        : 'project_mutable_put',
@@ -85,6 +107,7 @@ module.exports.Projects = [
         ]
     },
     {
+        // 4
         _id         : new ObjectId('53584239a1294f5a24940394'),
         name        : 'Project mutable (delete)',
         slug        : 'project_mutable_delete',
@@ -93,6 +116,18 @@ module.exports.Projects = [
         owner       : module.exports.Users[5]._id,
         users       : [
             module.exports.Users[5]._id
+        ]
+    },
+    {
+        // 5
+        _id         : new ObjectId('53584239a1294f5a24940395'),
+        name        : 'Project mutable (push user)',
+        slug        : 'project_mutable_push_user',
+        createdAt   : new Date(2014, 4, 16, 11, 15, 10),
+        updatedAt   : new Date(2014, 4, 16, 11, 15, 10),
+        owner       : module.exports.Users[6]._id,
+        users       : [
+            module.exports.Users[6]._id
         ]
     }
 ];
