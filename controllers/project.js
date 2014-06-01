@@ -1,5 +1,6 @@
 var Project             = require('../models').Project,
     projectAdapter      = require('../adapter').Project,
+    statusService       = require('../services').Status,
     projectService      = require('../services').Project,
     userService         = require('../services').User,
     httpErrors          = require('../helpers/http.errors'),
@@ -120,6 +121,7 @@ var update = function(req, res, next) {
             }
         })
         .then(function() {
+            project.set('updatedAt', Date.now);
             return project.save();
         })
         .then(function() {
@@ -169,6 +171,43 @@ var show = function(req, res, next) {
             res
                 .contentType('application/json')
                 .send(JSON.stringify(project));
+        })
+        .then(null, function(err) {
+            if (_.has(err, 'code') && !(err instanceof httpErrors.NotFound) && !(err instanceof httpErrors.Forbidden)) {
+                return next(new httpErrors.BadRequest(err.message, err.code));
+            } else if (_.has(err, 'name') && err.name === 'CastError') {
+                return next(new httpErrors.BadRequest(errors[13].message, errors[13].code));
+            }
+            return next(err);
+        });
+};
+
+/**
+ * DELETE  /project/:id
+ */
+var remove = function(req, res, next) {
+    stringValidator.isDocumentId(req.params.id)
+        .then(function(id) {
+            return projectService.findOneReadOnlyById(id);
+        })
+        .then(function (project) {
+            if (!project) {
+                return when.reject(new httpErrors.NotFound(errors[18].message, errors[18].code));
+            }
+            // Check if the user is the owner
+            if (project.owner.toString() !== req.user._id.toString()) {
+                return when.reject(new httpErrors.Forbidden(errors[22].message, errors[22].code));
+            }
+            return projectService.removeById(project._id);
+        })
+        .then(function() {
+            return statusService.removeByProject(req.params.id);
+        })
+        .then(function() {
+            res
+                .contentType('application/json')
+                .status(200)
+                .send();
         })
         .then(null, function(err) {
             if (_.has(err, 'code') && !(err instanceof httpErrors.NotFound) && !(err instanceof httpErrors.Forbidden)) {
@@ -281,6 +320,7 @@ module.exports = {
     create: create,
     update: update,
     show: show,
+    remove: remove,
     listByCurrentUser: listByCurrentUser,
     listByUser: listByUser
 };

@@ -20,5 +20,6 @@ module.exports = [
     { 'code': 18,   'name': 'project.doesnt_exist',             'message': "project not found" },
     { 'code': 19,   'name': 'project.not_belong',               'message': "user not belong to project" },
     { 'code': 20,   'name': 'project.slug.length',              'message': "project.slug's length must be between 3 and 30 caracters" },
-    { 'code': 21,   'name': 'status.not_owner',                 'message': "you are not the owner of the status" }
+    { 'code': 21,   'name': 'status.not_owner',                 'message': "you are not the owner of the status" },
+    { 'code': 22,   'name': 'project.not_owner',                'message': "you are not the owner of the project" }
 ];

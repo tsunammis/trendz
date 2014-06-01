@@ -28,6 +28,11 @@ module.exports.Users = [
         _id         : new ObjectId('53584239a1294f5a24940595'),
         email       : 'delete_status@mail.com',
         password    : userHelper.generateHash('delete_status@mail.com')
+    },
+    {
+        _id         : new ObjectId('53584239a1294f5a24940596'),
+        email       : 'delete_project@mail.com',
+        password    : userHelper.generateHash('delete_project@mail.com')
     }
 ];
 
@@ -77,6 +82,17 @@ module.exports.Projects = [
         owner       : module.exports.Users[2]._id,
         users       : [
             module.exports.Users[2]._id
+        ]
+    },
+    {
+        _id         : new ObjectId('53584239a1294f5a24940394'),
+        name        : 'Project mutable (delete)',
+        slug        : 'project_mutable_delete',
+        createdAt   : new Date(2014, 4, 15, 10, 15, 10),
+        updatedAt   : new Date(2014, 4, 15, 10, 15, 10),
+        owner       : module.exports.Users[5]._id,
+        users       : [
+            module.exports.Users[5]._id
         ]
     }
 ];

@@ -2,6 +2,18 @@ var Project     = require('../models').Project,
     ObjectId    = require('mongoose').Types.ObjectId;
 
 /**
+ * Remove project by ID.
+ *
+ * @param {string} id
+ */
+var removeById = function(id) {
+    return Project
+        .remove({
+            _id: new ObjectId(id)
+        });
+};
+
+/**
  * Find project by ID.
  * The data return is a MongooseDocument
  *
@@ -83,6 +95,7 @@ var findReadOnlyByUser = function(userId, select) {
 };
 
 module.exports = {
+    removeById: removeById,
     findOneById: findOneById,
     findOneReadOnlyById: findOneReadOnlyById,
     findOneReadOnlyBySlug: findOneReadOnlyBySlug,

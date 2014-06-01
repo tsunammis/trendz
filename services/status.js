@@ -14,6 +14,18 @@ var removeById = function(id) {
 };
 
 /**
+ * Remove status by project.
+ *
+ * @param {string} id
+ */
+var removeByProject = function(id) {
+    return Status
+        .remove({
+            project: new ObjectId(id)
+        });
+};
+
+/**
  * Find status by ID.
  *
  * @param {string} id
@@ -93,6 +105,7 @@ var findReadOnlyByProjectId = function(projectId, select) {
 
 module.exports = {
     removeById: removeById,
+    removeByProject: removeByProject,
     findOneById: findOneById,
     findOneReadOnlyById: findOneReadOnlyById,
     findReadOnlyByUserId: findReadOnlyByUserId,

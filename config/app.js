@@ -36,6 +36,7 @@ app.route('/status/:id').get(controllers.Status.show);
 app.route('/project').post(controllers.Project.create);
 app.route('/project/:id').put(controllers.Project.update);
 app.route('/project/:id').get(controllers.Project.show);
+app.route('/project/:id').delete(controllers.Project.remove);
 app.route('/project/:id/status').get(controllers.Status.listByProject);
 app.route('/project/:id/users').get(controllers.User.listByProject);
 

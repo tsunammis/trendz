@@ -316,6 +316,7 @@ describe('POST /project', function() {
 describe('PUT /project/:id', function() {
 
     it('it is OK (with additional users)', function(done) {
+        expect(false).to.be.ok;
         done();
     });
 
@@ -625,7 +626,7 @@ describe('GET /users/:id/project', function() {
 
 });
 
-describe('GET /me/project', function() {
+describe('DELETE /me/project', function() {
 
     it('it is OK', function(done) {
         request(app)
@@ -668,6 +669,104 @@ describe('GET /me/project', function() {
             .get('/me/project')
             .set('Content-Type', 'application/json')
             .expect(401, done);
+    });
+
+});
+
+describe('DELETE /project/:id', function() {
+
+    it('it is OK', function(done) {
+        request(app)
+            .delete('/project/53584239a1294f5a24940394')
+            .set('Authorization', testTools.buildBasicAuthorization('delete_project@mail.com', 'delete_project@mail.com'))
+            .expect(200, done);
+    });
+
+    it("ID's format is not good (Bad Request)", function(done) {
+        request(app)
+            .delete('/project/1234')
+            .set('Authorization', testTools.buildBasicAuthorization('chuck@norris.com', 'chuck@norris.com'))
+            .expect(400)
+            .end(function(err, res) {
+
+                if (err) {
+                    return done(err);
+                }
+
+                expect(res)
+                    .to.have.property('body')
+                    .that.is.an('object');
+
+                expect(res.body)
+                    .to.have.property('message')
+                    .to.equal("the id's format is not valid");
+
+                expect(res.body)
+                    .to.have.property('code')
+                    .to.equal(13);
+
+                return done();
+            });
+    });
+
+    it("Project not found", function(done) {
+        request(app)
+            .delete('/project/aaa84239a1294f5a24940690')
+            .set('Authorization', testTools.buildBasicAuthorization('chuck@norris.com', 'chuck@norris.com'))
+            .expect(404)
+            .end(function(err, res) {
+
+                if (err) {
+                    return done(err);
+                }
+
+                expect(res)
+                    .to.have.property('body')
+                    .that.is.an('object');
+
+                expect(res.body)
+                    .to.have.property('message')
+                    .to.equal("project not found");
+
+                expect(res.body)
+                    .to.have.property('code')
+                    .to.equal(18);
+
+                return done();
+            });
+    });
+
+    it('Not authorized to access this data (Unauthorized)', function(done) {
+        request(app)
+            .delete('/project/53584239a1294f5a24940394')
+            .expect(401, done);
+    });
+
+    it('Not authorized to access this data (User not owner of status)', function(done) {
+        request(app)
+            .delete('/project/53584239a1294f5a24940394')
+            .set('Authorization', testTools.buildBasicAuthorization('chuck@norris.com', 'chuck@norris.com'))
+            .expect(403)
+            .end(function(err, res) {
+
+                if (err) {
+                    return done(err);
+                }
+
+                expect(res)
+                    .to.have.property('body')
+                    .that.is.an('object');
+
+                expect(res.body)
+                    .to.have.property('message')
+                    .to.equal("you are not the owner of the project");
+
+                expect(res.body)
+                    .to.have.property('code')
+                    .to.equal(22);
+
+                return done();
+            });
     });
 
 });
