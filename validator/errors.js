@@ -22,5 +22,6 @@ module.exports = [
     { 'code': 20,   'name': 'project.slug.length',              'message': "project.slug's length must be between 3 and 30 caracters" },
     { 'code': 21,   'name': 'status.not_owner',                 'message': "you are not the owner of the status" },
     { 'code': 22,   'name': 'project.not_owner',                'message': "you are not the owner of the project" },
-    { 'code': 23,   'name': 'project.user_already_assigned',    'message': "the user is already assigned to the project" }
+    { 'code': 23,   'name': 'project.user_already_assigned',    'message': "the user is already assigned to the project" },
+    { 'code': 24,   'name': 'project.user_is_not_assigned',     'message': "the user is not assigned to the project" }
 ];

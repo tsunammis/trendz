@@ -272,11 +272,73 @@ var addToProject = function(req, res, next) {
         });
 };
 
+/**
+ * DELETE  /project/:id/users/:idUser
+ *
+ * Parameters:
+ *  - id | Respect the format of Mongo's Id
+ *  - idUser | Respect the format of Mongo's Id
+ */
+var removeUserFromProject = function(req, res, next) {
+    var project = null;
+    stringValidator.isDocumentId(req.params.id)
+        .then(function(value) {
+            return projectService.findOneById(value);
+        })
+        .then(function(p) {
+            // Check if the project doesn't exist
+            if (!p) {
+                return when.reject(new httpErrors.NotFound(errors[18].message, errors[18].code));
+            }
+            // Copy to use in other 'then()'
+            project = p;
+            // User is the owner
+            if (p.owner.toString() !== req.user._id.toString()) {
+                return when.reject(new httpErrors.Forbidden(errors[22].message, errors[22].code));
+            }
+            return stringValidator.isDocumentId(req.params.idUser);
+        })
+        .then(function(idUser) {
+            return userService.findOneReadOnlyById(idUser, '_id');
+        })
+        .then(function(user) {
+            if (!user) {
+                return when.reject(new httpErrors.BadRequest(errors[14].message, errors[14].code));
+            }
+            // User is assigned
+            var isAssigned = _.find(project.users, function(userId) {
+                return userId.toString() === user._id.toString();
+            });
+            if (!isAssigned) {
+                return when.reject(new httpErrors.BadRequest(errors[24].message, errors[24].code));
+            }
+            var newList = _.reject(project.users, function(userId) {
+                return userId.toString() === user._id.toString();;
+            });
+            project.set('users', newList);
+            return project.save();
+        })
+        .then(function() {
+            res
+                .status(200)
+                .send();
+        })
+        .then(null, function(err) {
+            if (_.has(err, 'code') && !(err instanceof httpErrors.NotFound) && !(err instanceof httpErrors.Forbidden)) {
+                return next(new httpErrors.BadRequest(err.message, err.code));
+            } else if (_.has(err, 'name') && err.name === 'CastError') {
+                return next(new httpErrors.BadRequest(errors[13].message, errors[13].code));
+            }
+            return next(err);
+        });
+};
+
 module.exports = {
     create: create,
     update: update,
     self: self,
     show: show,
     listByProject: listByProject,
-    addToProject: addToProject
+    addToProject: addToProject,
+    removeUserFromProject: removeUserFromProject
 };

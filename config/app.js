@@ -40,6 +40,7 @@ app.route('/project/:id').delete(controllers.Project.remove);
 app.route('/project/:id/status').get(controllers.Status.listByProject);
 app.route('/project/:id/users').get(controllers.User.listByProject);
 app.route('/project/:id/users').post(controllers.User.addToProject);
+app.route('/project/:id/users/:idUser').delete(controllers.User.removeUserFromProject);
 
 // Handle error(s)
 app.use(controllers.Default.errorHandler);

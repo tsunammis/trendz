@@ -752,3 +752,170 @@ describe('POST /project/:id/users', function() {
     });
 
 });
+
+describe('DELETE /project/:id/users/:idUser', function() {
+
+    it('User not found', function(done) {
+        request(app)
+            .delete('/project/53584239a1294f5a24940396/users/aaa84239a1294f5a24940599')
+            .set('Authorization', testTools.buildBasicAuthorization('remove_user_from_project@mail.com', 'remove_user_from_project@mail.com'))
+            .expect(400)
+            .end(function(err, res) {
+                if (err) {
+                    return done(err);
+                }
+
+                expect(res)
+                    .to.have.property('body')
+                    .that.is.an('object');
+
+                expect(res.body)
+                    .to.have.property('message')
+                    .to.equal("user not found");
+
+                expect(res.body)
+                    .to.have.property('code')
+                    .to.equal(14);
+
+                return done();
+            });
+    });
+
+    it('User not assigned', function(done) {
+        request(app)
+            .delete('/project/53584239a1294f5a24940396/users/53584239a1294f5a24940590')
+            .set('Authorization', testTools.buildBasicAuthorization('remove_user_from_project@mail.com', 'remove_user_from_project@mail.com'))
+            .expect(400)
+            .end(function(err, res) {
+                if (err) {
+                    return done(err);
+                }
+
+                expect(res)
+                    .to.have.property('body')
+                    .that.is.an('object');
+
+                expect(res.body)
+                    .to.have.property('message')
+                    .to.equal("the user is not assigned to the project");
+
+                expect(res.body)
+                    .to.have.property('code')
+                    .to.equal(24);
+
+                return done();
+            });
+    });
+
+    it('Project not found', function(done) {
+        request(app)
+            .delete('/project/aaa84239a1294f5a24940396/users/53584239a1294f5a24940590')
+            .set('Authorization', testTools.buildBasicAuthorization('remove_user_from_project@mail.com', 'remove_user_from_project@mail.com'))
+            .expect(404)
+            .end(function(err, res) {
+                if (err) {
+                    return done(err);
+                }
+
+                expect(res)
+                    .to.have.property('body')
+                    .that.is.an('object');
+
+                expect(res.body)
+                    .to.have.property('message')
+                    .to.equal("project not found");
+
+                expect(res.body)
+                    .to.have.property('code')
+                    .to.equal(18);
+
+                return done();
+            });
+    });
+
+    it("ID's format is not good (Bad Request, Project)", function(done) {
+        request(app)
+            .delete('/project/1234/users/53584239a1294f5a24940590')
+            .set('Authorization', testTools.buildBasicAuthorization('remove_user_from_project@mail.com', 'remove_user_from_project@mail.com'))
+            .expect(400)
+            .end(function(err, res) {
+                if (err) {
+                    return done(err);
+                }
+
+                expect(res)
+                    .to.have.property('body')
+                    .that.is.an('object');
+
+                expect(res.body)
+                    .to.have.property('message')
+                    .to.equal("the id's format is not valid");
+
+                expect(res.body)
+                    .to.have.property('code')
+                    .to.equal(13);
+
+                return done();
+            });
+    });
+
+    it("ID's format is not good (Bad Request, User)", function(done) {
+        request(app)
+            .delete('/project/53584239a1294f5a24940396/users/1234')
+            .set('Authorization', testTools.buildBasicAuthorization('remove_user_from_project@mail.com', 'remove_user_from_project@mail.com'))
+            .expect(400)
+            .end(function(err, res) {
+                if (err) {
+                    return done(err);
+                }
+
+                expect(res)
+                    .to.have.property('body')
+                    .that.is.an('object');
+
+                expect(res.body)
+                    .to.have.property('message')
+                    .to.equal("the id's format is not valid");
+
+                expect(res.body)
+                    .to.have.property('code')
+                    .to.equal(13);
+
+                return done();
+            });
+    });
+
+    it('Requester is not the owner', function(done) {
+        request(app)
+            .delete('/project/53584239a1294f5a24940396/users/53584239a1294f5a24940601')
+            .set('Authorization', testTools.buildBasicAuthorization('chuck@norris.com', 'chuck@norris.com'))
+            .expect(403)
+            .end(function(err, res) {
+                if (err) {
+                    return done(err);
+                }
+
+                expect(res)
+                    .to.have.property('body')
+                    .that.is.an('object');
+
+                expect(res.body)
+                    .to.have.property('message')
+                    .to.equal("you are not the owner of the project");
+
+                expect(res.body)
+                    .to.have.property('code')
+                    .to.equal(22);
+
+                return done();
+            });
+    });
+
+    it('It is OK', function(done) {
+        request(app)
+            .delete('/project/53584239a1294f5a24940396/users/53584239a1294f5a24940601')
+            .set('Authorization', testTools.buildBasicAuthorization('remove_user_from_project@mail.com', 'remove_user_from_project@mail.com'))
+            .expect(200, done);
+    });
+
+});

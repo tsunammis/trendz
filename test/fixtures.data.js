@@ -51,6 +51,18 @@ module.exports.Users = [
         _id         : new ObjectId('53584239a1294f5a24940598'),
         email       : 'push_user_to_project2@mail.com',
         password    : userHelper.generateHash('push_user_to_project2@mail.com')
+    },
+    {
+        // 8
+        _id         : new ObjectId('53584239a1294f5a24940599'),
+        email       : 'remove_user_from_project@mail.com',
+        password    : userHelper.generateHash('remove_user_from_project@mail.com')
+    },
+    {
+        // 9
+        _id         : new ObjectId('53584239a1294f5a24940601'),
+        email       : 'remove_user_from_project2@mail.com',
+        password    : userHelper.generateHash('remove_user_from_project2@mail.com')
     }
 ];
 
@@ -128,6 +140,19 @@ module.exports.Projects = [
         owner       : module.exports.Users[6]._id,
         users       : [
             module.exports.Users[6]._id
+        ]
+    },
+    {
+        // 6
+        _id         : new ObjectId('53584239a1294f5a24940396'),
+        name        : 'Project mutable (remove user)',
+        slug        : 'project_mutable_remove_user',
+        createdAt   : new Date(2014, 4, 16, 11, 15, 10),
+        updatedAt   : new Date(2014, 4, 16, 11, 15, 10),
+        owner       : module.exports.Users[8]._id,
+        users       : [
+            module.exports.Users[8]._id,
+            module.exports.Users[9]._id
         ]
     }
 ];
