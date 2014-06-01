@@ -315,9 +315,62 @@ describe('POST /project', function() {
 
 describe('PUT /project/:id', function() {
 
-    it('it is OK (with additional users)', function(done) {
-        expect(false).to.be.ok;
-        done();
+    it("it is OK (name)", function(done) {
+        request(app)
+            .put('/project/53584239a1294f5a24940393')
+            .set('Authorization', testTools.buildBasicAuthorization('larry@mail.com', 'larry@mail.com'))
+            .set('Content-Type', 'application/json')
+            .send({
+                name: 'Project mutable (put new)'
+            })
+            .expect('Content-Type', /json/)
+            .expect(200)
+            .end(function(err, res) {
+
+                if (err) {
+                    return done(err);
+                }
+
+                expect(res.body)
+                    .to.contain.keys('_id', 'name', 'slug', 'owner', 'users', 'createdAt', 'links');
+
+                expect(res.body)
+                    .to.not.contain.keys('__v');
+
+                expect(res.body.name)
+                    .to.equal('Project mutable (put new)');
+
+                return done();
+            });
+    });
+
+    it("it is OK (slug)", function(done) {
+        request(app)
+            .put('/project/53584239a1294f5a24940393')
+            .set('Authorization', testTools.buildBasicAuthorization('larry@mail.com', 'larry@mail.com'))
+            .set('Content-Type', 'application/json')
+            .send({
+                slug: 'project_mutable_put_new'
+            })
+            .expect('Content-Type', /json/)
+            .expect(200)
+            .end(function(err, res) {
+
+                if (err) {
+                    return done(err);
+                }
+
+                expect(res.body)
+                    .to.contain.keys('_id', 'name', 'slug', 'owner', 'users', 'createdAt', 'links');
+
+                expect(res.body)
+                    .to.not.contain.keys('__v');
+
+                expect(res.body.slug)
+                    .to.equal('project_mutable_put_new');
+
+                return done();
+            });
     });
 
     it("Name's length is too short", function(done) {

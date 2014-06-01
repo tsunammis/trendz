@@ -75,7 +75,7 @@ var update = function(req, res, next) {
         })
         .then(function(p) {
 
-            // Use variable inside different then()
+            // Use variable into different then()
             project = p;
 
             // Check if the project doesn't exist
@@ -114,14 +114,14 @@ var update = function(req, res, next) {
             return projectService.findOneReadOnlyBySlug(project.slug);
         })
         .then(function(obj) {
-            if (obj && obj._id !== project._id) {
+            if (obj && obj._id.toString() !== project._id.toString()) {
                 return when.reject(errors[4]);
             } else {
                 return when.resolve(project);
             }
         })
         .then(function() {
-            project.set('updatedAt', Date.now);
+            project.set('updatedAt', Date.now());
             return project.save();
         })
         .then(function() {
