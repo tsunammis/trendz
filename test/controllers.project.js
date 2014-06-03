@@ -1,7 +1,8 @@
 var request     = require('supertest'),
     testTools   = require('./tools'),
     app         = require('./mock.app'),
-    expect      = require("chai").expect;
+    expect      = require("chai").expect,
+    errors      = require('../validator/errors');
 
 describe('GET /project/:id', function() {
 
@@ -128,11 +129,11 @@ describe('POST /project', function() {
 
                 expect(res.body)
                     .to.have.property('message')
-                    .to.equal("project.name's length must be between 3 and 30 caracters");
+                    .to.equal(errors.project.name_length.message);
 
                 expect(res.body)
                     .to.have.property('code')
-                    .to.equal(1);
+                    .to.equal(errors.project.name_length.code);
 
                 return done();
             });
@@ -161,11 +162,11 @@ describe('POST /project', function() {
 
                 expect(res.body)
                     .to.have.property('message')
-                    .to.equal("project.name's length must be between 3 and 30 caracters");
+                    .to.equal(errors.project.name_length.message);
 
                 expect(res.body)
                     .to.have.property('code')
-                    .to.equal(1);
+                    .to.equal(errors.project.name_length.code);
 
                 return done();
             });
@@ -194,11 +195,11 @@ describe('POST /project', function() {
 
                 expect(res.body)
                     .to.have.property('message')
-                    .to.equal("project.slug's length must be between 3 and 30 caracters");
+                    .to.equal(errors.project.slug_bad_length.message);
 
                 expect(res.body)
                     .to.have.property('code')
-                    .to.equal(20);
+                    .to.equal(errors.project.slug_bad_length.code);
 
                 return done();
             });
@@ -227,11 +228,11 @@ describe('POST /project', function() {
 
                 expect(res.body)
                     .to.have.property('message')
-                    .to.equal("project.slug's length must be between 3 and 30 caracters");
+                    .to.equal(errors.project.slug_bad_length.message);
 
                 expect(res.body)
                     .to.have.property('code')
-                    .to.equal(20);
+                    .to.equal(errors.project.slug_bad_length.code);
 
                 return done();
             });
@@ -260,11 +261,11 @@ describe('POST /project', function() {
 
                 expect(res.body)
                     .to.have.property('message')
-                    .to.equal("the slug's format is not valid");
+                    .to.equal(errors.string.slug_bad_format.message);
 
                 expect(res.body)
                     .to.have.property('code')
-                    .to.equal(12);
+                    .to.equal(errors.string.slug_bad_format.code);
 
                 return done();
             });
@@ -293,11 +294,11 @@ describe('POST /project', function() {
 
                 expect(res.body)
                     .to.have.property('message')
-                    .to.equal("project.slug already exist");
+                    .to.equal(errors.project.slug_already_exist.message);
 
                 expect(res.body)
                     .to.have.property('code')
-                    .to.equal(4);
+                    .to.equal(errors.project.slug_already_exist.code);
 
                 return done();
             });
@@ -395,11 +396,11 @@ describe('PUT /project/:id', function() {
 
                 expect(res.body)
                     .to.have.property('message')
-                    .to.equal("project.name's length must be between 3 and 30 caracters");
+                    .to.equal(errors.project.name_length.message);
 
                 expect(res.body)
                     .to.have.property('code')
-                    .to.equal(1);
+                    .to.equal(errors.project.name_length.code);
 
                 return done();
             });
@@ -427,11 +428,11 @@ describe('PUT /project/:id', function() {
 
                 expect(res.body)
                     .to.have.property('message')
-                    .to.equal("project.name's length must be between 3 and 30 caracters");
+                    .to.equal(errors.project.name_length.message);
 
                 expect(res.body)
                     .to.have.property('code')
-                    .to.equal(1);
+                    .to.equal(errors.project.name_length.code);
 
                 return done();
             });
@@ -459,11 +460,11 @@ describe('PUT /project/:id', function() {
 
                 expect(res.body)
                     .to.have.property('message')
-                    .to.equal("project.slug's length must be between 3 and 30 caracters");
+                    .to.equal(errors.project.slug_bad_length.message);
 
                 expect(res.body)
                     .to.have.property('code')
-                    .to.equal(20);
+                    .to.equal(errors.project.slug_bad_length.code);
 
                 return done();
             });
@@ -491,11 +492,11 @@ describe('PUT /project/:id', function() {
 
                 expect(res.body)
                     .to.have.property('message')
-                    .to.equal("project.slug's length must be between 3 and 30 caracters");
+                    .to.equal(errors.project.slug_bad_length.message);
 
                 expect(res.body)
                     .to.have.property('code')
-                    .to.equal(20);
+                    .to.equal(errors.project.slug_bad_length.code);
 
                 return done();
             });
@@ -523,11 +524,11 @@ describe('PUT /project/:id', function() {
 
                 expect(res.body)
                     .to.have.property('message')
-                    .to.equal("the slug's format is not valid");
+                    .to.equal(errors.string.slug_bad_format.message);
 
                 expect(res.body)
                     .to.have.property('code')
-                    .to.equal(12);
+                    .to.equal(errors.string.slug_bad_format.code);
 
                 return done();
             });
@@ -555,11 +556,11 @@ describe('PUT /project/:id', function() {
 
                 expect(res.body)
                     .to.have.property('message')
-                    .to.equal("project.slug already exist");
+                    .to.equal(errors.project.slug_already_exist.message);
 
                 expect(res.body)
                     .to.have.property('code')
-                    .to.equal(4);
+                    .to.equal(errors.project.slug_already_exist.code);
 
                 return done();
             });
@@ -602,11 +603,11 @@ describe('PUT /project/:id', function() {
 
                 expect(res.body)
                     .to.have.property('message')
-                    .to.equal("user not belong to project");
+                    .to.equal(errors.project.user_not_belong.message);
 
                 expect(res.body)
                     .to.have.property('code')
-                    .to.equal(19);
+                    .to.equal(errors.project.user_not_belong.code);
 
                 return done();
             });
@@ -752,11 +753,11 @@ describe('DELETE /project/:id', function() {
 
                 expect(res.body)
                     .to.have.property('message')
-                    .to.equal("the id's format is not valid");
+                    .to.equal(errors.string.documentid_bad_format.message);
 
                 expect(res.body)
                     .to.have.property('code')
-                    .to.equal(13);
+                    .to.equal(errors.string.documentid_bad_format.code);
 
                 return done();
             });
@@ -779,11 +780,11 @@ describe('DELETE /project/:id', function() {
 
                 expect(res.body)
                     .to.have.property('message')
-                    .to.equal("project not found");
+                    .to.equal(errors.project.not_found.message);
 
                 expect(res.body)
                     .to.have.property('code')
-                    .to.equal(18);
+                    .to.equal(errors.project.not_found.code);
 
                 return done();
             });
@@ -812,11 +813,11 @@ describe('DELETE /project/:id', function() {
 
                 expect(res.body)
                     .to.have.property('message')
-                    .to.equal("you are not the owner of the project");
+                    .to.equal(errors.project.not_owner.message);
 
                 expect(res.body)
                     .to.have.property('code')
-                    .to.equal(22);
+                    .to.equal(errors.project.not_owner.code);
 
                 return done();
             });

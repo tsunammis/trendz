@@ -79,7 +79,7 @@ var update = function(req, res, next) {
             })
             .then(function(user) {
                 if (user && user._id !== req.user._id) {
-                    return when.reject(errors[8]);
+                    return when.reject(errors.user.email_already_exist);
                 } else {
                     return when.resolve();
                 }
@@ -112,7 +112,7 @@ var update = function(req, res, next) {
             if (_.has(err, 'code')) {
                 return next(new httpErrors.BadRequest(err.message, err.code));
             } else if (_.has(err, 'name') && err.name === 'CastError') {
-                return next(new httpErrors.BadRequest(errors[13].message, errors[13].code));
+                return next(new httpErrors.BadRequest(errors.string.documentid_bad_format));
             }
             return next(err);
         });
@@ -124,7 +124,7 @@ var update = function(req, res, next) {
 var self = function(req, res, next) {
     var user = req.user;
     if (!user) {
-        next(errors[14]);
+        next(errors.user.not_found);
     }
     user = user.toObject();
     user = objectHelper.removeProperties(['__v', 'password'], user);
@@ -147,7 +147,7 @@ var show = function(req, res, next) {
         })
         .then(function (data) {
             if (!data) {
-                return when.reject(new httpErrors.NotFound(errors[14].message, errors[14].code));
+                return when.reject(new httpErrors.NotFound(errors.user.not_found));
             }
             data = objectHelper.removeProperties(['__v', 'password'], data);
             data = userAdapter.hateoasize(['self', 'status'], data);
@@ -159,7 +159,7 @@ var show = function(req, res, next) {
             if (_.has(err, 'code') && !(err instanceof httpErrors.NotFound)) {
                 return next(new httpErrors.BadRequest(err.message, err.code));
             } else if (_.has(err, 'name') && err.name === 'CastError') {
-                return next(new httpErrors.BadRequest(errors[13].message, errors[13].code));
+                return next(new httpErrors.BadRequest(errors.string.documentid_bad_format));
             }
             return next(err);
         });
@@ -179,7 +179,7 @@ var listByProject = function(req, res, next) {
         .then(function(project) {
             // Check if the project doesn't exist
             if (!project) {
-                return when.reject(new httpErrors.NotFound(errors[18].message, errors[18].code));
+                return when.reject(new httpErrors.NotFound(errors.project.not_found));
             }
             // User is able to access this project
             // @Todo Use query to mongo to determine ability
@@ -187,7 +187,7 @@ var listByProject = function(req, res, next) {
                 return userId.toString() === req.user._id.toString();
             });
             if (!isAble) {
-                return when.reject(new httpErrors.Unauthorized(errors[19].message, errors[19].code));
+                return when.reject(new httpErrors.Unauthorized(errors.project.user_not_belong));
             }
             return userService.findReadOnlyByIds(project.users, '_id email');
         })
@@ -212,7 +212,7 @@ var listByProject = function(req, res, next) {
             if (_.has(err, 'code') && !(err instanceof httpErrors.NotFound) && !(err instanceof httpErrors.Unauthorized)) {
                 return next(new httpErrors.BadRequest(err.message, err.code));
             } else if (_.has(err, 'name') && err.name === 'CastError') {
-                return next(new httpErrors.BadRequest(errors[13].message, errors[13].code));
+                return next(new httpErrors.BadRequest(errors.string.documentid_bad_format));
             }
             return next(err);
         });
@@ -233,26 +233,26 @@ var addToProject = function(req, res, next) {
         .then(function(p) {
             // Check if the project doesn't exist
             if (!p) {
-                return when.reject(new httpErrors.NotFound(errors[18].message, errors[18].code));
+                return when.reject(new httpErrors.NotFound(errors.project.not_found));
             }
             // Copy to use in other 'then()'
             project = p;
             // User is the owner
             if (p.owner.toString() !== req.user._id.toString()) {
-                return when.reject(new httpErrors.Forbidden(errors[22].message, errors[22].code));
+                return when.reject(new httpErrors.Forbidden(errors.project.not_owner));
             }
             return userService.findOneReadOnlyById(req.body.user, '_id');
         })
         .then(function(user) {
             if (!user) {
-                return when.reject(new httpErrors.BadRequest(errors[14].message, errors[14].code));
+                return when.reject(new httpErrors.BadRequest(errors.user.not_found));
             }
             // User is already assigned
             var isAssigned = _.find(project.users, function(userId) {
                 return userId.toString() === user._id.toString();
             });
             if (isAssigned) {
-                return when.reject(new httpErrors.BadRequest(errors[23].message, errors[23].code));
+                return when.reject(new httpErrors.BadRequest(errors.project.user_already_assigned));
             }
             project.users.push(user._id);
             return project.save();
@@ -266,7 +266,7 @@ var addToProject = function(req, res, next) {
             if (_.has(err, 'code') && !(err instanceof httpErrors.NotFound) && !(err instanceof httpErrors.Forbidden)) {
                 return next(new httpErrors.BadRequest(err.message, err.code));
             } else if (_.has(err, 'name') && err.name === 'CastError') {
-                return next(new httpErrors.BadRequest(errors[13].message, errors[13].code));
+                return next(new httpErrors.BadRequest(errors.string.documentid_bad_format));
             }
             return next(err);
         });
@@ -288,13 +288,13 @@ var removeUserFromProject = function(req, res, next) {
         .then(function(p) {
             // Check if the project doesn't exist
             if (!p) {
-                return when.reject(new httpErrors.NotFound(errors[18].message, errors[18].code));
+                return when.reject(new httpErrors.NotFound(errors.project.not_found));
             }
             // Copy to use in other 'then()'
             project = p;
             // User is the owner
             if (p.owner.toString() !== req.user._id.toString()) {
-                return when.reject(new httpErrors.Forbidden(errors[22].message, errors[22].code));
+                return when.reject(new httpErrors.Forbidden(errors.project.not_owner));
             }
             return stringValidator.isDocumentId(req.params.idUser);
         })
@@ -303,14 +303,14 @@ var removeUserFromProject = function(req, res, next) {
         })
         .then(function(user) {
             if (!user) {
-                return when.reject(new httpErrors.BadRequest(errors[14].message, errors[14].code));
+                return when.reject(new httpErrors.BadRequest(errors.user.not_found));
             }
             // User is assigned
             var isAssigned = _.find(project.users, function(userId) {
                 return userId.toString() === user._id.toString();
             });
             if (!isAssigned) {
-                return when.reject(new httpErrors.BadRequest(errors[24].message, errors[24].code));
+                return when.reject(new httpErrors.BadRequest(errors.project.user_not_assigned));
             }
             var newList = _.reject(project.users, function(userId) {
                 return userId.toString() === user._id.toString();;
@@ -327,7 +327,7 @@ var removeUserFromProject = function(req, res, next) {
             if (_.has(err, 'code') && !(err instanceof httpErrors.NotFound) && !(err instanceof httpErrors.Forbidden)) {
                 return next(new httpErrors.BadRequest(err.message, err.code));
             } else if (_.has(err, 'name') && err.name === 'CastError') {
-                return next(new httpErrors.BadRequest(errors[13].message, errors[13].code));
+                return next(new httpErrors.BadRequest(errors.string.documentid_bad_format));
             }
             return next(err);
         });

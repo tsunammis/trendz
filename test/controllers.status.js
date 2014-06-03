@@ -1,7 +1,8 @@
 var request     = require('supertest'),
     testTools   = require('./tools'),
     app         = require('./mock.app'),
-    expect      = require("chai").expect;
+    expect      = require('chai').expect,
+    errors      = require('../validator/errors');
 
 describe('GET /users/:id/status', function() {
 
@@ -64,11 +65,11 @@ describe('GET /users/:id/status', function() {
                 
                 expect(res.body)
                     .to.have.property('message')
-                    .to.equal("user not found");
+                    .to.equal(errors.user.not_found.message);
                     
                 expect(res.body)
                     .to.have.property('code')
-                    .to.equal(14);
+                    .to.equal(errors.user.not_found.code);
                     
                 return done();
             });
@@ -91,11 +92,11 @@ describe('GET /users/:id/status', function() {
                 
                 expect(res.body)
                     .to.have.property('message')
-                    .to.equal("the id's format is not valid");
+                    .to.equal(errors.string.documentid_bad_format.message);
                     
                 expect(res.body)
                     .to.have.property('code')
-                    .to.equal(13);
+                    .to.equal(errors.string.documentid_bad_format.code);
                     
                 return done();
             });
@@ -189,11 +190,11 @@ describe('GET /status/:id', function() {
                 
                 expect(res.body)
                     .to.have.property('message')
-                    .to.equal("the id's format is not valid");
+                    .to.equal(errors.string.documentid_bad_format.message);
                     
                 expect(res.body)
                     .to.have.property('code')
-                    .to.equal(13);
+                    .to.equal(errors.string.documentid_bad_format.code);
                     
                 return done();
             });
@@ -218,11 +219,11 @@ describe('GET /status/:id', function() {
                 
                 expect(res.body)
                     .to.have.property('message')
-                    .to.equal("status not found");
+                    .to.equal(errors.status.not_found.message);
                     
                 expect(res.body)
                     .to.have.property('code')
-                    .to.equal(15);
+                    .to.equal(errors.status.not_found.code);
                     
                 return done();
             });
@@ -254,11 +255,11 @@ describe('GET /status/:id', function() {
 
                 expect(res.body)
                     .to.have.property('message')
-                    .to.equal("user not belong to project");
+                    .to.equal(errors.project.user_not_belong.message);
 
                 expect(res.body)
                     .to.have.property('code')
-                    .to.equal(19);
+                    .to.equal(errors.project.user_not_belong.code);
 
                 return done();
             });
@@ -362,11 +363,11 @@ describe('POST /status', function() {
 
                 expect(res.body)
                     .to.have.property('message')
-                    .to.equal("status.content's length must be between 1 and 300 caracters.");
+                    .to.equal(errors.status.content_bad_format.message);
 
                 expect(res.body)
                     .to.have.property('code')
-                    .to.equal(17);
+                    .to.equal(errors.status.content_bad_format.code);
 
                 return done();
             });
@@ -399,11 +400,11 @@ describe('POST /status', function() {
 
                 expect(res.body)
                     .to.have.property('message')
-                    .to.equal("status.content's length must be between 1 and 300 caracters.");
+                    .to.equal(errors.status.content_bad_format.message);
 
                 expect(res.body)
                     .to.have.property('code')
-                    .to.equal(17);
+                    .to.equal(errors.status.content_bad_format.code);
 
                 return done();
             });
@@ -429,11 +430,11 @@ describe('POST /status', function() {
 
                 expect(res.body)
                     .to.have.property('message')
-                    .to.equal("the id's format is not valid");
+                    .to.equal(errors.string.documentid_bad_format.message);
 
                 expect(res.body)
                     .to.have.property('code')
-                    .to.equal(13);
+                    .to.equal(errors.string.documentid_bad_format.code);
 
                 return done();
             });
@@ -521,11 +522,11 @@ describe('POST /status', function() {
 
                 expect(res.body)
                     .to.have.property('message')
-                    .to.equal("user not belong to project");
+                    .to.equal(errors.project.user_not_belong.message);
 
                 expect(res.body)
                     .to.have.property('code')
-                    .to.equal(19);
+                    .to.equal(errors.project.user_not_belong.code);
 
                 return done();
             });
@@ -559,11 +560,11 @@ describe('DELETE /status/:id', function() {
 
                 expect(res.body)
                     .to.have.property('message')
-                    .to.equal("the id's format is not valid");
+                    .to.equal(errors.string.documentid_bad_format.message);
 
                 expect(res.body)
                     .to.have.property('code')
-                    .to.equal(13);
+                    .to.equal(errors.string.documentid_bad_format.code);
 
                 return done();
             });
@@ -586,11 +587,11 @@ describe('DELETE /status/:id', function() {
 
                 expect(res.body)
                     .to.have.property('message')
-                    .to.equal("status not found");
+                    .to.equal(errors.status.not_found.message);
 
                 expect(res.body)
                     .to.have.property('code')
-                    .to.equal(15);
+                    .to.equal(errors.status.not_found.code);
 
                 return done();
             });
@@ -619,11 +620,11 @@ describe('DELETE /status/:id', function() {
 
                 expect(res.body)
                     .to.have.property('message')
-                    .to.equal("you are not the owner of the status");
+                    .to.equal(errors.status.not_owner.message);
 
                 expect(res.body)
                     .to.have.property('code')
-                    .to.equal(21);
+                    .to.equal(errors.status.not_owner.code);
 
                 return done();
             });

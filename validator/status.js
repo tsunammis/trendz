@@ -4,7 +4,7 @@ var validator       = require('validator'),
 
 var content = function(content) {
     if (content.length <= 2 || content.length > 30) {
-        return when.reject(errors[17]);
+        return when.reject(errors.status.content_bad_format);
     }
     return when.resolve(content);
 };

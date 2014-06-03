@@ -1,7 +1,8 @@
 var request     = require('supertest'),
     testTools   = require('./tools'),
     app         = require('./mock.app'),
-    expect      = require("chai").expect;
+    expect      = require('chai').expect,
+    errors      = require('../validator/errors');
 
 describe('GET /me', function() {
 
@@ -90,11 +91,11 @@ describe('GET /users/:id', function() {
                 
                 expect(res.body)
                     .to.have.property('message')
-                    .to.equal("user not found");
+                    .to.equal(errors.user.not_found.message);
                     
                 expect(res.body)
                     .to.have.property('code')
-                    .to.equal(14);
+                    .to.equal(errors.user.not_found.code);
                     
                 return done();
             });
@@ -117,11 +118,11 @@ describe('GET /users/:id', function() {
                 
                 expect(res.body)
                     .to.have.property('message')
-                    .to.equal("the id's format is not valid");
+                    .to.equal(errors.string.documentid_bad_format.message);
                     
                 expect(res.body)
                     .to.have.property('code')
-                    .to.equal(13);
+                    .to.equal(errors.string.documentid_bad_format.code);
                     
                 return done();
             });
@@ -151,11 +152,11 @@ describe('POST /users', function() {
                 
                 expect(res.body)
                     .to.have.property('message')
-                    .to.equal("the password's length is too short (3 min caracters)");
+                    .to.equal(errors.user.password_length_too_short.message);
                     
                 expect(res.body)
                     .to.have.property('code')
-                    .to.equal(5);
+                    .to.equal(errors.user.password_length_too_short.code);
                     
                 return done();
             });
@@ -181,11 +182,11 @@ describe('POST /users', function() {
                 
                 expect(res.body)
                     .to.have.property('message')
-                    .to.equal("the password's length is too long (15 caracters max)");
+                    .to.equal(errors.user.password_length_too_long.message);
                     
                 expect(res.body)
                     .to.have.property('code')
-                    .to.equal(6);
+                    .to.equal(errors.user.password_length_too_long.code);
                     
                 return done();
             });
@@ -211,11 +212,11 @@ describe('POST /users', function() {
                 
                 expect(res.body)
                     .to.have.property('message')
-                    .to.equal('Both password are not the same');
+                    .to.equal(errors.user.password_confirmation_fail.message);
                     
                 expect(res.body)
                     .to.have.property('code')
-                    .to.equal(9);
+                    .to.equal(errors.user.password_confirmation_fail.code);
                     
                 return done();
             });
@@ -241,11 +242,11 @@ describe('POST /users', function() {
                 
                 expect(res.body)
                     .to.have.property('message')
-                    .to.equal('this email is already registered');
+                    .to.equal(errors.user.email_already_exist.message);
                     
                 expect(res.body)
                     .to.have.property('code')
-                    .to.equal(8);
+                    .to.equal(errors.user.email_already_exist.code);
                     
                 return done();
             });
@@ -271,11 +272,11 @@ describe('POST /users', function() {
                 
                 expect(res.body)
                     .to.have.property('message')
-                    .to.equal("the email's format is not valid");
+                    .to.equal(errors.string.email_bad_format.message);
                     
                 expect(res.body)
                     .to.have.property('code')
-                    .to.equal(11);
+                    .to.equal(errors.string.email_bad_format.code);
                     
                 return done();
             });
@@ -337,11 +338,11 @@ describe('PUT /me', function() {
 
                 expect(res.body)
                     .to.have.property('message')
-                    .to.equal("the password's length is too short (3 min caracters)");
+                    .to.equal(errors.user.password_length_too_short.message);
 
                 expect(res.body)
                     .to.have.property('code')
-                    .to.equal(5);
+                    .to.equal(errors.user.password_length_too_short.code);
 
                 return done();
             });
@@ -367,11 +368,11 @@ describe('PUT /me', function() {
 
                 expect(res.body)
                     .to.have.property('message')
-                    .to.equal("the password's length is too long (15 caracters max)");
+                    .to.equal(errors.user.password_length_too_long.message);
 
                 expect(res.body)
                     .to.have.property('code')
-                    .to.equal(6);
+                    .to.equal(errors.user.password_length_too_long.code);
 
                 return done();
             });
@@ -397,11 +398,11 @@ describe('PUT /me', function() {
 
                 expect(res.body)
                     .to.have.property('message')
-                    .to.equal('Both password are not the same');
+                    .to.equal(errors.user.password_confirmation_fail.message);
 
                 expect(res.body)
                     .to.have.property('code')
-                    .to.equal(9);
+                    .to.equal(errors.user.password_confirmation_fail.code);
 
                 return done();
             });
@@ -427,11 +428,11 @@ describe('PUT /me', function() {
 
                 expect(res.body)
                     .to.have.property('message')
-                    .to.equal('this email is already registered');
+                    .to.equal(errors.user.email_already_exist.message);
 
                 expect(res.body)
                     .to.have.property('code')
-                    .to.equal(8);
+                    .to.equal(errors.user.email_already_exist.code);
 
                 return done();
             });
@@ -457,11 +458,11 @@ describe('PUT /me', function() {
 
                 expect(res.body)
                     .to.have.property('message')
-                    .to.equal("the email's format is not valid");
+                    .to.equal(errors.string.email_bad_format.message);
 
                 expect(res.body)
                     .to.have.property('code')
-                    .to.equal(11);
+                    .to.equal(errors.string.email_bad_format.code);
 
                 return done();
             });
@@ -620,11 +621,11 @@ describe('POST /project/:id/users', function() {
 
                 expect(res.body)
                     .to.have.property('message')
-                    .to.equal("user not found");
+                    .to.equal(errors.user.not_found.message);
 
                 expect(res.body)
                     .to.have.property('code')
-                    .to.equal(14);
+                    .to.equal(errors.user.not_found.code);
 
                 return done();
             });
@@ -648,11 +649,11 @@ describe('POST /project/:id/users', function() {
 
                 expect(res.body)
                     .to.have.property('message')
-                    .to.equal("the user is already assigned to the project");
+                    .to.equal(errors.project.user_already_assigned.message);
 
                 expect(res.body)
                     .to.have.property('code')
-                    .to.equal(23);
+                    .to.equal(errors.project.user_already_assigned.code);
 
                 return done();
             });
@@ -676,11 +677,11 @@ describe('POST /project/:id/users', function() {
 
                 expect(res.body)
                     .to.have.property('message')
-                    .to.equal("project not found");
+                    .to.equal(errors.project.not_found.message);
 
                 expect(res.body)
                     .to.have.property('code')
-                    .to.equal(18);
+                    .to.equal(errors.project.not_found.code);
 
                 return done();
             });
@@ -704,11 +705,11 @@ describe('POST /project/:id/users', function() {
 
                 expect(res.body)
                     .to.have.property('message')
-                    .to.equal("the id's format is not valid");
+                    .to.equal(errors.string.documentid_bad_format.message);
 
                 expect(res.body)
                     .to.have.property('code')
-                    .to.equal(13);
+                    .to.equal(errors.string.documentid_bad_format.code);
 
                 return done();
             });
@@ -732,11 +733,11 @@ describe('POST /project/:id/users', function() {
 
                 expect(res.body)
                     .to.have.property('message')
-                    .to.equal("you are not the owner of the project");
+                    .to.equal(errors.project.not_owner.message);
 
                 expect(res.body)
                     .to.have.property('code')
-                    .to.equal(22);
+                    .to.equal(errors.project.not_owner.code);
 
                 return done();
             });
@@ -771,11 +772,11 @@ describe('DELETE /project/:id/users/:idUser', function() {
 
                 expect(res.body)
                     .to.have.property('message')
-                    .to.equal("user not found");
+                    .to.equal(errors.user.not_found.message);
 
                 expect(res.body)
                     .to.have.property('code')
-                    .to.equal(14);
+                    .to.equal(errors.user.not_found.code);
 
                 return done();
             });
@@ -797,11 +798,11 @@ describe('DELETE /project/:id/users/:idUser', function() {
 
                 expect(res.body)
                     .to.have.property('message')
-                    .to.equal("the user is not assigned to the project");
+                    .to.equal(errors.project.user_not_assigned.message);
 
                 expect(res.body)
                     .to.have.property('code')
-                    .to.equal(24);
+                    .to.equal(errors.project.user_not_assigned.code);
 
                 return done();
             });
@@ -823,11 +824,11 @@ describe('DELETE /project/:id/users/:idUser', function() {
 
                 expect(res.body)
                     .to.have.property('message')
-                    .to.equal("project not found");
+                    .to.equal(errors.project.not_found.message);
 
                 expect(res.body)
                     .to.have.property('code')
-                    .to.equal(18);
+                    .to.equal(errors.project.not_found.code);
 
                 return done();
             });
@@ -849,11 +850,11 @@ describe('DELETE /project/:id/users/:idUser', function() {
 
                 expect(res.body)
                     .to.have.property('message')
-                    .to.equal("the id's format is not valid");
+                    .to.equal(errors.string.documentid_bad_format.message);
 
                 expect(res.body)
                     .to.have.property('code')
-                    .to.equal(13);
+                    .to.equal(errors.string.documentid_bad_format.code);
 
                 return done();
             });
@@ -875,11 +876,11 @@ describe('DELETE /project/:id/users/:idUser', function() {
 
                 expect(res.body)
                     .to.have.property('message')
-                    .to.equal("the id's format is not valid");
+                    .to.equal(errors.string.documentid_bad_format.message);
 
                 expect(res.body)
                     .to.have.property('code')
-                    .to.equal(13);
+                    .to.equal(errors.string.documentid_bad_format.code);
 
                 return done();
             });
@@ -901,11 +902,11 @@ describe('DELETE /project/:id/users/:idUser', function() {
 
                 expect(res.body)
                     .to.have.property('message')
-                    .to.equal("you are not the owner of the project");
+                    .to.equal(errors.project.not_owner.message);
 
                 expect(res.body)
                     .to.have.property('code')
-                    .to.equal(22);
+                    .to.equal(errors.project.not_owner.code);
 
                 return done();
             });

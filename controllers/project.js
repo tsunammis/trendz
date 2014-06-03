@@ -153,7 +153,7 @@ var show = function(req, res, next) {
         .then(function(project) {
 
             if (!project) {
-                return when.reject(new httpErrors.NotFound(errors[18].message, errors[18].code));
+                return when.reject(new httpErrors.NotFound(errors.project.not_found));
             }
 
             // User is able to access this project
@@ -192,11 +192,11 @@ var remove = function(req, res, next) {
         })
         .then(function (project) {
             if (!project) {
-                return when.reject(new httpErrors.NotFound(errors[18].message, errors[18].code));
+                return when.reject(new httpErrors.NotFound(errors.project.not_found));
             }
             // Check if the user is the owner
             if (project.owner.toString() !== req.user._id.toString()) {
-                return when.reject(new httpErrors.Forbidden(errors[22].message, errors[22].code));
+                return when.reject(new httpErrors.Forbidden(errors.project.not_owner));
             }
             return projectService.removeById(project._id);
         })
@@ -213,7 +213,7 @@ var remove = function(req, res, next) {
             if (_.has(err, 'code') && !(err instanceof httpErrors.NotFound) && !(err instanceof httpErrors.Forbidden)) {
                 return next(new httpErrors.BadRequest(err.message, err.code));
             } else if (_.has(err, 'name') && err.name === 'CastError') {
-                return next(new httpErrors.BadRequest(errors[13].message, errors[13].code));
+                return next(new httpErrors.BadRequest(errors.string.documentid_bad_format));
             }
             return next(err);
         });
@@ -226,7 +226,7 @@ var listByCurrentUser = function(req, res, next) {
     userService.findOneReadOnlyById(req.user._id)
         .then(function(user) {
             if (!user) {
-                return when.reject(new httpErrors.NotFound(errors[14].message, errors[14].code));
+                return when.reject(new httpErrors.NotFound(errors.user.not_found));
             }
             return projectService.findReadOnlyByUser(user._id, '_id name slug');
         })
@@ -260,7 +260,7 @@ var listByCurrentUser = function(req, res, next) {
             if (_.has(err, 'code') && !(err instanceof httpErrors.NotFound) && !(err instanceof httpErrors.ForbiddenForbidden)) {
                 return next(new httpErrors.BadRequest(err.message, err.code));
             } else if (_.has(err, 'name') && err.name === 'CastError') {
-                return next(new httpErrors.BadRequest(errors[13].message, errors[13].code));
+                return next(new httpErrors.BadRequest(errors.string.documentid_bad_format));
             }
             return next(err);
         });
@@ -276,7 +276,7 @@ var listByUser = function(req, res, next) {
         })
         .then(function(user) {
             if (!user) {
-                return when.reject(new httpErrors.NotFound(errors[14].message, errors[14].code));
+                return when.reject(new httpErrors.NotFound(errors.user.not_found));
             }
             return projectService.findReadOnlyByUser(user._id, '_id name slug');
         })
@@ -310,7 +310,7 @@ var listByUser = function(req, res, next) {
             if (_.has(err, 'code') && !(err instanceof httpErrors.NotFound) && !(err instanceof httpErrors.Forbidden)) {
                 return next(new httpErrors.BadRequest(err.message, err.code));
             } else if (_.has(err, 'name') && err.name === 'CastError') {
-                return next(new httpErrors.BadRequest(errors[13].message, errors[13].code));
+                return next(new httpErrors.BadRequest(errors.string.documentid_bad_format));
             }
             return next(err);
         });

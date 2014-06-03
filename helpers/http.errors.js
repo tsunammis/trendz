@@ -51,5 +51,6 @@ module.exports = {
             }
             this.message = msg || 'Not found';
         }
+        this.status = 404;
     }
 };

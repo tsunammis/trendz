@@ -32,7 +32,7 @@ var create = function(req, res, next) {
                     })
                     .then(function(project) {
                         if (!project) {
-                            return when.reject(new httpErrors.BadRequest(errors[18].message, errors[18].code));
+                            return when.reject(new httpErrors.BadRequest(errors.project.not_found));
                         }
                         // User is able to access this project
                         // @Todo Use request to mongo to determine ability
@@ -40,7 +40,7 @@ var create = function(req, res, next) {
                             return userId.toString() === req.user._id.toString();
                         });
                         if (!isAble) {
-                            return when.reject(new httpErrors.Unauthorized(errors[19].message, errors[19].code));
+                            return when.reject(new httpErrors.Unauthorized(errors.project.user_not_belong));
                         }
                         status.project = project._id;
                         return Status.create(status);
@@ -60,7 +60,7 @@ var create = function(req, res, next) {
             if (_.has(err, 'code') && !(err instanceof httpErrors.Unauthorized)) {
                 return next(new httpErrors.BadRequest(err.message, err.code));
             } else if (_.has(err, 'name') && err.name === 'CastError') {
-                return next(new httpErrors.BadRequest(errors[13].message, errors[13].code));
+                return next(new httpErrors.BadRequest(errors.string.documentid_bad_format));
             }
             return next(err);
         });
@@ -79,7 +79,7 @@ var show = function(req, res, next) {
         })
         .then(function (status) {
             if (!status) {
-                return when.reject(new httpErrors.NotFound(errors[15].message, errors[15].code));
+                return when.reject(new httpErrors.NotFound(errors.status.not_found));
             }
             if (_.has(status, 'project') && status.project) {
                 return stringValidator.isDocumentId(status.project)
@@ -88,7 +88,7 @@ var show = function(req, res, next) {
                     })
                     .then(function(project) {
                         if (!project) {
-                            return when.reject(new httpErrors.BadRequest(errors[19].message, errors[19].code));
+                            return when.reject(new httpErrors.BadRequest(errors.project.user_not_belong));
                         }
                         // User is able to access this project
                         // @Todo Use request to mongo to determine ability
@@ -96,7 +96,7 @@ var show = function(req, res, next) {
                             return userId.toString() === req.user._id.toString();
                         });
                         if (!isAble) {
-                            return when.reject(new httpErrors.Forbidden(errors[19].message, errors[19].code));
+                            return when.reject(new httpErrors.Forbidden(errors.project.user_not_belong));
                         }
                         return when.resolve(status);
                     });
@@ -115,7 +115,7 @@ var show = function(req, res, next) {
             if (_.has(err, 'code') && !(err instanceof httpErrors.NotFound) && !(err instanceof httpErrors.Forbidden)) {
                 return next(new httpErrors.BadRequest(err.message, err.code));
             } else if (_.has(err, 'name') && err.name === 'CastError') {
-                return next(new httpErrors.BadRequest(errors[13].message, errors[13].code));
+                return next(new httpErrors.BadRequest(errors.string.documentid_bad_format));
             }
             return next(err);
         });
@@ -134,11 +134,11 @@ var remove = function(req, res, next) {
         })
         .then(function (status) {
             if (!status) {
-                return when.reject(new httpErrors.NotFound(errors[15].message, errors[15].code));
+                return when.reject(new httpErrors.NotFound(errors.status.not_found));
             }
             // Check if the user is the owner
             if (status.owner.toString() !== req.user._id.toString()) {
-                return when.reject(new httpErrors.Forbidden(errors[21].message, errors[21].code));
+                return when.reject(new httpErrors.Forbidden(errors.status.not_owner));
             }
             return statusService.removeById(status._id);
         })
@@ -152,7 +152,7 @@ var remove = function(req, res, next) {
             if (_.has(err, 'code') && !(err instanceof httpErrors.NotFound) && !(err instanceof httpErrors.Forbidden)) {
                 return next(new httpErrors.BadRequest(err.message, err.code));
             } else if (_.has(err, 'name') && err.name === 'CastError') {
-                return next(new httpErrors.BadRequest(errors[13].message, errors[13].code));
+                return next(new httpErrors.BadRequest(errors.string.documentid_bad_format));
             }
             return next(err);
         });
@@ -171,7 +171,7 @@ var listByUser = function(req, res, next) {
         })
         .then(function (user) {
             if (!user) {
-                return when.reject(new httpErrors.BadRequest(errors[14].message, errors[14].code));
+                return when.reject(new httpErrors.BadRequest(errors.user.not_found));
             }
             return statusService.findReadOnlyByUserId(req.params.id);
         })
@@ -203,7 +203,7 @@ var listByUser = function(req, res, next) {
             if (_.has(err, 'code')) {
                 return next(new httpErrors.BadRequest(err.message, err.code));
             } else if (_.has(err, 'name') && err.name === 'CastError') {
-                return next(new httpErrors.BadRequest(errors[13].message, errors[13].code));
+                return next(new httpErrors.BadRequest(errors.string.documentid_bad_format));
             }
             return next(err);
         });
@@ -244,7 +244,7 @@ var listByCurrentUser = function(req, res, next) {
             if (_.has(err, 'code')) {
                 return next(new httpErrors.BadRequest(err.message, err.code));
             } else if (_.has(err, 'name') && err.name === 'CastError') {
-                return next(new httpErrors.BadRequest(errors[13].message, errors[13].code));
+                return next(new httpErrors.BadRequest(errors.string.documentid_bad_format));
             }
             return next(err);
         });
@@ -263,7 +263,7 @@ var listByProject = function(req, res, next) {
         })
         .then(function (project) {
             if (!project) {
-                return when.reject(new httpErrors.BadRequest(errors[18].message, errors[18].code));
+                return when.reject(new httpErrors.BadRequest(errors.project.not_found));
             }
             // User is able to access this project
             // @Todo Use request to mongo to determine ability
@@ -271,7 +271,7 @@ var listByProject = function(req, res, next) {
                 return userId.toString() === req.user._id.toString();
             });
             if (!isAble) {
-                return when.reject(new httpErrors.Forbidden(errors[19].message, errors[19].code));
+                return when.reject(new httpErrors.Forbidden(errors.project.user_not_belong));
             }
             return statusService.findReadOnlyByProjectId(req.params.id);
         })
@@ -304,7 +304,7 @@ var listByProject = function(req, res, next) {
             if (_.has(err, 'code') && !(err instanceof httpErrors.NotFound) && !(err instanceof httpErrors.Forbidden)) {
                 return next(new httpErrors.BadRequest(err.message, err.code));
             } else if (_.has(err, 'name') && err.name === 'CastError') {
-                return next(new httpErrors.BadRequest(errors[13].message, errors[13].code));
+                return next(new httpErrors.BadRequest(errors.string.documentid_bad_format));
             }
             return next(err);
         });
