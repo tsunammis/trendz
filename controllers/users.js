@@ -313,7 +313,7 @@ var removeUserFromProject = function(req, res, next) {
                 return when.reject(new httpErrors.BadRequest(errors.project.user_not_assigned));
             }
             var newList = _.reject(project.users, function(userId) {
-                return userId.toString() === user._id.toString();;
+                return userId.toString() === user._id.toString();
             });
             project.set('users', newList);
             return project.save();
