@@ -8,7 +8,7 @@ var User            = require('../models').User,
     userValidator   = require('../validator').User,
     errors          = require('../validator').Errors,
     when            = require('when'),
-    _               = require('underscore');
+    _               = require('lodash');
 
 /**
  * POST  /users

@@ -1,6 +1,6 @@
 var configuration   = require('../config/configuration'),
     arrayHelper     = require('../helpers/array'),
-    _               = require('underscore');
+    _               = require('lodash');
 
 /**
  * Add 'links' data to entity to respect the HATEOAS guidelines

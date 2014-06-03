@@ -8,7 +8,7 @@ var Project             = require('../models').Project,
     projectValidator    = require('../validator').Project,
     stringValidator     = require('../validator').String,
     errors              = require('../validator').Errors,
-    _                   = require('underscore'),
+    _                   = require('lodash'),
     when                = require('when');
 
 /**

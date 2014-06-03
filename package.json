@@ -22,7 +22,7 @@
     "mongoose": "~3.8.0",
     "passport": "~0.2.0",
     "passport-http": "~0.2.2",
-    "underscore": "~1.5.2",
+    "lodash": "2.4.1",
     "bcrypt-nodejs": "latest",
     "cli-color": "~0.3.2",
     "validator": "~3.11.2",

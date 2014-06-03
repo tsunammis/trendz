@@ -9,7 +9,7 @@ var statusAdapter   = require('../adapter').Status,
     stringValidator = require('../validator').String,
     errors          = require('../validator').Errors,
     when            = require('when'),
-    _               = require('underscore');
+    _               = require('lodash');
 
 /**
  * POST  /status
