@@ -51,7 +51,7 @@ var create = function(req, res, next) {
             if (_.has(err, 'code')) {
                 return next(new httpErrors.BadRequest(err.message, err.code));
             } else if (_.has(err, 'name') && err.name === 'CastError') {
-                return next(new httpErrors.BadRequest(errors[13].message, errors[13].code));
+                return next(new httpErrors.BadRequest(errors.string.documentid_bad_format));
             }
             return next(err);
         });
@@ -80,7 +80,7 @@ var update = function(req, res, next) {
 
             // Check if the project doesn't exist
             if (!project) {
-                return when.reject(new httpErrors.NotFound(errors[18].message, errors[18].code));
+                return when.reject(new httpErrors.NotFound(errors.project.not_found));
             }
 
             var projectOld = project.toObject();
@@ -92,7 +92,7 @@ var update = function(req, res, next) {
             });
 
             if (!isAble) {
-                return when.reject(new httpErrors.Forbidden(errors[19].message, errors[19].code));
+                return when.reject(new httpErrors.Forbidden(errors.project.user_not_belong));
             }
 
             // Update object with changes
@@ -115,7 +115,7 @@ var update = function(req, res, next) {
         })
         .then(function(obj) {
             if (obj && obj._id.toString() !== project._id.toString()) {
-                return when.reject(errors[4]);
+                return when.reject(errors.project.slug_already_exist);
             } else {
                 return when.resolve(project);
             }
@@ -136,7 +136,7 @@ var update = function(req, res, next) {
             if (_.has(err, 'code') && !(err instanceof httpErrors.NotFound) && !(err instanceof httpErrors.Forbidden)) {
                 return next(new httpErrors.BadRequest(err.message, err.code));
             } else if (_.has(err, 'name') && err.name === 'CastError') {
-                return next(new httpErrors.BadRequest(errors[13].message, errors[13].code));
+                return next(new httpErrors.BadRequest(errors.string.documentid_bad_format));
             }
             return next(err);
         });
@@ -163,7 +163,7 @@ var show = function(req, res, next) {
             });
 
             if (!isAble) {
-                return when.reject(new httpErrors.Forbidden(errors[19].message, errors[19].code));
+                return when.reject(new httpErrors.Forbidden(errors.project.user_not_belong));
             }
 
             project = objectHelper.removeProperties(['__v'], project);
@@ -176,7 +176,7 @@ var show = function(req, res, next) {
             if (_.has(err, 'code') && !(err instanceof httpErrors.NotFound) && !(err instanceof httpErrors.Forbidden)) {
                 return next(new httpErrors.BadRequest(err.message, err.code));
             } else if (_.has(err, 'name') && err.name === 'CastError') {
-                return next(new httpErrors.BadRequest(errors[13].message, errors[13].code));
+                return next(new httpErrors.BadRequest(errors.string.documentid_bad_format));
             }
             return next(err);
         });

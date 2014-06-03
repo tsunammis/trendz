@@ -1,3 +1,40 @@
+module.exports = {
+    'unknow':                           { 'code': '0',     'message': "Unknow error" },
+    'project': {
+        'name_length':                  { 'code': 'P-1',   'message': "project.name's length must be between 3 and 30 caracters" },
+        'slug_not_found':               { 'code': 'P-2',   'message': "project.slug doesn't exist" },
+        'slug_already_exist':           { 'code': 'P-3',   'message': "project.slug already exist" },
+        'slug_bad_length':              { 'code': 'P-4',   'message': "project.slug's length must be between 3 and 30 caracters" },
+        'not_found':                    { 'code': 'P-5',   'message': "project not found" },
+        'user_not_belong':              { 'code': 'P-6',   'message': "user not belong to project" },
+        'not_owner':                    { 'code': 'P-7',   'message': "you are not the owner of the project" },
+        'user_not_assigned':            { 'code': 'P-8',   'message': "the user is not assigned to the project" },
+        'user_already_assigned':        { 'code': 'P-9',   'message': "the user is already assigned to the project" }
+    },
+    'user': {
+        'password_confirmation_fail':   { 'code': 'U-1',    'message': "Both password are not the same" },
+        'password_length_too_short':    { 'code': 'U-2',    'message': "the password's length is too short (3 min caracters)" },
+        'password_length_too_long':     { 'code': 'U-3',    'message': "the password's length is too long (15 caracters max)" },
+        'email_not_found':              { 'code': 'U-4',    'message': "this email is not registered" },
+        'email_already_exist':          { 'code': 'U-5',    'message': "this email is already registered" },
+        'not_found':                    { 'code': 'U-6',    'message': "user not found" }
+    },
+    'status': {
+        'not_found':                    { 'code': 'S-1',    'message': "status not found" },
+        'not_owner':                    { 'code': 'S-2',    'message': "you are not the owner of the status" },
+        'content_bad_format':           { 'code': 'S-3',    'message': "status.content's length must be between 1 and 300 caracters." }
+    },
+    'string': {
+        'not_null':                     { 'code': 'str-1',  'message': "the string must be not null" },
+        'email_bad_format':             { 'code': 'str-2',  'message': "the email's format is not valid" },
+        'slug_bad_format':              { 'code': 'str-3',  'message': "the slug's format is not valid" },
+        'documentid_bad_format':        { 'code': 'str-4',  'message': "the id's format is not valid" }
+    },
+    'storage': {
+        'connection_error':             { 'code': 'store-1','message': "Error durring connection with mongo" }
+    }
+};
+/*
 module.exports = [
     { 'code': 0,    'name': 'unknow',                           'message': "Unknow error" },
     { 'code': 1,    'name': 'project.name.length',              'message': "project.name's length must be between 3 and 30 caracters" },
@@ -25,3 +62,4 @@ module.exports = [
     { 'code': 23,   'name': 'project.user_already_assigned',    'message': "the user is already assigned to the project" },
     { 'code': 24,   'name': 'project.user_is_not_assigned',     'message': "the user is not assigned to the project" }
 ];
+*/

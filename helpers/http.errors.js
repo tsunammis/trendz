@@ -1,30 +1,55 @@
+var _ = require('lodash');
+
+var isErrorObject = function(obj) {
+    return _.isObject(obj) && _.has(obj, 'message') && _.has(obj, 'code');
+};
+
 module.exports = {
     BadRequest: function(msg, code) {
-        if (code !== undefined && code !== null) {
-            this.code = code;
+        if (isErrorObject(msg)) {
+            this.code = msg.code;
+            this.message = msg.message;
+        } else {
+            if (code !== undefined && code !== null) {
+                this.code = code;
+            }
+            this.message = msg || 'Bad request';
         }
         this.status = 400;
-        this.message = msg || 'Bad request';
     },
     Unauthorized: function(msg, code) {
-        if (code !== undefined && code !== null) {
-            this.code = code;
+        if (isErrorObject(msg)) {
+            this.code = msg.code;
+            this.message = msg.message;
+        } else {
+            if (code !== undefined && code !== null) {
+                this.code = code;
+            }
+            this.message = msg || 'Unauthorized';
         }
         this.status = 401;
-        this.message = msg || 'Unauthorized';
     },
     Forbidden: function(msg, code) {
-        if (code !== undefined && code !== null) {
-            this.code = code;
+        if (isErrorObject(msg)) {
+            this.code = msg.code;
+            this.message = msg.message;
+        } else {
+            if (code !== undefined && code !== null) {
+                this.code = code;
+            }
+            this.message = msg || 'Forbidden';
         }
         this.status = 403;
-        this.message = msg || 'Forbidden';
     },
     NotFound: function(msg, code) {
-        if (code !== undefined && code !== null) {
-            this.code = code;
+        if (isErrorObject(msg)) {
+            this.code = msg.code;
+            this.message = msg.message;
+        } else {
+            if (code !== undefined && code !== null) {
+                this.code = code;
+            }
+            this.message = msg || 'Not found';
         }
-        this.status = 404;
-        this.message = msg || 'Not found';
     }
 };
